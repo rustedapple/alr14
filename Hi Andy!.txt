@@ -1,9 +1,9 @@
 Hi Andy!
 
-If you are reading this, it means you successfully cloned the ALightRoom repository to your computer. Git works differently than perforce in that you "clone" the entire repository to your computer. You checkout files and do all your branching/merging right there, and then PUSH the entire repository back to the depot. This allows you to make all sorts of crazy branches locally, offline, and only push things to the site when you are ready. Obviously cloning an entire repository (and all it's history) doesn't work well for large binary files, which is why they use perforce for game development. But for fast development in the real world, like for websites and javascript stuff, people use git.
+If you are reading this, it means you successfully cloned the ALightRoom repository to your computer. Git works differently than perforce in that you "clone" the entire repository to your computer. You checkout files and do all your branching/merging right there, and then PUSH the entire repository back to the depot. This allows you to make all sorts of crazy branches locally, offline, and only push things to the site when you are ready. Obviously cloning an entire repository (and all it's history) doesn't work well for large binary files, which is why people use perforce for game development. But for really fast development in the real world, like for websites and javascript stuff, people use git.
 
 ProjectName: ALightRoom
-GameDesign: Adventure game
+GameDesign: Adventure Game
 Team: RustedApple and OrangeKyo
 SourceControl: Git
 HostingSite: Assembla
@@ -14,7 +14,7 @@ Here are some links to get you started:
 Git for windows: https://git-for-windows.github.io/
 Git getting started: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
 
-Assemble site. Sign up for an account here: https://app.assembla.com/
+Assemble site (sign up for account here): https://app.assembla.com/
 Assembla Repository URL:  git@git.assembla.com:alightroom.git
 Assembla "Getting started w/ Git" instructions: https://app.assembla.com/spaces/alightroom/git/instructions
 
@@ -34,6 +34,6 @@ __________________________________
 
 That's it! 
 
-I'll start you off with the source of ADarkRoom so you can get started right away! In the meanwhile, I need start learning javscript...
+I'll start you off with the source of ADarkRoom so you can get started right away! In the meanwhile, I need to start learning javscript...
 
 - Sashank
