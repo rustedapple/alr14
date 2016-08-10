@@ -79,6 +79,12 @@ Use the on method to attach one or more events at once:
 <Effects>
 </Effects>
 
+<HTML>
+</HTML>
+
+<Traversing>
+</Traversing>
+
 <Examples>
 Make every paragraph in this html doc hide when you click it.
    $(document).ready(function(){
