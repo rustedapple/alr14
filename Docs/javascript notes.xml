@@ -1,0 +1,241 @@
+
+<HowTo>
+How to change some html, some properties of an html element:
+   JS: document.getElementById("demo").innerHTML = 5 + 6;
+
+How to show a message box
+   window.alert("Hi Andy!");
+
+How to write to chrome javascript console (F12)
+   console.log(5 + 6);
+
+How to make a button do something
+   <button onclick="document.write(5 + 6)">Click me!</button>
+
+How to check if an object is an array or date
+   myArray.constructor.toString().indexOf("Array") > -1;
+   Array.IsArray(myObject); // Not supported on all browsers
+   myDate.constructor.toString().indexOf("Date") > -1;
+
+How to access object properties
+   objectName.propertyName
+   objectName["propertyName"]
+</HowTo>
+
+<DataTypes>
+DataTypes
+   string: "John"
+   number: 3.14
+   boolean": true
+   object
+      Object: {name:'John', age:34}
+      Date: new Date()
+      Array: [1,2,3,4]
+   function: function () {}
+
+Null types
+   null // value is empty
+   undefined // variable has not ye been declared or assigned a value
+</DataTypes>
+
+<DynamicTyping>
+Type of variable can be changed:
+   var x;            // Now x is undefined
+   var x = 5;         // Now x is a Number
+   var x = "John";     // Now x is a String
+
+typeof myVariable // Returns the variable's type as a string
+typeof null; // Returns "object". Everyone agrees this is stupid.
+</DynamicTyping>
+
+<Globals>
+   Automatic Global
+      If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable. Example:
+         myFunction();
+         // code here can use carName
+         function myFunction() {
+            carName = "Volvo";
+         }
+      Do NOT create global variables unless you intend to.
+
+   With JavaScript, the global scope is the complete JavaScript environment. In HTML, the global scope is the window object. All global variables belong to the window object. Global variables are deleted when you close the page. Example:
+      var carName = "Volvo";
+      // code here can use window.carName
+</Globals>
+
+<HtmlEvents>
+   HTML events invoke javascript code. Pattern:
+      <some-HTML-element some-event="some JavaScript" />
+   Common HTML events
+      onchange	An HTML element has been changed
+      onclick	The user clicks an HTML element
+      onmouseover	The user moves the mouse over an HTML element
+      onmouseout	The user moves the mouse away from an HTML element
+      onkeydown	The user pushes a keyboard key
+      onload	The browser has finished loading the page
+</HtmlEvents>
+
+<Strings>
+Strings
+   myString.length;
+   \ escape character
+   myString.indexOf("locate"); // string search
+   myString.lastIndexOf("locate");
+   myString.search("locate") // regex search
+   myString.substr(start, length) // standard substring w/ length. start can be negative.
+   myString.slice(start, end) // substring with end position. arguments can also be negative.
+   myString.replace("Microsoft","W3Schools"); // Replaces first instance. Supports regex.
+   myString.replace(/Microsoft/g,"W3Schools"); // global replace (using regex global match flag)
+   myString.toUpperCase();
+   myString.toLowerCase();
+   str.charAt(0);
+   str.charCodeAt(0);
+   str[0]; // Not recommended or fully supported.
+   str.split(delimeter)
+   str.split("") // Array of single characters
+</Strings>
+
+<Numbers>
+Numbers
+   Always stored as doubles (64-bit Floating Point)
+   0xFF; // Hex is ok
+   myNumber.toString(8) // Displays as octal
+   NaN, Infinity // special symbols. typeof returns "number".
+   isNaN(x);
+   Parsing
+      Number() // Converts bools, dates to number form
+      parseInt() // Parses a string and returns the first whole number found
+      parseFloat() // Parses a string and returns the first decimal number found
+   Properties
+      Number.MAX_VALUE
+      Number.MIN_VALUE
+      Number.NEGATIVE_INFINITY
+      Number.POSITIVE_INFINITY
+      Number.NaN
+</Numbers>
+
+<Math>
+Math
+   Functions
+      Math.random();
+      Math.min(...);
+      Math.max(...);
+      Math.round(a);
+      Math.ceil(a);
+      Math.floor(a);
+      Math.exp();
+      Math.log();
+      Math.pow();
+      ... // lots of trig functions
+   Constants
+      Math.E          // returns Euler's number
+      Math.PI         // returns PI
+      Math.SQRT2      // returns the square root of 2
+      Math.SQRT1_2    // returns the square root of 1/2
+      Math.LN2        // returns the natural logarithm of 2
+      Math.LN10       // returns the natural logarithm of 10
+      Math.LOG2E      // returns base 2 logarithm of E
+      Math.LOG10E     // returns base 10 logarithm of E
+</Math>
+
+<Arrays>
+Arrays
+   var cars = ["Saab", "Volvo", "BMW"];
+   // You can have variables of different types in the same Array.
+   myArray.length
+   myArray.sort()
+   myArray.pop() // Removes last element
+   myArray.push(a)
+   // You can also assign to out of bound indices. The array resizes to compensate, potentially creating holes.
+   Array.isArray(fruits); // Not supported in IE8.
+   myArray.ToString(); // comma-delimited string
+   myArray.Join(delimeter); // custom-delimited string
+   myArray.Shift(); // Pop first element, and shuffle everything else to the left.
+   myArray.UnShift(); // Inserts as first element, and shuffles everything else to the right.
+   myArray.splice(startPosition, numElementsToRemove, ElementsToInsert...);
+   myArray.splice(0,1); Removes first element
+   myArray.concat(myOtherArray, myOtherOtherArray, ...);
+   myArray.sort(); // sorts *alphabetically*
+   myArray.reverse(); // reverse orderedlist
+   myArray.sort(function(a, b){return a - b}); // sort by functor
+   myArray.sort(function(a, b){return 0.5 - Math.random()}); // shuffle
+</Arrays>
+
+<Boolean>
+Boolean
+   Falsy values: false, 0, "", null, undefined, NaN
+   Truthy values: everything else
+   When comparing a string with a number, JavaScript will convert the string to a number when doing the comparison.
+</Boolean>
+
+<ControlStatements>
+   conditions
+      if, else if, else, and switch
+   loops
+      for, for in, while, and do while
+   break and continue can be used in loops
+
+   break can also be used in switches and jumping out of any labelled code block. e.g.
+      list: {
+          text += cars[0];
+          text += cars[1];
+          text += cars[2];
+          break list;
+          text += cars[3];
+          text += cars[4];
+          text += cars[5];
+      }
+
+   exceptions
+      try, catch, finally, throw.
+</ControlStatements>
+
+<UniqueThings>
+   In javascript a function is an object. So classes are just made of objects, and functions are just one of these objects.
+
+   Type conversion:
+      // TODO
+
+   debugging
+      debugger; // this keyword sets a breakpoint
+
+   Hoisting
+      All variable declarations occur at top of scope, regardless of where they are declared. But variable initializations do NOT get hoisted to the top.
+      Good practice to declare variables at the top of scope
+
+   strict
+      "use strict"; // execute code in strict mode
+
+   closures
+      var add = (function () {
+          var counter = 0;
+          return function () {return counter += 1;}
+      })();
+
+      add();
+      add();
+      add();
+
+      // the counter is now 3
+
+   parameter defaults
+      function myFunction(x, y) {
+          if (y === undefined) {
+              y = 0;
+          }
+
+      }
+
+   Avoid Using eval()
+
+   Expecting Block Level Scope
+      JavaScript does not create a new scope for each code block.
+      It is true in many programming languages, but not true in JavaScript.
+      It is a common mistake, among new JavaScript developers, to believe that this code returns undefined:
+      Example
+      for (var i = 0; i _LT_ 10; i++) {
+          // some code
+      }
+      return i;
+</JavaScriptUniqueThings>
+
