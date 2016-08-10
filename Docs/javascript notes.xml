@@ -1,40 +1,11 @@
 
-<LanguageBasics>
-   <DataTypes>
-   DataTypes
-      string: "John"   
-      number: 3.14
-      boolean": true
-      object
-         Object: {name:'John', age:34}
-         Date: new Date()   
-         Array: [1,2,3,4]   
-      function: function () {}
-
-   Null types
-      null // value is empty
-      undefined // variable has not ye been declared or assigned a value
-   </DataTypes>
-
-   <DynamicTyping>
-   Type of variable can be changed:
-      var x;            // Now x is undefined
-      var x = 5;         // Now x is a Number
-      var x = "John";     // Now x is a String
-   
-   typeof myVariable // Returns the variable's type as a string
-   typeof null; // Returns "object". Everyone agrees this is stupid.
-   </DynamicTyping>
-
-</Language>
-
 <HowTo>
 How to change some html, some properties of an html element:
    JS: document.getElementById("demo").innerHTML = 5 + 6;
-   
+
 How to show a message box
    window.alert("Hi Andy!");
-   
+
 How to write to chrome javascript console (F12)
    console.log(5 + 6);
 
@@ -43,42 +14,68 @@ How to make a button do something
 
 How to check if an object is an array or date
    myArray.constructor.toString().indexOf("Array") > -1;
+   Array.IsArray(myObject); // Not supported on all browsers
    myDate.constructor.toString().indexOf("Date") > -1;
-</HowTo>
 
-in javascript a function is an object
-so classes are just made of objects, static and non static
-   and functions are just one of these objects
-
-AccessingObjectProperties
+How to access object properties
    objectName.propertyName
    objectName["propertyName"]
+</HowTo>
 
-Automatic Global
-   If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable. Example:
-      myFunction();
-      
-      // code here can use carName 
-      
-      function myFunction() {
-         carName = "Volvo";
-      }
-   Do NOT create global variables unless you intend to.
+<DataTypes>
+DataTypes
+   string: "John"
+   number: 3.14
+   boolean": true
+   object
+      Object: {name:'John', age:34}
+      Date: new Date()
+      Array: [1,2,3,4]
+   function: function () {}
 
-With JavaScript, the global scope is the complete JavaScript environment. In HTML, the global scope is the window object. All global variables belong to the window object. Global variables are deleted when you close the page. Example:
-   var carName = "Volvo";
-   // code here can use window.carName
+Null types
+   null // value is empty
+   undefined // variable has not ye been declared or assigned a value
+</DataTypes>
 
-HTML events invoke javascript code. Pattern:
-   <some-HTML-element some-event="some JavaScript">
-Common HTML events
-   onchange	An HTML element has been changed
-   onclick	The user clicks an HTML element
-   onmouseover	The user moves the mouse over an HTML element
-   onmouseout	The user moves the mouse away from an HTML element
-   onkeydown	The user pushes a keyboard key
-   onload	The browser has finished loading the page
+<DynamicTyping>
+Type of variable can be changed:
+   var x;            // Now x is undefined
+   var x = 5;         // Now x is a Number
+   var x = "John";     // Now x is a String
 
+typeof myVariable // Returns the variable's type as a string
+typeof null; // Returns "object". Everyone agrees this is stupid.
+</DynamicTyping>
+
+<Globals>
+   Automatic Global
+      If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable. Example:
+         myFunction();
+         // code here can use carName
+         function myFunction() {
+            carName = "Volvo";
+         }
+      Do NOT create global variables unless you intend to.
+
+   With JavaScript, the global scope is the complete JavaScript environment. In HTML, the global scope is the window object. All global variables belong to the window object. Global variables are deleted when you close the page. Example:
+      var carName = "Volvo";
+      // code here can use window.carName
+</Globals>
+
+<HtmlEvents>
+   HTML events invoke javascript code. Pattern:
+      <some-HTML-element some-event="some JavaScript" />
+   Common HTML events
+      onchange	An HTML element has been changed
+      onclick	The user clicks an HTML element
+      onmouseover	The user moves the mouse over an HTML element
+      onmouseout	The user moves the mouse away from an HTML element
+      onkeydown	The user pushes a keyboard key
+      onload	The browser has finished loading the page
+</HtmlEvents>
+
+<Strings>
 Strings
    myString.length;
    \ escape character
@@ -91,12 +88,14 @@ Strings
    myString.replace(/Microsoft/g,"W3Schools"); // global replace (using regex global match flag)
    myString.toUpperCase();
    myString.toLowerCase();
-   str.charAt(0);       
-   str.charCodeAt(0);  
+   str.charAt(0);
+   str.charCodeAt(0);
    str[0]; // Not recommended or fully supported.
    str.split(delimeter)
    str.split("") // Array of single characters
+</Strings>
 
+<Numbers>
 Numbers
    Always stored as doubles (64-bit Floating Point)
    0xFF; // Hex is ok
@@ -113,7 +112,9 @@ Numbers
       Number.NEGATIVE_INFINITY
       Number.POSITIVE_INFINITY
       Number.NaN
+</Numbers>
 
+<Math>
 Math
    Functions
       Math.random();
@@ -135,10 +136,9 @@ Math
       Math.LN10       // returns the natural logarithm of 10
       Math.LOG2E      // returns base 2 logarithm of E
       Math.LOG10E     // returns base 10 logarithm of E
+</Math>
 
-Dates
-   string format and timezone functionality.
-
+<Arrays>
 Arrays
    var cars = ["Saab", "Volvo", "BMW"];
    // You can have variables of different types in the same Array.
@@ -155,79 +155,87 @@ Arrays
    myArray.splice(startPosition, numElementsToRemove, ElementsToInsert...);
    myArray.splice(0,1); Removes first element
    myArray.concat(myOtherArray, myOtherOtherArray, ...);
-   
-Arrays (cont.)
    myArray.sort(); // sorts *alphabetically*
    myArray.reverse(); // reverse orderedlist
-   points.sort(function(a, b){return a - b}); // sort by functor
-   points.sort(function(a, b){return 0.5 - Math.random()}); // shuffle
+   myArray.sort(function(a, b){return a - b}); // sort by functor
+   myArray.sort(function(a, b){return 0.5 - Math.random()}); // shuffle
+</Arrays>
 
+<Boolean>
 Boolean
    Falsy values: false, 0, "", null, undefined, NaN
    Truthy values: everything else
    When comparing a string with a number, JavaScript will convert the string to a number when doing the comparison.
-   
-conditions: if, else if, else, and switch
-loops: for, for in, while, and do while
-break and continue can be used in loops
-break can also be used in switches and jumping out of any labelled code block. e.g.
-   list: {
-       text += cars[0] + "<br>";
-       text += cars[1] + "<br>";
-       text += cars[2] + "<br>";
-       break list;
-       text += cars[3] + "<br>";
-       text += cars[4] + "<br>";
-       text += cars[5] + "<br>";
-   }
+</Boolean>
 
-more topics:
-   type conversion
-   regex
+<ControlStatements>
+   conditions
+      if, else if, else, and switch
+   loops
+      for, for in, while, and do while
+   break and continue can be used in loops
 
-exceptions
-   try, catch, finally, throw.
+   break can also be used in switches and jumping out of any labelled code block. e.g.
+      list: {
+          text += cars[0];
+          text += cars[1];
+          text += cars[2];
+          break list;
+          text += cars[3];
+          text += cars[4];
+          text += cars[5];
+      }
 
-debugging
-   debugger; // this keyword sets a breakpoint
+   exceptions
+      try, catch, finally, throw.
+</ControlStatements>
 
-Hoisting
-   All variable declarations occur at top of scope, regardless of where they are declared. But variable initializations do NOT get hoisted to the top.
-   Good practice to declare variables at the top of scope
+<UniqueThings>
+   In javascript a function is an object. So classes are just made of objects, and functions are just one of these objects.
 
-strict
-   "use strict"; // execute code in strict mode
+   Type conversion:
+      // TODO
 
+   debugging
+      debugger; // this keyword sets a breakpoint
 
-closures
-   var add = (function () {
-       var counter = 0;
-       return function () {return counter += 1;}
-   })();
+   Hoisting
+      All variable declarations occur at top of scope, regardless of where they are declared. But variable initializations do NOT get hoisted to the top.
+      Good practice to declare variables at the top of scope
 
-   add();
-   add();
-   add();
+   strict
+      "use strict"; // execute code in strict mode
 
-   // the counter is now 3 
+   closures
+      var add = (function () {
+          var counter = 0;
+          return function () {return counter += 1;}
+      })();
 
-parameter defaults
-   function myFunction(x, y) {
-       if (y === undefined) {
-           y = 0;
-       }
-   
-   }
+      add();
+      add();
+      add();
 
-Avoid Using eval()
+      // the counter is now 3
 
-Expecting Block Level Scope
-   JavaScript does not create a new scope for each code block.
-   It is true in many programming languages, but not true in JavaScript.
-   It is a common mistake, among new JavaScript developers, to believe that this code returns undefined:
-   Example
-   for (var i = 0; i < 10; i++) {
-       // some code
-   }
-   return i;
+   parameter defaults
+      function myFunction(x, y) {
+          if (y === undefined) {
+              y = 0;
+          }
+
+      }
+
+   Avoid Using eval()
+
+   Expecting Block Level Scope
+      JavaScript does not create a new scope for each code block.
+      It is true in many programming languages, but not true in JavaScript.
+      It is a common mistake, among new JavaScript developers, to believe that this code returns undefined:
+      Example
+      for (var i = 0; i _LT_ 10; i++) {
+          // some code
+      }
+      return i;
+</JavaScriptUniqueThings>
 
