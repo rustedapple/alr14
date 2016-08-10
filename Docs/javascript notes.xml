@@ -159,6 +159,19 @@ Arrays
 </Arrays>
 
 <TypeConversion>
+   The unary + operator can be used to convert a variable to a number.
+      var y = "5"; // y is a string
+      var x = + y; // x is a number
+
+   Use .toString() to convert a variable to a string.
+
+   <AutomaticConversions>
+      5 + null    // returns 5         because null is converted to 0
+      "5" + null  // returns "5null"   because null is converted to "null"
+      "5" + 2     // returns 52        because 2 is converted to "2"
+      "5" - 2     // returns 3         because "5" is converted to 5
+      "5" * "2"   // returns 10        because "5" and "2" are converted to 5 and 2
+   </AutomaticConversions>
 </TypeConversion>
 
 <Boolean>
