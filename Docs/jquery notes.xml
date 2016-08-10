@@ -1,0 +1,106 @@
+
+<IncludingJQuery>
+   <script src="jquery-1.12.4.min.js"></script> // Self hosted (DL debug/compacted versions from jquery.com)
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> // Mooch off google
+</IncludingJQuery>
+
+<Syntax>
+The jQuery syntax is tailor-made for selecting HTML elements and performing some action on the element(s).
+   $(selector).action()
+      $ to access jQuery
+      selector to "query (or find)" HTML elements
+      action() to be performed on the element(s)
+</Syntax>
+
+<Selectors>
+   $("p") // Select by element type
+   $("#test") // Select by #id
+   $(".test") // Select by class
+   
+   $("*") // Selects all elements
+   $(this) // Selects the current HTML element
+   
+   $("p.intro") // Selects all p elements with class="intro"
+   $("p:first") // Selects the first p element
+   
+   $("ul li:first") // Selects the first li element of the first ul element
+   $("ul li:first-child") // Selects the first li element of every ul element
+   
+   $("[href]") // Selects all elements with an href attribute
+   $("a[target='_blank']") // Selects all a elements with a target attribute value equal to "_blank"
+   $("a[target!='_blank']") // Selects all a elements with a target attribute value NOT equal to "_blank"
+   
+   $(":button") // Selects all button elements and input elements of type="button"
+   $("tr:even") // Selects all even tr elements
+   $("tr:odd") // Selects all odd tr elements
+</Selectors>
+
+<Events>
+Mouse Events
+   click	      
+   dblclick	   
+   mouseenter	
+   mouseleave
+   mousedown
+   mouseup
+   hover
+
+Keyboard Events
+   keypress	
+   keydown	
+   keyup	   
+
+Form Events
+   submit
+   change
+   focus	
+   blur  
+
+Document/Window Events
+   load
+   resize
+   scroll
+   unload
+   
+Use the on method to attach one or more events at once:
+   $("p").on({
+      mouseenter: function(){
+         $(this).css("background-color", "lightgray");
+      }, 
+      mouseleave: function(){
+         $(this).css("background-color", "lightblue");
+      }, 
+      click: function(){
+         $(this).css("background-color", "yellow");
+      } 
+   });
+</Events>
+
+<Effects>
+</Effects>
+
+<Examples>
+Make every paragraph in this html doc hide when you click it.
+   $(document).ready(function(){
+       $("p").click(function(){
+           $(this).hide();
+       });
+   });
+
+   $(this).hide() - hides the current element.
+   $("p").hide() - hides all <p /> elements.
+   $(".test").hide() - hides all elements with class="test".
+   $("#test").hide() - hides the element with id="test".
+</Example>
+
+<BestPractice>
+Don't run jQuery code until the document has finished loading
+   $(document).ready(function(){
+      // jQuery methods go here...
+   });
+Shorthand version:
+   $(function(){
+      // jQuery methods go here...
+   });
+</BestPractice>
+
