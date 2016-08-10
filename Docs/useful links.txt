@@ -1,0 +1,9 @@
+
+Git for windows: https://git-for-windows.github.io/
+Git getting started: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+
+Assembla site (sign up for account here): https://app.assembla.com/
+Assembla Repository URL:  git@git.assembla.com:alightroom.git
+Assembla "Getting started w/ Git" instructions: https://app.assembla.com/spaces/alightroom/git/instructions
+
+Chrome Developer Tools https://developers.google.com/web/tools/setup/?hl=en
