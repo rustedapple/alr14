@@ -16,20 +16,20 @@ The jQuery syntax is tailor-made for selecting HTML elements and performing some
    $("p") // Select by element type
    $("#test") // Select by #id
    $(".test") // Select by class
-   
+
    $("*") // Selects all elements
    $(this) // Selects the current HTML element
-   
+
    $("p.intro") // Selects all p elements with class="intro"
    $("p:first") // Selects the first p element
-   
+
    $("ul li:first") // Selects the first li element of the first ul element
    $("ul li:first-child") // Selects the first li element of every ul element
-   
+
    $("[href]") // Selects all elements with an href attribute
    $("a[target='_blank']") // Selects all a elements with a target attribute value equal to "_blank"
    $("a[target!='_blank']") // Selects all a elements with a target attribute value NOT equal to "_blank"
-   
+
    $(":button") // Selects all button elements and input elements of type="button"
    $("tr:even") // Selects all even tr elements
    $("tr:odd") // Selects all odd tr elements
@@ -37,46 +37,103 @@ The jQuery syntax is tailor-made for selecting HTML elements and performing some
 
 <Events>
 Mouse Events
-   click	      
-   dblclick	   
-   mouseenter	
+   click
+   dblclick
+   mouseenter
    mouseleave
    mousedown
    mouseup
    hover
 
 Keyboard Events
-   keypress	
-   keydown	
-   keyup	   
+   keypress
+   keydown
+   keyup
 
 Form Events
    submit
    change
-   focus	
-   blur  
+   focus
+   blur
 
 Document/Window Events
    load
    resize
    scroll
    unload
-   
+
 Use the on method to attach one or more events at once:
    $("p").on({
       mouseenter: function(){
          $(this).css("background-color", "lightgray");
-      }, 
+      },
       mouseleave: function(){
          $(this).css("background-color", "lightblue");
-      }, 
+      },
       click: function(){
          $(this).css("background-color", "yellow");
-      } 
+      }
    });
 </Events>
 
 <Effects>
+$(selector).hide(speed,callback);
+$(selector).show(speed,callback);
+$(selector).toggle(speed,callback);
+
+$(selector).fadeIn(speed,callback);
+$(selector).fadeOut(speed,callback);
+$(selector).fadeToggle(speed,callback);
+$(selector).fadeTo(speed,opacity,easing,callback)
+
+$(selector).slideDown(speed,callback);
+$(selector).slideUp(speed,callback);
+$(selector).slideToggle(speed,callback);
+
+$(selector).animate({styles},speed,easing,callback)
+$(selector).animate({params},speed,callback);
+$(selector).stop(stopAll,goToEnd); // Cancel (abruptly finish) a playing (queue of) animation(s).
+
+   <Animate>
+   $("div").animate({
+      left: '250px',
+      opacity: '0.5',
+      height: '150px',
+      width: '150px'
+   });
+
+   $("div").animate({
+      left: '250px',
+      height: '+=150px',
+      width: '+=150px'
+   });
+   </Animate>'
+
+   <Queing>
+   $("button").click(function(){
+      var div = $("div");
+      div.animate({height: '300px', opacity: '0.4'}, "slow");
+      div.animate({width: '300px', opacity: '0.8'}, "slow");
+      div.animate({height: '100px', opacity: '0.4'}, "slow");
+      div.animate({width: '100px', opacity: '0.8'}, "slow");
+   });
+
+   $("button").click(function(){
+      var div = $("div");
+      div.animate({left: '100px'}, "slow");
+      div.animate({fontSize: '3em'}, "slow");
+   });
+   </Queing>
+
+   <Chaining>
+   $("#p1").css("color", "red").slideUp(2000).slideDown(2000);
+   $("#p1").css("color", "red")
+      .slideUp(2000)
+      .slideDown(2000);
+   </Chaining>
+
+   // Chaining and queuing are the same. Both wait until one effect has finished playing before calling the next one.
+   // Note: The standard callBack does not wait. The callEffect function returns quickly, while the animation still plays over the next several frames.
 </Effects>
 
 <HTML>
