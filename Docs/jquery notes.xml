@@ -137,6 +137,49 @@ $(selector).stop(stopAll,goToEnd); // Cancel (abruptly finish) a playing (queue 
 </Effects>
 
 <HTML>
+   <Dom>
+   // DOM = Document Object Model
+   text() - Sets or returns the text content of selected elements
+   html() - Sets or returns the content of selected elements (including HTML markup)
+   val() - Sets or returns the value of form fields
+   attr() - used to get attribute values.
+
+   These setters also accept as a second argument the lamba function(i, origValue) { return newValue; }
+   The i is the elementIndex of the selected element.
+   </Dom>
+
+   <Html>
+   $("p").append("Some appended text.", ...);
+   $("p").prepend("Some prepended text.", ...);
+
+   $("img").after("Some text after", ...);
+   $("img").before("Some text before", ...);
+
+   remove(filter...) - Removes the selected element (and its child elements)
+   empty() - Removes the child elements from the selected element
+   </Html>
+
+   <CSS>
+   $("h1, h2, p").addClass("important blue"); add css class(es) to these elements
+   $("h1, h2, p").removeClass("blue");
+   $("h1, h2, p").toggleClass("blue");
+
+   css("propertyname");
+   css("propertyname","value");
+   css({"propertyname":"value","propertyname":"value",...});
+
+   width()
+   height()
+   innerWidth()
+   innerHeight()
+   outerWidth()
+   outerHeight()
+
+   $(document).width();
+   $(window).width();
+   $("#div1").width(500).height(500);
+   </CSS>
+
 </HTML>
 
 <Traversing>
