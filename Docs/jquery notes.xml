@@ -140,7 +140,49 @@ $(selector).stop(stopAll,goToEnd); // Cancel (abruptly finish) a playing (queue 
 </HTML>
 
 <Traversing>
+   parent()
+   parents(filter)
+   parentsUntil(outer) // returns ancestory between ($this) and outer, exclusive.
+
+   children(filter)
+   find(filter) // All descendents
+
+   siblings(filter)
+   next()
+   nextAll()
+   nextUntil(sibling)
+   prev()
+   prevAll()
+   prevUntil(sibling)
+
+   first() // first of the selector's elements
+   last() // last of the selector's elements
+   eq(index) // ith of the selector's element
+
+   filter() // Used after a selector to filter the returned results
+   not() // opposite of filter
 </Traversing>
+
+<AJAX>
+AJAX = Asynchronous JavaScript and XML.
+Asynchronously load content from a URL into a particular element, using HTTP Get/Post requests, without reloading the whole page.
+You can request text, HTML, XML, or JSON.
+Examples of applications using AJAX: Gmail, Google Maps, Youtube, and Facebook tabs.
+
+$(selector).load(URL,data,callback);
+callback can be of the form function(responseTxt, statusTxt, xhr)
+   responseTxt - contains the resulting content if the call succeeds
+   statusTxt - contains the status of the call
+   xhr - contains the XMLHttpRequest object
+
+HTTP GET vs. POST
+   GET - Requests data from a specified resource
+   POST - Submits data to be processed to a specified resource
+
+You can GET or POST arbitrary data
+   $.get(URL,callback);
+   $.post(URL,data,callback);
+</AJAX>
 
 <Examples>
 Make every paragraph in this html doc hide when you click it.
@@ -150,10 +192,10 @@ Make every paragraph in this html doc hide when you click it.
        });
    });
 
-   $(this).hide() - hides the current element.
-   $("p").hide() - hides all <p /> elements.
-   $(".test").hide() - hides all elements with class="test".
-   $("#test").hide() - hides the element with id="test".
+$(this).hide() - hides the current element.
+$("p").hide() - hides all <p /> elements.
+$(".test").hide() - hides all elements with class="test".
+$("#test").hide() - hides the element with id="test".
 </Example>
 
 <BestPractice>
