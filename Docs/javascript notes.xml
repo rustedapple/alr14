@@ -267,3 +267,7 @@ Boolean
    Explicitly declare variables at the top of scope using var keyword. Else the variable will be assumed global even if it's inside a function.
    </Scope>
 </UniqueThings>
+
+<LocalStorage>
+http://pervasivecode.blogspot.com/2011/07/html5-transferring-localstorage-data.html
+</LocalStorage>

@@ -10,12 +10,10 @@
    <body>
       <h1>Animation Demo</h1>
       <p>This is a demo to show off some of the nicer features of jquery animations and test js perf.</p>
-      <Button type="button" onclick="animation.run();">Click me!</Button>
-      <div>
-         <div class="square" onmouseenter="$(this).css('background-color', 'blue');" 
-         onmouseleave="$(this).css('background-color', 'red');"></div>
-         <div class="square" onmouseenter="$(this).css('background-color', 'blue');" 
-         onmouseleave="$(this).css('background-color', 'red');"></div>
+      <Button type="button" onclick="animation.load();">Click me!</Button>
+      <div id="grid">
+         <div class="square" onmouseenter="onSquareEnter($(this));" onmouseleave="onSquareLeave($(this));"></div>
+         <div class="square" onmouseenter="onSquareEnter($(this));" onmouseleave="onSquareLeave($(this));"></div>
       </div>
       <h1>Story Demo</h1>
       <p>This is a demo to show off demonstrate some of the code flexibility features of js.</p>
