@@ -2,6 +2,7 @@
 <html>
    <head>
       <title>Sashank's First Javascript</title>
+      <link rel="stylesheet" type="text/css" href="style.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
       <script src="script.js"></script>
       <script src="animation.js"></script>
@@ -10,7 +11,12 @@
       <h1>Animation Demo</h1>
       <p>This is a demo to show off some of the nicer features of jquery animations and test js perf.</p>
       <Button type="button" onclick="animation.run();">Click me!</Button>
-      <div id="div1" style="width:80px;height:80px;background-color:red;"></div>
+      <div>
+         <div class="square" onmouseenter="$(this).css('background-color', 'blue');" 
+         onmouseleave="$(this).css('background-color', 'red');"></div>
+         <div class="square" onmouseenter="$(this).css('background-color', 'blue');" 
+         onmouseleave="$(this).css('background-color', 'red');"></div>
+      </div>
       <h1>Story Demo</h1>
       <p>This is a demo to show off demonstrate some of the code flexibility features of js.</p>
       <Button type="button" onclick="alert('hi');">Click me!</Button>
