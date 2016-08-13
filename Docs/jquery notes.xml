@@ -1,0 +1,306 @@
+
+<IncludingJQuery>
+   <script src="jquery-1.12.4.min.js"></script> // Self hosted (DL debug/compacted versions from jquery.com)
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> // Mooch off google
+</IncludingJQuery>
+
+<Syntax>
+The jQuery syntax is tailor-made for selecting HTML elements and performing some action on the element(s).
+   $(selector).action()
+      $ to access jQuery
+      selector to "query (or find)" HTML elements
+      action() to be performed on the element(s)
+</Syntax>
+
+<Selectors>
+   $("p") // Select by element type
+   $("#test") // Select by #id
+   $(".test") // Select by class
+
+   $("*") // Selects all elements
+   $(this) // Selects the current HTML element
+
+   $("p.intro") // Selects all p elements with class="intro"
+   $("p:first") // Selects the first p element
+
+   $("ul li:first") // Selects the first li element of the first ul element
+   $("ul li:first-child") // Selects the first li element of every ul element
+
+   $("[href]") // Selects all elements with an href attribute
+   $("a[target='_blank']") // Selects all a elements with a target attribute value equal to "_blank"
+   $("a[target!='_blank']") // Selects all a elements with a target attribute value NOT equal to "_blank"
+
+   $(":button") // Selects all button elements and input elements of type="button"
+   $("tr:even") // Selects all even tr elements
+   $("tr:odd") // Selects all odd tr elements
+</Selectors>
+
+<Events>
+Mouse Events
+   click
+   dblclick
+   mouseenter
+   mouseleave
+   mousedown
+   mouseup
+   hover
+
+Keyboard Events
+   keypress
+   keydown
+   keyup
+
+Form Events
+   submit
+   change
+   focus
+   blur
+
+Document/Window Events
+   load
+   resize
+   scroll
+   unload
+
+Use the on method to attach one or more events at once:
+   $("p").on({
+      mouseenter: function(){
+         $(this).css("background-color", "lightgray");
+      },
+      mouseleave: function(){
+         $(this).css("background-color", "lightblue");
+      },
+      click: function(){
+         $(this).css("background-color", "yellow");
+      }
+   });
+</Events>
+
+<Effects>
+$(selector).hide(speed,callback);
+$(selector).show(speed,callback);
+$(selector).toggle(speed,callback);
+
+$(selector).fadeIn(speed,callback);
+$(selector).fadeOut(speed,callback);
+$(selector).fadeToggle(speed,callback);
+$(selector).fadeTo(speed,opacity,easing,callback)
+
+$(selector).slideDown(speed,callback);
+$(selector).slideUp(speed,callback);
+$(selector).slideToggle(speed,callback);
+
+$(selector).animate({styles},speed,easing,callback)
+$(selector).animate({params},speed,callback);
+$(selector).stop(stopAll,goToEnd); // Cancel (abruptly finish) a playing (queue of) animation(s).
+
+   <Animate>
+   $("div").animate({
+      left: '250px',
+      opacity: '0.5',
+      height: '150px',
+      width: '150px'
+   });
+
+   $("div").animate({
+      left: '250px',
+      height: '+=150px',
+      width: '+=150px'
+   });
+   </Animate>'
+
+   <Queing>
+   $("button").click(function(){
+      var div = $("div");
+      div.animate({height: '300px', opacity: '0.4'}, "slow");
+      div.animate({width: '300px', opacity: '0.8'}, "slow");
+      div.animate({height: '100px', opacity: '0.4'}, "slow");
+      div.animate({width: '100px', opacity: '0.8'}, "slow");
+   });
+
+   $("button").click(function(){
+      var div = $("div");
+      div.animate({left: '100px'}, "slow");
+      div.animate({fontSize: '3em'}, "slow");
+   });
+   </Queing>
+
+   <Chaining>
+   $("#p1").css("color", "red").slideUp(2000).slideDown(2000);
+   $("#p1").css("color", "red")
+      .slideUp(2000)
+      .slideDown(2000);
+   </Chaining>
+
+   // Chaining and queuing are the same. Both wait until one effect has finished playing before calling the next one.
+   // Note: The standard callBack does not wait. The callEffect function returns quickly, while the animation still plays over the next several frames.
+</Effects>
+
+<HTML>
+   <Dom>
+   // DOM = Document Object Model
+   text() - Sets or returns the text content of selected elements
+   html() - Sets or returns the content of selected elements (including HTML markup)
+   val() - Sets or returns the value of form fields
+   attr() - used to get attribute values.
+
+   These setters also accept as a second argument the lamba function(i, origValue) { return newValue; }
+   The i is the elementIndex of the selected element.
+   </Dom>
+
+   <Html>
+   $("p").append("Some appended text.", ...);
+   $("p").prepend("Some prepended text.", ...);
+
+   $("img").after("Some text after", ...);
+   $("img").before("Some text before", ...);
+
+   remove(filter...) - Removes the selected element (and its child elements)
+   empty() - Removes the child elements from the selected element
+   </Html>
+
+   <CSS>
+   $("h1, h2, p").addClass("important blue"); add css class(es) to these elements
+   $("h1, h2, p").removeClass("blue");
+   $("h1, h2, p").toggleClass("blue");
+
+   css("propertyname");
+   css("propertyname","value");
+   css({"propertyname":"value","propertyname":"value",...});
+
+   width()
+   height()
+   innerWidth()
+   innerHeight()
+   outerWidth()
+   outerHeight()
+
+   $(document).width();
+   $(window).width();
+   $("#div1").width(500).height(500);
+   </CSS>
+
+</HTML>
+
+<Traversing>
+   parent()
+   parents(filter)
+   parentsUntil(outer) // returns ancestory between ($this) and outer, exclusive.
+
+   children(filter)
+   find(filter) // All descendents
+
+   siblings(filter)
+   next()
+   nextAll()
+   nextUntil(sibling)
+   prev()
+   prevAll()
+   prevUntil(sibling)
+
+   first() // first of the selector's elements
+   last() // last of the selector's elements
+   eq(index) // ith of the selector's element
+
+   filter() // Used after a selector to filter the returned results
+   not() // opposite of filter
+</Traversing>
+
+<AJAX>
+AJAX = Asynchronous JavaScript and XML.
+Asynchronously load content from a URL into a particular element, using HTTP Get/Post requests, without reloading the whole page.
+You can request text, HTML, XML, or JSON.
+Examples of applications using AJAX: Gmail, Google Maps, Youtube, and Facebook tabs.
+
+$(selector).load(URL,data,callback);
+callback can be of the form function(responseTxt, statusTxt, xhr)
+   responseTxt - contains the resulting content if the call succeeds
+   statusTxt - contains the status of the call
+   xhr - contains the XMLHttpRequest object
+
+HTTP GET vs. POST
+   GET - Requests data from a specified resource
+   POST - Submits data to be processed to a specified resource
+
+You can GET or POST arbitrary data
+   $.get(URL,callback);
+   $.post(URL,data,callback);
+
+   <XMLHttpRequest>
+   For more manual control of these GET and POST requests use the XMLHttpRequest object
+
+   xhttp.open("GET", "demo_get.asp", true); // Third argument means asynchronous. May get a cached result.
+   xhttp.send();
+
+   xhttp.open("GET", "demo_get2.asp?fname=Henry&lname=Ford", true); // Add parameters like this
+   xhttp.send();
+
+   xhttp.open("GET", "demo_get.asp?t=" + Math.random(), true); // Add a random index parameter (different URL now) to avoid getting a cached result.
+   xhttp.send();
+
+   // Form Data
+   xhttp.open("POST", "ajax_test.asp", true);
+   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   xhttp.send("fname=Henry&lname=Ford");
+
+   // Callback on resource loaded
+   xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+         document.getElementById("demo").innerHTML = xhttp.responseText;
+      }
+   };
+   xhttp.open("GET", "ajax_info.txt", true);
+   xhttp.send();
+
+   // Response returned as txt
+   document.getElementById("demo").innerHTML = xhttp.responseText;
+
+   // Response returned as XML
+   xmlDoc = xhttp.responseXML;
+   txt = "";
+   x = xmlDoc.getElementsByTagName("ARTIST");
+   for (i = 0; i LT x.length; i++) {
+      txt += x[i].childNodes[0].nodeValue;
+   }
+   document.getElementById("demo").innerHTML = txt;
+
+   // Doing different things based on XMLHttpRequest status
+   xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+         document.getElementById("demo").innerHTML = xhttp.responseText;
+      }
+   };
+   </XMLHttpRequest>
+
+   // Working w/ PHP (server side script)
+   xmlhttp.open("GET", "gethint.php?q=" + str, true);
+
+   // Working w/ ASP (microsoft's "ASP.NET MVC" or "ASP.NET Web API" server side script)
+   xmlhttp.open("GET", "gethint.asp?q=" + str, true);
+</AJAX>
+
+<Examples>
+Make every paragraph in this html doc hide when you click it.
+   $(document).ready(function(){
+       $("p").click(function(){
+           $(this).hide();
+       });
+   });
+
+$(this).hide() - hides the current element.
+$("p").hide() - hides all <p /> elements.
+$(".test").hide() - hides all elements with class="test".
+$("#test").hide() - hides the element with id="test".
+</Example>
+
+<BestPractice>
+Don't run jQuery code until the document has finished loading
+   $(document).ready(function(){
+      // jQuery methods go here...
+   });
+Shorthand version:
+   $(function(){
+      // jQuery methods go here...
+   });
+</BestPractice>
+

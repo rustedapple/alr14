@@ -1,9 +1,24 @@
 
-Git for windows: https://git-for-windows.github.io/
-Git getting started: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+Developer Tools
+   Git for windows: https://git-for-windows.github.io/
+   Git getting started: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
 
-Assembla site (sign up for account here): https://app.assembla.com/
-Assembla Repository URL:  git@git.assembla.com:alightroom.git
-Assembla "Getting started w/ Git" instructions: https://app.assembla.com/spaces/alightroom/git/instructions
+   Assembla site (sign up for account here): https://app.assembla.com/
+   Assembla Repository URL:  git@git.assembla.com:alightroom.git
+   Assembla "Getting started w/ Git" instructions: https://app.assembla.com/spaces/alightroom/git/instructions
 
-Chrome Developer Tools https://developers.google.com/web/tools/setup/?hl=en
+   Chrome Developer Tools https://developers.google.com/web/tools/setup/?hl=en
+
+   Sublime Text: https://www.sublimetext.com/
+
+   Javascript Reference: http://www.w3schools.com/js/default.asp
+   JQuery Reference: http://www.w3schools.com/jquery/default.asp
+
+Referenced Games
+   http://adarkroom.doublespeakgames.com/
+   http://bloodrizer.ru/games/kittens/#
+   http://candybox2.net/
+   http://jhollands.co.uk/spaceplan/
+
+Research
+   https://www.reddit.com/r/incremental_games

@@ -1,0 +1,9 @@
+
+div.square {
+   display:inline-block;
+   margin:0px;
+   padding;0px;
+   width:10px;
+   height:10px;
+   background-color:red;
+}
