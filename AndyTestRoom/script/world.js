@@ -160,7 +160,7 @@ var World = {
 		World.ship = World.mapSearch(World.TILE.SHIP,$SM.get('game.world.map'),1);
 		World.dir = World.compassDir(World.ship[0]);
 		// compass tooltip text
-		Room.compassTooltip(World.dir);
+		Home.compassTooltip(World.dir);
 
 		//subscribe to stateUpdates
 		$.Dispatch('stateUpdate').subscribe(World.handleStateUpdates);
@@ -855,11 +855,11 @@ var World = {
 				$('#outerSlider').css('left', '0px');
 				$('#locationSlider').css('left', '0px');
 				$('#storesContainer').css({'top': '0px', 'right': '0px'});
-				Engine.activeModule = Room;
+				Engine.activeModule = Home;
 				$('div.headerButton').removeClass('selected');
-				Room.tab.addClass('selected');
+				Home.tab.addClass('selected');
 				Engine.setTimeout(function(){
-					Room.onArrival();
+					Home.onArrival();
 					$('#outerSlider').animate({opacity:'1'}, 600, 'linear');
 					Button.cooldown($('#embarkButton'));
 					Engine.keyLock = false;
@@ -909,7 +909,7 @@ var World = {
 
 	leaveItAtHome: function(thing) {
 		 return thing != 'cured meat' && thing != 'bullets' && thing != 'energy cell'  && thing != 'charm' && thing != 'medicine' &&
-		 typeof World.Weapons[thing] == 'undefined' && typeof Room.Craftables[thing] == 'undefined';
+		 typeof World.Weapons[thing] == 'undefined' && typeof Home.Craftables[thing] == 'undefined';
 	},
 
 	getMaxHealth: function() {

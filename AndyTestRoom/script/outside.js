@@ -10,7 +10,7 @@ var Outside = {
 	_POP_DELAY: [0.5, 3],
 	_HUT_ROOM: 4,
 	
-	_INCOME: {
+		_INCOME: {
 		'gatherer': {
 			name: _('gatherer'),
 			delay: 10,
@@ -157,22 +157,36 @@ var Outside = {
 			if(!$SM.get('game.workers')) $SM.set('game.workers', {});
 		}
 		
-		this.updateVillage();
-		Outside.updateWorkersView();
 		Outside.updateVillageIncome();
 		
 		Engine.updateSlider();
 		
-		// Create the gather button
+		// Search for food
 		new Button.Button({
-			id: 'gatherButton',
-			text: _("gather wood"),
-			click: Outside.gatherWood,
-			cooldown: Outside._GATHER_DELAY,
-			width: '80px'
+			id: 'searchButton',
+			text: _("Search for Food"),
+			click: Outside.searchForFood,
+			//cooldown: Home._EXPLORE_COOLDOWN,
+			width: '80px',
+			//cost: {'wood': 1}
 		}).appendTo('div#outsidePanel');
 
-		Outside.updateTrapButton();
+		// Return home
+		new Button.Button({
+			id: 'returnHomeButton',
+			text: _("Return Home"),
+			click: Outside.returnHome,
+			//cooldown: Home._RECRUIT_COOLDOWN,
+			width: '80px',
+			//cost: {'wood': 1}
+		}).appendTo('div#outsidePanel');
+	},
+
+	returnHome: function() {
+
+		$SM.set('stores.wood', 4);
+
+		Engine.travelTo(Home);
 	},
 	
 	getMaxPopulation: function() {
@@ -256,81 +270,6 @@ var Outside = {
 		var nextIncrease = Math.floor(Math.random()*(Outside._POP_DELAY[1] - Outside._POP_DELAY[0])) + Outside._POP_DELAY[0];
 		Engine.log('next population increase scheduled in ' + nextIncrease + ' minutes');
 		Outside._popTimeout = Engine.setTimeout(Outside.increasePopulation, nextIncrease * 60 * 1000);
-	},
-	
-	updateWorkersView: function() {
-		var workers = $('div#workers');
-
-		// If our population is 0 and we don't already have a workers view,
-		// there's nothing to do here.
-		if(!workers.length && $SM.get('game.population') === 0) return;
-
-		var needsAppend = false;
-		if(workers.length === 0) {
-			needsAppend = true;
-			workers = $('<div>').attr('id', 'workers').css('opacity', 0);
-		}
-		
-		var numGatherers = $SM.get('game.population');
-		var gatherer = $('div#workers_row_gatherer', workers);
-		
-		for(var k in $SM.get('game.workers')) {
-			var lk = _(k);
-			var workerCount = $SM.get('game.workers["'+k+'"]');
-			var row = $('div#workers_row_' + k.replace(' ', '-'), workers);
-			if(row.length === 0) {
-				row = Outside.makeWorkerRow(k, workerCount);
-				
-				var curPrev = null;
-				workers.children().each(function(i) {
-					var child = $(this);
-					var cName = child.children('.row_key').text();
-					if(cName != 'gatherer') {
-						if(cName < lk) {
-							curPrev = child.attr('id');
-						}
-					}
-				});
-				if(curPrev == null && gatherer.length === 0) {
-					row.prependTo(workers);
-				} else if(curPrev == null) {
-					row.insertAfter(gatherer);
-				} else {
-					row.insertAfter(workers.find('#'+ curPrev));
-				}
-				
-			} else {
-				$('div#' + row.attr('id') + ' > div.row_val > span', workers).text(workerCount);
-			}
-			numGatherers -= workerCount;
-			if(workerCount === 0) {
-				$('.dnBtn', row).addClass('disabled');
-				$('.dnManyBtn', row).addClass('disabled');
-			} else {
-				$('.dnBtn', row).removeClass('disabled');
-				$('.dnManyBtn', row).removeClass('disabled');
-			}
-		}
-		
-		if(gatherer.length === 0) {
-			gatherer = Outside.makeWorkerRow('gatherer', numGatherers);
-			gatherer.prependTo(workers);
-		} else {
-			$('div#workers_row_gatherer > div.row_val > span', workers).text(numGatherers);
-		}
-		
-		if(numGatherers === 0) {
-			$('.upBtn', '#workers').addClass('disabled');
-			$('.upManyBtn', '#workers').addClass('disabled');
-		} else {
-			$('.upBtn', '#workers').removeClass('disabled');
-			$('.upManyBtn', '#workers').removeClass('disabled');
-		}
-		
-		
-		if(needsAppend && workers.children().length > 0) {
-			workers.appendTo('#outsidePanel').animate({opacity:1}, 300, 'linear');
-		}
 	},
 	
 	getNumGatherers: function() {
@@ -423,59 +362,6 @@ var Outside = {
 		}
 	},
 	
-	updateVillage: function(ignoreStores) {
-		var village = $('div#village');
-		var population = $('div#population');
-		var needsAppend = false;
-		if(village.length === 0) {
-			needsAppend = true;
-			village = $('<div>').attr('id', 'village').css('opacity', 0);
-			population = $('<div>').attr('id', 'population').appendTo(village);
-		}
-		
-		for(var k in $SM.get('game.buildings')) {
-			if(k == 'trap') {
-				var numTraps = $SM.get('game.buildings["'+k+'"]');
-				var numBait = $SM.get('stores.bait', true);
-				var traps = numTraps - numBait;
-				traps = traps < 0 ? 0 : traps;
-				Outside.updateVillageRow(k, traps, village);
-				Outside.updateVillageRow('baited trap', numBait > numTraps ? numTraps : numBait, village);
-			} else {
-				if(Outside.checkWorker(k)) {
-					Outside.updateWorkersView();
-				}
-				Outside.updateVillageRow(k, $SM.get('game.buildings["'+k+'"]'), village);
-			}
-		}
-		/// TRANSLATORS : pop is short for population.
-		population.text(_('pop ') + $SM.get('game.population') + '/' + this.getMaxPopulation());
-		
-		var hasPeeps;
-		if($SM.get('game.buildings["hut"]', true) === 0) {
-			hasPeeps = false;
-			village.attr('data-legend', _('forest'));
-		} else {
-			hasPeeps = true;
-			village.attr('data-legend', _('village'));
-		}
-		
-		if(needsAppend && village.children().length > 1) {
-			village.prependTo('#outsidePanel');
-			village.animate({opacity:1}, 300, 'linear');
-		}
-		
-		if(hasPeeps && typeof Outside._popTimeout == 'undefined') {
-			Outside.schedulePopIncrease();
-		}
-		
-		this.setTitle();
-
-		if(!ignoreStores && Engine.activeModule === Outside && village.children().length > 1) {
-			$('#storesContainer').css({top: village.height() + 26 + Outside._STORES_OFFSET + 'px'});
-		}
-	},
-	
 	checkWorker: function(name) {
 		var jobMap = {
 			'lodge': ['hunter', 'trapper'],
@@ -531,7 +417,7 @@ var Outside = {
 				}
 			}
 		}
-		Room.updateIncomeView();
+		Home.updateIncomeView();
 	},
 	
 	updateTrapButton: function() {
@@ -580,12 +466,6 @@ var Outside = {
 	
 	onArrival: function(transition_diff) {
 		Outside.setTitle();
-		if(!$SM.get('game.outside.seenForest')) {
-			Notifications.notify(Outside, _("the sky is grey and the wind blows relentlessly"));
-			$SM.set('game.outside.seenForest', true);
-		}
-		Outside.updateTrapButton();
-		Outside.updateVillage(true);
 
 		Engine.moveStoresView($('#village'), transition_diff);
 	},
@@ -638,9 +518,7 @@ var Outside = {
 	
 	handleStateUpdates: function(e){
 		if(e.category == 'stores'){
-			Outside.updateVillage();
 		} else if(e.stateName.indexOf('game.workers') === 0 || e.stateName.indexOf('game.population') === 0){
-			Outside.updateVillage();
 			Outside.updateWorkersView();
 			Outside.updateVillageIncome();
 		};
