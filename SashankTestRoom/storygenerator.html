@@ -12,15 +12,24 @@
       <p>Use the following program to dynamically create (or just plain read!) a "Choose your own Adventure" story.</p>
       <!--Button id="loadbutton" type="button" onclick="">Load</Button-->
       <Button id="savebutton" type="button" onclick="">Save</Button>
+      <Button id="prevbutton" type="button" onclick="">Prev Page</BUtton>
+      <Button id="prevbutton" type="button" onclick="">Delete Page</BUtton>
       <!--Button id="playbutton" type="button" onclick="">Edit</BUtton-->
       <div id="storywrapper">
          <div id="storytext">
-            <input type="text" name="pagetext">
+            <textarea type="text" name="pagetext" rows="20" cols="100">Would you like to write a short story or a long story?</textarea>
          </div>
          <div id="choicesWrapper">
-            <Button id="addChoiceButton" type="button" onclick="">Add Choice</Button>
+            <div id="choice1">
+               <Button id="addChoiceButton" type="button" onclick="">A short story please!</Button>
+               <Button id="addChoiceButton" type="button" onclick="">(X)</Button>
+            </div>
+            <div id="choice2">
+               <Button id="addChoiceButton" type="button" onclick="">Are you kidding me? I am pro. I am writing a NOVEL.</Button>
+               <Button id="addChoiceButton" type="button" onclick="">(X)</Button>
+            </div>
          </div>
       </div>
-      <Button id="prevbutton" type="button" onclick="">Prev</BUtton>
+      <Button id="addChoiceButton" type="button" onclick="">Add Choice</Button>
    </body>
 </html>
