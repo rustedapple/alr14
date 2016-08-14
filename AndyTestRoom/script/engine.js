@@ -99,6 +99,7 @@
 			Engine.disableSelection();
 
 			if(this.options.state != null) {
+				//Engine.deleteSave();
 				window.State = this.options.state;
 			} else {
 				Engine.loadGame();

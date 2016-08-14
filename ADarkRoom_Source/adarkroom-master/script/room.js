@@ -473,7 +473,7 @@ var Room = {
 		
 		if(typeof $SM.get('features.location.room') == 'undefined') {
 			$SM.set('features.location.room', true);
-			$SM.set('game.builder.level', -1);
+			//$SM.set('game.builder.level', -1);
 		}
 		
 		// If this is the first time playing, the fire is dead and it's freezing. 

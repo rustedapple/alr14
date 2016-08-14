@@ -519,7 +519,7 @@ var Outside = {
 	handleStateUpdates: function(e){
 		if(e.category == 'stores'){
 		} else if(e.stateName.indexOf('game.workers') === 0 || e.stateName.indexOf('game.population') === 0){
-			Outside.updateWorkersView();
+			//Outside.updateWorkersView();
 			Outside.updateVillageIncome();
 		};
 	},

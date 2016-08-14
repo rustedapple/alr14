@@ -21,16 +21,26 @@ var Home = {
 			this._RECRUIT_COOLDOWN = 0;
 			this._EXPAND_COOLDOWN = 0;
 		}
-		
+
 		if(typeof $SM.get('features.location.home') == 'undefined') {
 			$SM.set('features.location.home', true);
 			$SM.set('features.location.outside', true);
 			$SM.set('game.builder.level', -1);
+			$SM.set('game.temperature', 0);
+			$SM.set('stores.hunger', 100);
+			$SM.set('stores.distance', 1);
+			$SM.set('stores.food', 1);
 		}
 		
 		// If this is the first time playing, the fire is dead and it's freezing. 
 		// Otherwise grab past save state temp and fire level.
-		// $SM.set('game.temperature', $SM.get('game.temperature.value')===undefined?this.TempEnum.Freezing:$SM.get('game.temperature'));
+		if(typeof $SM.get('features.location.outside') == 'undefined') {
+			//$SM.set('stores.hunger') = 100;
+			//Engine.deleteSave();
+		}
+		else {
+			//Engine.deleteSave();
+		}
 		// $SM.set('game.fire', $SM.get('game.fire.value')===undefined?this.FireEnum.Dead:$SM.get('game.fire'));
 		
 		// Create the Home tab
@@ -74,38 +84,18 @@ var Home = {
 		Home.updateIncomeView();
 		Home.updateBuildButtons();
 		
-		Home._fireTimer = Engine.setTimeout(Home.coolFire, Home._FIRE_COOL_DELAY);
-		Home._tempTimer = Engine.setTimeout(Home.adjustTemp, Home._Home_WARM_DELAY);
-		
-		Engine.setTimeout($SM.collectIncome, 1000);
+		Engine.setTimeout($SM.collectIncome, 100);
 
 		//Outside.init();
 		if(Home.changed) {
 			Home.changed = false;
 		}
 		//if($SM.get('game.builder.level') == 3) {
-			$SM.add('game.builder.level', 1);
 			$SM.setIncome('builder', {
-				delay: 10,
-				stores: {'wood' : 2 }
+				delay: 0.1,
+				stores: {'hunger' : -1 }
 			});
-			Home.updateIncomeView();
 		//}
-
-		// Home.setTitle();
-		// if(Home.changed) {
-		// 	Home.changed = false;
-		// }
-		// if($SM.get('game.builder.level') == 3) {
-		// 	$SM.add('game.builder.level', 1);
-		// 	$SM.setIncome('builder', {
-		// 		delay: 1,
-		// 		stores: {'wood' : 2 }
-		// 	});
-		// 	Home.updateIncomeView();
-		// }
-
-		// Engine.moveStoresView(null, transition_diff);
 	},
 	
 	options: {}, // Nothing for now
@@ -121,18 +111,16 @@ var Home = {
 	onArrival: function(transition_diff) {
 		Home.setTitle();
 		if(Home.changed) {
-			Notifications.notify(Home, _("the fire is {0}", Home.FireEnum.fromInt($SM.get('game.fire.value')).text));
-			Notifications.notify(Home, _("the room is {0}", Home.TempEnum.fromInt($SM.get('game.temperature.value')).text));
 			Home.changed = false;
 		}
 		if($SM.get('game.builder.level') == 3) {
-			$SM.add('game.builder.level', 1);
+
 			$SM.setIncome('builder', {
 				delay: 10,
 				stores: {'wood' : 2 }
 			});
-			Room.updateIncomeView();
-			Notifications.notify(Room, _("the stranger is standing by the fire. she says she can help. says she builds things."));
+			Home.updateIncomeView();
+			Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
 		}
 
 		Engine.moveStoresView(null, transition_diff);
@@ -143,17 +131,17 @@ var Home = {
 	},
 
 	leaveNest: function() {
-
-		//Notifications.notify(Home, _("the Home is {0}" , Home.TempEnum.fromInt($SM.get('game.builder.level')).text), true);
-		//if($SM.get('game.builder.level') <= 0) {
-
-			$SM.add('game.builder.level', 1);
-			$SM.set('stores.wood', 4);
+		if($SM.get('game.temperature') != 1) {
+			$SM.set('game.temperature', 1);
+			//$SM.set('game.builder.level', -1);
 			Outside.init();
-			Engine.event('progress', 'outside');
+			//Engine.event('progress', 'outside');
 
 			Engine.travelTo(Outside);
-		//}
+		}
+		else {
+			Engine.travelTo(Outside);
+		}
 		//$('#HomePanel').animate({opacity: '0'}, 600, 'linear', function() {
 				//$('#outerSlider').css('left', '0px');
 				//$('#locationSlider').css('left', '0px');
