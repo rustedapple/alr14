@@ -31,12 +31,12 @@ var Story = {
          "text" : text,
          "choices" : [],
          "render" : function () {
-            $("pageTextArea").val(text);
-            $("choicesWrapper").innerHTML = "";
+            $("#pageTextArea").val(text);
+            $("#choicesWrapper").empty();
             for (var i = 0; i < this.choices.length; i++) {
                var choice = this.choices[i];
                var htmlText = choice.createHtml();
-               $("choicesWrapper").append(htmlText);
+               $("#choicesWrapper").append(htmlText);
             }
          }
       }
@@ -58,9 +58,20 @@ var Story = {
    }
 }
 
+var gStory;
 var Load_Click = function ()
 {
-   var defaultStory = Story.createDefaultStory();
-   defaultStory.render();
-}
+   var storyJson = localStorage.getItem('story');
+   if (storyJson) {
+      //gStory = JSON.parse(storyJson);
+   }
+   if (gStory == null) {
+      gStory = Story.createDefaultStory();
+   }
+   gStory.render();
+};
 
+var Save_Click = function ()
+{
+   localStorage.setItem('story', JSON.stringify(gStory));
+};
