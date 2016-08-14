@@ -64,6 +64,9 @@ var Grid = {
          gridObject.brightness = (i+j) % 2
          gridObject.render();*/
       });
+
+      setInterval(Grid.updateGrid, 100);
+      setInterval(Grid.renderGrid, 100);
    },
    
    "renderGrid" : function () {
@@ -107,11 +110,11 @@ var Grid = {
             if (gridObject.left !== null)
                gridObject.left.brightness += 0.25;*/
             
-            Grid.updateGrid();
+            //Grid.updateGrid();
             Grid.renderGrid();
          },
          "onLeave" : function () {
-            Grid.updateGrid();
+            //Grid.updateGrid();
             Grid.renderGrid();
          },
          "update" : function () {
