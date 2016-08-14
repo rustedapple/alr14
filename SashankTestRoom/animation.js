@@ -65,8 +65,8 @@ var Grid = {
          gridObject.render();*/
       });
 
-      setInterval(Grid.updateGrid, 100);
-      setInterval(Grid.renderGrid, 100);
+      setInterval(Grid.updateGrid, 1);
+      setInterval(Grid.renderGrid, 1);
    },
    
    "renderGrid" : function () {
