@@ -10,9 +10,11 @@ var animation = {
    }
 };
 
-var NUM_ROWS = 50;
-var NUM_COLUMNS = 50;
+var NUM_ROWS = 20;
+var NUM_COLUMNS = 20;
 var mGrid = [];
+var DECAY_RATE = 0.9;
+var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
 var Grid = {
    "createGridHtml" : function () {
@@ -54,11 +56,13 @@ var Grid = {
          gridObject = Grid.getSquare(i,j);
          gridObject.div = $(this);
          //$(this).data("gridObject", gridObject); // TODO why does this not work?
+         // Theory: $() returns a jquery object, whereas you need to operate on the DOM element
+         // But then why does the passed in div not work? Goddammit...
          gridObject.div.data("gridObject", gridObject);
          
-         $(this).css('background-color', 'green');
+         /*$(this).css('background-color', 'green');
          gridObject.brightness = (i+j) % 2
-         gridObject.render();
+         gridObject.render();*/
       });
    },
    
@@ -94,14 +98,14 @@ var Grid = {
          "left" : null,
          "onEnter" : function () {
             gridObject.brightness += 1;
-            if (gridObject.top !== null)
+            /*if (gridObject.top !== null)
                gridObject.top.brightness += 0.25;
             if (gridObject.right !== null)
                gridObject.right.brightness += 0.25;
             if (gridObject.bottom !== null)
                gridObject.bottom.brightness += 0.25;
             if (gridObject.left !== null)
-               gridObject.left.brightness += 0.25;
+               gridObject.left.brightness += 0.25;*/
             
             Grid.updateGrid();
             Grid.renderGrid();
@@ -111,8 +115,19 @@ var Grid = {
             Grid.renderGrid();
          },
          "update" : function () {
-            gridObject.brightness -= 0.1;
-            gridObject.brightness = Math.min(1, Math.max(0, gridObject.brightness));
+            if (gridObject.brightness > 0) {
+               if (gridObject.top !== null)
+                  gridObject.top.brightness += BLEED_FACTOR * gridObject.brightness;
+               if (gridObject.right !== null)
+                  gridObject.right.brightness += BLEED_FACTOR * gridObject.brightness;
+               if (gridObject.bottom !== null)
+                  gridObject.bottom.brightness += BLEED_FACTOR * gridObject.brightness;
+               if (gridObject.left !== null)
+                  gridObject.left.brightness += BLEED_FACTOR * gridObject.brightness;
+               
+               gridObject.brightness *= DECAY_RATE;
+               gridObject.brightness = Math.min(1, Math.max(0, gridObject.brightness));
+            }
          },
          "render" : function () {
             var red = gridObject.brightness * 255;
