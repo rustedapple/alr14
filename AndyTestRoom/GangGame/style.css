@@ -1,0 +1,10 @@
+
+div.square {
+   display:inline-block;
+   vertical-align: top;
+   margin:0px;
+   padding:0px;
+   width:15px;
+   height:15px;
+   background-color:black;
+}
