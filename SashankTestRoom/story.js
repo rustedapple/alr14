@@ -8,13 +8,18 @@ var Story = {
          Story.createChoice("A short story please!"),
          Story.createChoice("Are you kidding me? I am pro. I am writing a NOVEL."),
       ];
+      story.currentPageIndex = 0;
+      return story;
    },
    "createStory" : function () {
       return {
          "pages" : [],
-         "currentPage" : -1,
+         "currentPageIndex" : -1,
          "render" : function () {
-
+            if (0 <= this.currentPageIndex && this.currentPageIndex < this.pages.length) {
+               var page = this.pages[this.currentPageIndex];
+               page.render();
+            }
          }
       }
    },
@@ -23,8 +28,17 @@ var Story = {
          text = "";
       
       return {
-         "text" : "",
-         "choices" : []
+         "text" : text,
+         "choices" : [],
+         "render" : function () {
+            $("pageTextArea").val(text);
+            $("choicesWrapper").innerHTML = "";
+            for (var i = 0; i < this.choices.length; i++) {
+               var choice = this.choices[i];
+               var htmlText = choice.createHtml();
+               $("choicesWrapper").append(htmlText);
+            }
+         }
       }
    },
    "createChoice" : function (text) {
@@ -33,7 +47,20 @@ var Story = {
       
       return {
          "text" : text,
-         "page" : null
+         "page" : null,
+         "createHtml" : function () {
+            return '<div id="choice1"> \
+               <Button type="button" onclick="">' + text + '</Button> \
+               <Button type="button" onclick="">(X)</Button> \
+            </div>';
+         }
       }
    }
 }
+
+var Load_Click = function ()
+{
+   var defaultStory = Story.createDefaultStory();
+   defaultStory.render();
+}
+
