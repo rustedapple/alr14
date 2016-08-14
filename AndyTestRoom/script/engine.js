@@ -204,23 +204,23 @@
 			Events.init();
 			Home.init();
 
-			if(typeof $SM.get('stores.wood') != 'undefined') {
-				Outside.init();
-			}
-			if($SM.get('stores.compass', true) > 0) {
-				Path.init();
-			}
-			if($SM.get('features.location.spaceShip')) {
-				Ship.init();
-			}
+			// if(typeof $SM.get('stores.wood') != 'undefined') {
+			// 	Outside.init();
+			// }
+			// if($SM.get('stores.compass', true) > 0) {
+			// 	Path.init();
+			// }
+			// if($SM.get('features.location.spaceShip')) {
+			// 	Ship.init();
+			// }
 
-			if($SM.get('config.lightsOff', true)){
-					Engine.turnLightsOff();
-			}
+			// if($SM.get('config.lightsOff', true)){
+			// 		Engine.turnLightsOff();
+			// }
 
-			if($SM.get('config.hyperMode', true)){
-					Engine.triggerHyperMode();
-			}
+			// if($SM.get('config.hyperMode', true)){
+			// 		Engine.triggerHyperMode();
+			// }
 
 			Engine.saveLanguage();
 			Engine.travelTo(Home);
@@ -235,33 +235,33 @@
 			return ( location.search.indexOf( 'ignorebrowser=true' ) < 0 && /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test( navigator.userAgent ) );
 		},
 
-		// saveGame: function() {
-		// 	if(typeof Storage != 'undefined' && localStorage) {
-		// 		if(Engine._saveTimer != null) {
-		// 			clearTimeout(Engine._saveTimer);
-		// 		}
-		// 		if(typeof Engine._lastNotify == 'undefined' || Date.now() - Engine._lastNotify > Engine.SAVE_DISPLAY){
-		// 			$('#saveNotify').css('opacity', 1).animate({opacity: 0}, 1000, 'linear');
-		// 			Engine._lastNotify = Date.now();
-		// 		}
-		// 		localStorage.gameState = JSON.stringify(State);
-		// 	}
-		// },
+		saveGame: function() {
+			if(typeof Storage != 'undefined' && localStorage) {
+				if(Engine._saveTimer != null) {
+					clearTimeout(Engine._saveTimer);
+				}
+				if(typeof Engine._lastNotify == 'undefined' || Date.now() - Engine._lastNotify > Engine.SAVE_DISPLAY){
+					$('#saveNotify').css('opacity', 1).animate({opacity: 0}, 1000, 'linear');
+					Engine._lastNotify = Date.now();
+				}
+				localStorage.gameState = JSON.stringify(State);
+			}
+		},
 
-		// loadGame: function() {
-		// 	try {
-		// 		var savedState = JSON.parse(localStorage.gameState);
-		// 		if(savedState) {
-		// 			State = savedState;
-		// 			$SM.updateOldState();
-		// 			Engine.log("loaded save!");
-		// 		}
-		// 	} catch(e) {
-		// 		State = {};
-		// 		$SM.set('version', Engine.VERSION);
-		// 		Engine.event('progress', 'new game');
-		// 	}
-		// },
+		loadGame: function() {
+			try {
+				var savedState = JSON.parse(localStorage.gameState);
+				if(savedState) {
+					State = savedState;
+					$SM.updateOldState();
+					Engine.log("loaded save!");
+				}
+			} catch(e) {
+				State = {};
+				$SM.set('version', Engine.VERSION);
+				Engine.event('progress', 'new game');
+			}
+		},
 
 		exportImport: function() {
 			Events.startEvent({
@@ -580,18 +580,6 @@
 				Engine.activeModule = module;
 
 				module.onArrival(diff);
-
-				if(Engine.activeModule == Home || Engine.activeModule == Path) {
-					// Don't fade out the weapons if we're switching to a module
-					// where we're going to keep showing them anyway.
-					if (module != Home && module != Path) {
-						$('div#weapons').animate({opacity: 0}, 300);
-					}
-				}
-
-				if(module == Home || module == Path) {
-					$('div#weapons').animate({opacity: 1}, 300);
-				}
 
 				Notifications.printQueue(module);
 

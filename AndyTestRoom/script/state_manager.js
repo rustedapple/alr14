@@ -52,23 +52,23 @@ var StateManager = {
 
 	//create all parents and then set state
 	createState: function(stateName, value) {
-		var words = stateName.split(/[.\[\]'"]+/);
-		//for some reason there are sometimes empty strings
-		for (var i = 0; i < words.length; i++) {
-			if (words[i] === '') {
-				words.splice(i, 1);
-				i--;
-			}
-		}
-		var obj = State;
-		var w = null;
-		for(var i=0, len=words.length-1;i<len;i++){
-			w = words[i];
-			if(obj[w] === undefined ) obj[w] = {};
-			obj = obj[w];
-		}
-		obj[words[i]] = value;
-		return obj;
+		// var words = stateName.split(/[.\[\]'"]+/);
+		// //for some reason there are sometimes empty strings
+		// for (var i = 0; i < words.length; i++) {
+		// 	if (words[i] === '') {
+		// 		words.splice(i, 1);
+		// 		i--;
+		// 	}
+		// }
+		// var obj = State;
+		// var w = null;
+		// for(var i=0, len=words.length-1;i<len;i++){
+		// 	w = words[i];
+		// 	if(obj[w] === undefined ) obj[w] = {};
+		// 	obj = obj[w];
+		// }
+		// obj[words[i]] = value;
+		// return obj;
 	},
 
 	//set single state

@@ -713,7 +713,7 @@ var Room = {
 	},
 	
 	unlockForest: function() {
-		$SM.set('stores.wood', 4);
+		//$SM.set('stores.wood', 4);
 		Outside.init();
 		Notifications.notify(Room, _("the wind howls outside"));
 		Notifications.notify(Room, _("the wood is running out"));

@@ -8,7 +8,7 @@ var Home = {
 	_EXPAND_COOLDOWN: 1, // cooldown to 
 	
 	buttons:{},
-	
+
 	name: _("Home"),
 	init: function(options) {
 		this.options = $.extend(
@@ -51,7 +51,6 @@ var Home = {
 			click: Home.leaveNest,
 			//cooldown: Home._EXPLORE_COOLDOWN,
 			width: '80px',
-			//cost: {'wood': 1}
 		}).appendTo('div#HomePanel');
 
 		// Feed baby chickpeas
@@ -61,7 +60,7 @@ var Home = {
 			click: Home.feed,
 			//cooldown: Home._RECRUIT_COOLDOWN,
 			width: '80px',
-			//cost: {'wood': 1}
+			cost: {'hunger': 1}
 		}).appendTo('div#HomePanel');
 		
 		// Create the stores container
@@ -78,42 +77,38 @@ var Home = {
 		Home._fireTimer = Engine.setTimeout(Home.coolFire, Home._FIRE_COOL_DELAY);
 		Home._tempTimer = Engine.setTimeout(Home.adjustTemp, Home._Home_WARM_DELAY);
 		
-		if($SM.get('game.builder.level') == 1 && $SM.get('stores.wood', true) < 0) {
-			Engine.setTimeout(Home.unlockForest, 5);
-		}
 		Engine.setTimeout($SM.collectIncome, 1000);
 
-		// Notifications.notify(Home, _("the Home is {0}", Home.TempEnum.fromInt($SM.get('game.temperature.value')).text));
-		// Notifications.notify(Home, _("the fire is {0}", Home.FireEnum.fromInt($SM.get('game.fire.value')).text));
-
-		//$SM.set('stores.wood', 4);
-		Outside.init();
-		Notifications.notify(Room, _("the wind howls outside"));
-		Notifications.notify(Room, _("the wood is running out"));
-		Engine.event('progress', 'outside');
-	},
-	
-	options: {}, // Nothing for now
-	
-	onArrival: function(transition_diff) {
-		Home.setTitle();
+		//Outside.init();
 		if(Home.changed) {
-			Notifications.notify(Home, _("the fire is {0}", Home.FireEnum.fromInt($SM.get('game.fire.value')).text));
-			Notifications.notify(Home, _("the Home is {0}", Home.TempEnum.fromInt($SM.get('game.temperature.value')).text));
 			Home.changed = false;
 		}
-		if($SM.get('game.builder.level') == 3) {
+		//if($SM.get('game.builder.level') == 3) {
 			$SM.add('game.builder.level', 1);
 			$SM.setIncome('builder', {
 				delay: 10,
 				stores: {'wood' : 2 }
 			});
 			Home.updateIncomeView();
-			Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
-		}
+		//}
 
-		Engine.moveStoresView(null, transition_diff);
+		// Home.setTitle();
+		// if(Home.changed) {
+		// 	Home.changed = false;
+		// }
+		// if($SM.get('game.builder.level') == 3) {
+		// 	$SM.add('game.builder.level', 1);
+		// 	$SM.setIncome('builder', {
+		// 		delay: 1,
+		// 		stores: {'wood' : 2 }
+		// 	});
+		// 	Home.updateIncomeView();
+		// }
+
+		// Engine.moveStoresView(null, transition_diff);
 	},
+	
+	options: {}, // Nothing for now
 	
 	setTitle: function() {
 		var title = $SM.get('game.fire.value') < 2 ? _("A Dark Home") : _("A Firelit Home");
@@ -122,47 +117,58 @@ var Home = {
 		}
 		$('div#location_Home').text(title);
 	},
+
+	onArrival: function(transition_diff) {
+		Home.setTitle();
+		if(Home.changed) {
+			Notifications.notify(Home, _("the fire is {0}", Home.FireEnum.fromInt($SM.get('game.fire.value')).text));
+			Notifications.notify(Home, _("the room is {0}", Home.TempEnum.fromInt($SM.get('game.temperature.value')).text));
+			Home.changed = false;
+		}
+		if($SM.get('game.builder.level') == 3) {
+			$SM.add('game.builder.level', 1);
+			$SM.setIncome('builder', {
+				delay: 10,
+				stores: {'wood' : 2 }
+			});
+			Room.updateIncomeView();
+			Notifications.notify(Room, _("the stranger is standing by the fire. she says she can help. says she builds things."));
+		}
+
+		Engine.moveStoresView(null, transition_diff);
+	},
 	
 	updateButton: function() {
 		var stoke = $('#stokeButton.button');
 	},
 
 	leaveNest: function() {
-		// Look for food
-		new Button.Button({
-			id: 'recruitButton',
-			text: _("Recruit"),
-			click: Home.recruit,
-			cooldown: Home._RECRUIT_COOLDOWN,
-			width: '80px',
-			//cost: {'wood': 1}
-		}).appendTo('div#HomePanel');
 
-		// Return to Nest
-		new Button.Button({
-			id: 'recruitButton',
-			text: _("Recruit"),
-			click: Home.recruit,
-			cooldown: Home._RECRUIT_COOLDOWN,
-			width: '80px',
-			//cost: {'wood': 1}
-		}).appendTo('div#HomePanel');
-	},
-	
-	stokeFire: function() {
-		var wood = $SM.get('stores.wood');
-		if(wood === 0) {
-			Notifications.notify(Home, _("the wood has run out"));
-			Button.clearCooldown($('#stokeButton.button'));
-			return;
-		}
-		if(wood > 0) {
-			$SM.set('stores.wood', wood - 1);
-		}
-		if($SM.get('game.fire.value') < 4) {
-			$SM.set('game.fire', Home.FireEnum.fromInt($SM.get('game.fire.value') + 1));
-		}
-		Home.onFireChange();
+		//Notifications.notify(Home, _("the Home is {0}" , Home.TempEnum.fromInt($SM.get('game.builder.level')).text), true);
+		//if($SM.get('game.builder.level') <= 0) {
+
+			$SM.add('game.builder.level', 1);
+			$SM.set('stores.wood', 4);
+			Outside.init();
+			Engine.event('progress', 'outside');
+
+			Engine.travelTo(Outside);
+		//}
+		//$('#HomePanel').animate({opacity: '0'}, 600, 'linear', function() {
+				//$('#outerSlider').css('left', '0px');
+				//$('#locationSlider').css('left', '0px');
+				//$('#storesContainer').css({'top': '0px', 'right': '0px'});
+				//Engine.activeModule = Outside;
+				//$('div.headerButton').removeClass('selected');
+				//Room.tab.addClass('selected');
+				// Engine.setTimeout(function(){
+				// 	Room.onArrival();
+				// 	$('#outerSlider').animate({opacity:'1'}, 600, 'linear');
+				// 	Button.cooldown($('#embarkButton'));
+				// 	Engine.keyLock = false;
+				// 	Engine.tabNavigation = true;
+				// }, 2000, true);
+		//	});
 	},
 	
 	adjustTemp: function() {
@@ -216,13 +222,6 @@ var Home = {
 		for(var k in $SM.get('stores')) {
 			
 			var type = null;
-			if(Home.Craftables[k]) {
-				type = Home.Craftables[k].type;
-			} else if(Home.TradeGoods[k]) {
-				type = Home.TradeGoods[k].type;
-			} else if (Home.MiscItems[k]) {
-				type = Home.MiscItems[k].type;
-			}
 			
 			var location;
 			switch(type) {
@@ -305,10 +304,6 @@ var Home = {
 		//if(newRow) {
 			Home.updateIncomeView();
 		//}/
-
-		//if($("div#outsidePanel").length) {
-			Outside.updateVillage();
-		//}
 
 		if($SM.get('stores.compass') && !Home.pathDiscovery){
 			Home.pathDiscovery = true;
@@ -434,38 +429,6 @@ var Home = {
 	
 	needsWorkshop: function(type) {
 		return type == 'weapon' || type == 'upgrade' || type =='tool';
-	},
-	
-	craftUnlocked: function(thing) {
-		if(Home.buttons[thing]) {
-			return true;
-		}
-		if($SM.get('game.builder.level') < 4) return false;
-		var craftable = Home.Craftables[thing];
-		if(Home.needsWorkshop(craftable.type) && $SM.get('game.buildings["'+'workshop'+'"]', true) === 0) return false;
-		var cost = craftable.cost();
-		
-		//show button if one has already been built
-		if($SM.get('game.buildings["'+thing+'"]') > 0){
-			Home.buttons[thing] = true;
-			return true;
-		}
-		// Show buttons if we have at least 1/2 the wood, and all other components have been seen.
-		if($SM.get('stores.wood', true) < cost['wood'] * 0.5) {
-			return false;
-		}
-		for(var c in cost) {
-			if(!$SM.get('stores["'+c+'"]')) {
-				return false;
-			}
-		}
-		
-		Home.buttons[thing] = true;
-		//don't notify if it has already been built before
-		if(!$SM.get('game.buildings["'+thing+'"]')){
-			Notifications.notify(Home, craftable.availableMsg);
-		}
-		return true;
 	},
 	
 	buyUnlocked: function(thing) {
