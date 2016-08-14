@@ -4,7 +4,8 @@
 var Outside = {
 	name: _("Outside"),
 	
-	_FINDFOOD_COOLDOWN: 3, // cooldown to 
+	_FINDFOOD_COOLDOWN: 2, // cooldown to 
+	_RETURNHOME_COOLDOWN: 2,
 
 	_STORES_OFFSET: 0,
 	_GATHER_DELAY: 60,
@@ -170,7 +171,7 @@ var Outside = {
 			click: Outside.findFood,
 			cooldown: Outside._FINDFOOD_COOLDOWN,
 			width: '80px',
-			//cost: {'wood': 1}
+			//cost: {'wood': 231rsaefsf}
 		}).appendTo('div#outsidePanel');
 
 		// Return home
@@ -178,7 +179,7 @@ var Outside = {
 			id: 'returnHomeButton',
 			text: _("Return Home"),
 			click: Outside.returnHome,
-			//cooldown: Outside._RECRUIT_COOLDOWN,
+			cooldown: Outside._RETURNHOME_COOLDOWN,
 			width: '80px',
 			//cost: {'wood': 1}
 		}).appendTo('div#outsidePanel');
@@ -186,10 +187,9 @@ var Outside = {
 
 	findFood: function() {
 		var food = $SM.get('stores.food');
-
+		var distance = $SM.get('stores.distance');
 		var babyBirdHealth = $SM.get('stores.babyBirdHealth');
-
-		var num = Math.floor(Math.random()*2);
+		var num = Math.floor(Math.random()*6);
 		
 		if(num === 0) {
 			if(food === 0) {
@@ -202,14 +202,22 @@ var Outside = {
 			}
 		} else {
 			Notifications.notify(Outside, _("Couldn't find food"));
+			$SM.set('stores.distance', distance + 1);
 		}
 	},
 
 	returnHome: function() {
+		var distance = $SM.get('stores.distance');
 
-		//$SM.set('stores.wood', 4);
 
-		Engine.travelTo(Home);
+
+		if(distance === 1) {
+			$SM.set('stores.distance', distance - 1);
+			Engine.travelTo(Home);
+		} else {
+			$SM.set('stores.distance', distance - 1);
+		}
+		
 	},
 	
 	getMaxPopulation: function() {

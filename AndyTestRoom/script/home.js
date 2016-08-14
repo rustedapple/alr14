@@ -118,7 +118,7 @@ var Home = {
 		var explore = $('#exploreButton.button');
 		var feed = $('#feedButton.button');
 
-		Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
+		//Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
 		//explore.hide();
 		//feed.hide();
 		// if($SM.get('game.fire.value') == Room.FireEnum.Dead.value && stoke.css('display') != 'none') {
@@ -139,22 +139,10 @@ var Home = {
 			$SM.set('game.temperature', 1);
 			//$SM.set('game.babyBirdHealth.level', -1);
 			Outside.init();
-			//Engine.event('progress', 'outside');
-			$SM.setIncome('flying', {
-				delay: 1,
-				stores: {'distance' : 1 }
-			});
-
-			Engine.travelTo(Outside);
 		}
-		else {
-			$SM.setIncome('flying', {
-				delay: 1,
-				stores: {'distance' : 1 }
-			});
 
-			Engine.travelTo(Outside);
-		}
+		Engine.travelTo(Outside);
+		$SM.set('stores.distance', 1);
 	},
 
 	feed: function() {
