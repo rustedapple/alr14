@@ -47,13 +47,14 @@ var Grid = {
             gridObject.left   = Grid.getSquare(i-1,j);
          }
       };
-      $(".square").each(function (index) {
+      $(".square").each(function (index, div) {
          i = Math.floor(index % NUM_COLUMNS);
          j = Math.floor(index / NUM_COLUMNS);
-         console.log(i + ", " + j);
+         //console.log(i + ", " + j);
          gridObject = Grid.getSquare(i,j);
-         $(this).data(gridObject); // TODO this does not work so well...
          gridObject.div = $(this);
+         //$(this).data("gridObject", gridObject); // TODO why does this not work?
+         gridObject.div.data("gridObject", gridObject);
          
          $(this).css('background-color', 'green');
          gridObject.brightness = (i+j) % 2
@@ -62,6 +63,7 @@ var Grid = {
    },
    
    "renderGrid" : function () {
+      var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
             var gridObject = Grid.getSquare(i,j);
@@ -71,6 +73,7 @@ var Grid = {
    },
    
    "updateGrid" : function () {
+      var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
             var gridObject = Grid.getSquare(i,j);
@@ -90,15 +93,26 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "onEnter" : function () {
-            brightness += 1;
-            top.brightness += 0.25;
-            right.brightness += 0.25;
-            bottom.brightness += 0.25;
-            left.brightness += 0.25;
+            gridObject.brightness += 1;
+            if (gridObject.top !== null)
+               gridObject.top.brightness += 0.25;
+            if (gridObject.right !== null)
+               gridObject.right.brightness += 0.25;
+            if (gridObject.bottom !== null)
+               gridObject.bottom.brightness += 0.25;
+            if (gridObject.left !== null)
+               gridObject.left.brightness += 0.25;
+            
+            Grid.updateGrid();
+            Grid.renderGrid();
+         },
+         "onLeave" : function () {
+            Grid.updateGrid();
+            Grid.renderGrid();
          },
          "update" : function () {
-            //brightness -= 1;
-            gridObject.brightness = Math.min(1, Math.max(0, brightness));
+            gridObject.brightness -= 0.1;
+            gridObject.brightness = Math.min(1, Math.max(0, gridObject.brightness));
          },
          "render" : function () {
             var red = gridObject.brightness * 255;
@@ -124,12 +138,17 @@ var Grid = {
 
 var Square = {
    "OnEnter" : function (div) {
-      var gridObject = $(this).data();
-      //gridObject.onEnter();
+      var gridObject = div.data("gridObject");
+      for (var property in gridObject) {
+         if (gridObject.hasOwnProperty(property)) {
+            // console.log(property + ": " + gridObject[property]);
+         }
+      }
+      gridObject.onEnter();
    },
 
    "OnLeave" : function (div) {
-      var gridObject = $(this).data();
-      //gridObject.onLeave();
+      var gridObject = div.data("gridObject");
+      gridObject.onLeave();
    },
 };
