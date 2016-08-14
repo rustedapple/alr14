@@ -14,11 +14,14 @@ Developer Tools
    Javascript Reference: http://www.w3schools.com/js/default.asp
    JQuery Reference: http://www.w3schools.com/jquery/default.asp
 
-Referenced Games
+Research
    http://adarkroom.doublespeakgames.com/
    http://bloodrizer.ru/games/kittens/#
    http://candybox2.net/
    http://jhollands.co.uk/spaceplan/
-
-Research
    https://www.reddit.com/r/incremental_games
+   
+Coding links:
+   JQuery and forms: https://api.jquery.com/text-selector/
+   
+   
