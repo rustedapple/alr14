@@ -3,8 +3,8 @@
  */
 var Home = {
 	// times in (minutes * seconds * milliseconds)
-	_EXPLORE_COOLDOWN: 60, // cooldown to 
-	_RECRUIT_COOLDOWN: 1, // cooldown to 
+	_EXPLORE_COOLDOWN: 1, // cooldown to 
+	_FEED_COOLDOWN: 1, // cooldown to 
 	_EXPAND_COOLDOWN: 1, // cooldown to 
 	
 	buttons:{},
@@ -18,30 +18,38 @@ var Home = {
 
 		if(Engine._debug) {
 			this._EXPLORE_COOLDOWN = 0;
-			this._RECRUIT_COOLDOWN = 0;
+			this._FEED_COOLDOWN = 0;
 			this._EXPAND_COOLDOWN = 0;
 		}
 
 		if(typeof $SM.get('features.location.home') == 'undefined') {
+			var prestige = Prestige.get();
+			//window.State = {};
+			localStorage.clear();
+			Prestige.set(prestige);
+
+			$SM.setIncome('flying', {
+				delay: 1,
+				stores: {'distance' : 0 }
+			});
+
+			$SM.setIncome('babyBirdHealth', {
+				delay: 1,
+				stores: {'babyBirdHealth' : 0 }
+			});
+
 			$SM.set('features.location.home', true);
 			$SM.set('features.location.outside', true);
-			$SM.set('game.builder.level', -1);
+			$SM.set('game.babyBirdHealth.level', -1);
 			$SM.set('game.temperature', 0);
-			$SM.set('stores.hunger', 100);
-			$SM.set('stores.distance', 1);
+			$SM.set('stores.babyBirdHealth', 0);
 			$SM.set('stores.food', 1);
-		}
-		
-		// If this is the first time playing, the fire is dead and it's freezing. 
-		// Otherwise grab past save state temp and fire level.
-		if(typeof $SM.get('features.location.outside') == 'undefined') {
-			//$SM.set('stores.hunger') = 100;
+			$SM.set('stores.distance', 0);
+
+
+
 			//Engine.deleteSave();
 		}
-		else {
-			//Engine.deleteSave();
-		}
-		// $SM.set('game.fire', $SM.get('game.fire.value')===undefined?this.FireEnum.Dead:$SM.get('game.fire'));
 		
 		// Create the Home tab
 		this.tab = Header.addLocation(_("Base"), "Home", Home);
@@ -54,23 +62,13 @@ var Home = {
 		
 		Engine.updateSlider();
 		
-		// Leave Nest
+		// Hatch Egg
 		new Button.Button({
-			id: 'exploreButton',
-			text: _("Leave Nest"),
-			click: Home.leaveNest,
+			id: 'hatchButton',
+			text: _("Hatch Egg"),
+			click: Home.hatchEgg,
 			//cooldown: Home._EXPLORE_COOLDOWN,
 			width: '80px',
-		}).appendTo('div#HomePanel');
-
-		// Feed baby chickpeas
-		new Button.Button({
-			id: 'recruitButton',
-			text: _("Feed Baby Chickpeas"),
-			click: Home.feed,
-			//cooldown: Home._RECRUIT_COOLDOWN,
-			width: '80px',
-			cost: {'hunger': 1}
 		}).appendTo('div#HomePanel');
 		
 		// Create the stores container
@@ -86,16 +84,9 @@ var Home = {
 		
 		Engine.setTimeout($SM.collectIncome, 100);
 
-		//Outside.init();
 		if(Home.changed) {
 			Home.changed = false;
 		}
-		//if($SM.get('game.builder.level') == 3) {
-			$SM.setIncome('builder', {
-				delay: 0.1,
-				stores: {'hunger' : -1 }
-			});
-		//}
 	},
 	
 	options: {}, // Nothing for now
@@ -113,12 +104,9 @@ var Home = {
 		if(Home.changed) {
 			Home.changed = false;
 		}
-		if($SM.get('game.builder.level') == 3) {
+		if($SM.get('game.babyBirdHealth.level') == 3) {
 
-			$SM.setIncome('builder', {
-				delay: 10,
-				stores: {'wood' : 2 }
-			});
+			
 			Home.updateIncomeView();
 			Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
 		}
@@ -127,36 +115,97 @@ var Home = {
 	},
 	
 	updateButton: function() {
-		var stoke = $('#stokeButton.button');
+		var explore = $('#exploreButton.button');
+		var feed = $('#feedButton.button');
+
+		Notifications.notify(Home, _("the stranger is standing by the fire. she says she can help. says she builds things."));
+		//explore.hide();
+		//feed.hide();
+		// if($SM.get('game.fire.value') == Room.FireEnum.Dead.value && stoke.css('display') != 'none') {
+		// 	stoke.hide();
+		// 	light.show();
+	
+		// if(!$SM.get('stores.food')) {
+		// 	feed.addClass('free');
+		// 	explore.addClass('free');
+		// } else {
+		// 	feed.removeClass('free');
+		// 	explore.removeClass('free');
+		// }
 	},
 
 	leaveNest: function() {
 		if($SM.get('game.temperature') != 1) {
 			$SM.set('game.temperature', 1);
-			//$SM.set('game.builder.level', -1);
+			//$SM.set('game.babyBirdHealth.level', -1);
 			Outside.init();
 			//Engine.event('progress', 'outside');
+			$SM.setIncome('flying', {
+				delay: 1,
+				stores: {'distance' : 1 }
+			});
 
 			Engine.travelTo(Outside);
 		}
 		else {
+			$SM.setIncome('flying', {
+				delay: 1,
+				stores: {'distance' : 1 }
+			});
+
 			Engine.travelTo(Outside);
 		}
-		//$('#HomePanel').animate({opacity: '0'}, 600, 'linear', function() {
-				//$('#outerSlider').css('left', '0px');
-				//$('#locationSlider').css('left', '0px');
-				//$('#storesContainer').css({'top': '0px', 'right': '0px'});
-				//Engine.activeModule = Outside;
-				//$('div.headerButton').removeClass('selected');
-				//Room.tab.addClass('selected');
-				// Engine.setTimeout(function(){
-				// 	Room.onArrival();
-				// 	$('#outerSlider').animate({opacity:'1'}, 600, 'linear');
-				// 	Button.cooldown($('#embarkButton'));
-				// 	Engine.keyLock = false;
-				// 	Engine.tabNavigation = true;
-				// }, 2000, true);
-		//	});
+	},
+
+	feed: function() {
+		var food = $SM.get('stores.food');
+		var babyBirdHealth = $SM.get('stores.babyBirdHealth');
+		if(food === 0) {
+			Notifications.notify(Home, _("no food"));
+			Button.clearCooldown($('#feedButton.button'));
+			return;
+		}
+		if(food > 0) {
+			$SM.set('stores.food', food - 1);
+			if (babyBirdHealth > 90) {
+				$SM.set('stores.babyBirdHealth', 100);
+			}
+			else {
+				$SM.set('stores.babyBirdHealth', babyBirdHealth + 10);				
+			}
+		}
+	},
+
+	hatchEgg: function() {
+		var hatchEggButton = $('#hatchButton.button');
+
+		// Leave Nest
+		new Button.Button({
+			id: 'exploreButton',
+			text: _("Leave Nest"),
+			click: Home.leaveNest,
+			cooldown: Home._EXPLORE_COOLDOWN,
+			width: '80px',
+		}).appendTo('div#HomePanel');
+
+		// Feed baby chickpeas
+		new Button.Button({
+			id: 'feedButton',
+			text: _("Feed Baby Chickpeas"),
+			click: Home.feed,
+			cooldown: Home._FEED_COOLDOWN,
+			width: '80px',
+			cost: {'food': 1}
+		}).appendTo('div#HomePanel');
+
+		$SM.setIncome('babyBirdHealth', {
+				delay: 1,
+				stores: {'babyBirdHealth' : -1 }
+			});
+
+		$SM.set('stores.babyBirdHealth', 80);
+
+		hatchEggButton.hide();
 	},
 	
 	adjustTemp: function() {
@@ -364,7 +413,7 @@ var Home = {
 	build: function(buildBtn) {
 		var thing = $(buildBtn).attr('buildThing');
 		if($SM.get('game.temperature.value') <= Home.TempEnum.Cold.value) {
-			Notifications.notify(Home, _("builder just shivers"));
+			Notifications.notify(Home, _("babyBirdHealth just shivers"));
 			return false;
 		}
 		var craftable = Home.Craftables[thing];

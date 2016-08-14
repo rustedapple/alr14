@@ -34,7 +34,7 @@ var Prestige = {
 		{ store: 'grenade', type: 'a' },
 		{ store: 'bolas', type: 'a' },
 		
-		{ store: 'hunger', type: 'g' },
+		{ store: 'health', type: 'g' },
 		{ store: 'distance', type: 'g' },
 		{ store: 'food', type: 'g' }
 	],

@@ -99,7 +99,7 @@
 			Engine.disableSelection();
 
 			if(this.options.state != null) {
-				//Engine.deleteSave();
+				Engine.deleteSave();
 				window.State = this.options.state;
 			} else {
 				Engine.loadGame();
@@ -573,7 +573,7 @@
 				var diff = Math.abs(panelIndex - currentIndex);
 				slider.animate({left: -(panelIndex * 700) + 'px'}, 300 * diff);
 
-				if($SM.get('stores.wood') !== undefined) {
+				if($SM.get('stores.babyBirdHealth') !== undefined) {
 				// FIXME Why does this work if there's an animation queue...?
 					stores.animate({right: -(panelIndex * 700) + 'px'}, 300 * diff);
 				}

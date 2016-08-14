@@ -4,6 +4,8 @@
 var Outside = {
 	name: _("Outside"),
 	
+	_FINDFOOD_COOLDOWN: 3, // cooldown to 
+
 	_STORES_OFFSET: 0,
 	_GATHER_DELAY: 60,
 	_TRAPS_DELAY: 90,
@@ -163,10 +165,10 @@ var Outside = {
 		
 		// Search for food
 		new Button.Button({
-			id: 'searchButton',
+			id: 'findFoodButton',
 			text: _("Search for Food"),
-			click: Outside.searchForFood,
-			//cooldown: Home._EXPLORE_COOLDOWN,
+			click: Outside.findFood,
+			cooldown: Outside._FINDFOOD_COOLDOWN,
 			width: '80px',
 			//cost: {'wood': 1}
 		}).appendTo('div#outsidePanel');
@@ -176,15 +178,36 @@ var Outside = {
 			id: 'returnHomeButton',
 			text: _("Return Home"),
 			click: Outside.returnHome,
-			//cooldown: Home._RECRUIT_COOLDOWN,
+			//cooldown: Outside._RECRUIT_COOLDOWN,
 			width: '80px',
 			//cost: {'wood': 1}
 		}).appendTo('div#outsidePanel');
 	},
 
+	findFood: function() {
+		var food = $SM.get('stores.food');
+
+		var babyBirdHealth = $SM.get('stores.babyBirdHealth');
+
+		var num = Math.floor(Math.random()*2);
+		
+		if(num === 0) {
+			if(food === 0) {
+				$SM.set('stores.food', food + 1);
+			}
+			if(food > 0) {
+				Notifications.notify(Outside, _("Can't hold more food"));
+				Button.clearCooldown($('#findFoodButton.button'));
+				return;
+			}
+		} else {
+			Notifications.notify(Outside, _("Couldn't find food"));
+		}
+	},
+
 	returnHome: function() {
 
-		$SM.set('stores.wood', 4);
+		//$SM.set('stores.wood', 4);
 
 		Engine.travelTo(Home);
 	},
