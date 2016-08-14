@@ -32,7 +32,11 @@ var Prestige = {
 		{ store: 'bullets', type: 'a' },
 		{ store: 'energy cell', type: 'a' },
 		{ store: 'grenade', type: 'a' },
-		{ store: 'bolas', type: 'a' }
+		{ store: 'bolas', type: 'a' },
+		
+		{ store: 'health', type: 'g' },
+		{ store: 'distance', type: 'g' },
+		{ store: 'food', type: 'g' }
 	],
 	
 	getStores: function(reduce) {

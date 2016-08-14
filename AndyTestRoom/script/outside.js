@@ -4,6 +4,9 @@
 var Outside = {
 	name: _("Outside"),
 	
+	_FINDFOOD_COOLDOWN: 2, // cooldown to 
+	_RETURNHOME_COOLDOWN: 2,
+
 	_STORES_OFFSET: 0,
 	_GATHER_DELAY: 60,
 	_TRAPS_DELAY: 90,
@@ -163,12 +166,12 @@ var Outside = {
 		
 		// Search for food
 		new Button.Button({
-			id: 'searchButton',
+			id: 'findFoodButton',
 			text: _("Search for Food"),
-			click: Outside.searchForFood,
-			//cooldown: Home._EXPLORE_COOLDOWN,
+			click: Outside.findFood,
+			cooldown: Outside._FINDFOOD_COOLDOWN,
 			width: '80px',
-			//cost: {'wood': 1}
+			//cost: {'wood': 231rsaefsf}
 		}).appendTo('div#outsidePanel');
 
 		// Return home
@@ -176,17 +179,45 @@ var Outside = {
 			id: 'returnHomeButton',
 			text: _("Return Home"),
 			click: Outside.returnHome,
-			//cooldown: Home._RECRUIT_COOLDOWN,
+			cooldown: Outside._RETURNHOME_COOLDOWN,
 			width: '80px',
 			//cost: {'wood': 1}
 		}).appendTo('div#outsidePanel');
 	},
 
+	findFood: function() {
+		var food = $SM.get('stores.food');
+		var distance = $SM.get('stores.distance');
+		var babyBirdHealth = $SM.get('stores.babyBirdHealth');
+		var num = Math.floor(Math.random()*6);
+		
+		if(num === 0) {
+			if(food === 0) {
+				$SM.set('stores.food', food + 1);
+			}
+			if(food > 0) {
+				Notifications.notify(Outside, _("Can't hold more food"));
+				Button.clearCooldown($('#findFoodButton.button'));
+				return;
+			}
+		} else {
+			Notifications.notify(Outside, _("Couldn't find food"));
+			$SM.set('stores.distance', distance + 1);
+		}
+	},
+
 	returnHome: function() {
+		var distance = $SM.get('stores.distance');
 
-		$SM.set('stores.wood', 4);
 
-		Engine.travelTo(Home);
+
+		if(distance === 1) {
+			$SM.set('stores.distance', distance - 1);
+			Engine.travelTo(Home);
+		} else {
+			$SM.set('stores.distance', distance - 1);
+		}
+		
 	},
 	
 	getMaxPopulation: function() {
@@ -519,7 +550,7 @@ var Outside = {
 	handleStateUpdates: function(e){
 		if(e.category == 'stores'){
 		} else if(e.stateName.indexOf('game.workers') === 0 || e.stateName.indexOf('game.population') === 0){
-			Outside.updateWorkersView();
+			//Outside.updateWorkersView();
 			Outside.updateVillageIncome();
 		};
 	},
