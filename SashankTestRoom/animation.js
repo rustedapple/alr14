@@ -31,7 +31,7 @@ var Grid = {
    },
    
    "initializeGrid" : function () {
-      var i, j;
+      var i, j, gridObject;
       for (i = 0; i < NUM_COLUMNS; i++) {
          mGrid[i] = [];
          for (j = 0; j < NUM_ROWS; j++) {
@@ -40,19 +40,24 @@ var Grid = {
       };
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            var gridObject = Grid.getSquare(i,j);
+            gridObject = Grid.getSquare(i,j);
             gridObject.top    = Grid.getSquare(i,j-1);
             gridObject.right  = Grid.getSquare(i+1,j);
             gridObject.bottom = Grid.getSquare(i,j+1);
             gridObject.left   = Grid.getSquare(i-1,j);
          }
       };
-      $("#gridsquare").each(function (index) {
-         var i = index % NUM_COLUMNS;
-         var j = index / NUM_COLUMNS;
-         var gridObject = Grid.getSquare(i,j);
-         gridObject.div = $(this);
+      $(".square").each(function (index) {
+         i = Math.floor(index % NUM_COLUMNS);
+         j = Math.floor(index / NUM_COLUMNS);
+         console.log(i + ", " + j);
+         gridObject = Grid.getSquare(i,j);
          $(this).data(gridObject); // TODO this does not work so well...
+         gridObject.div = $(this);
+         
+         $(this).css('background-color', 'green');
+         gridObject.brightness = (i+j) % 2
+         gridObject.render();
       });
    },
    
@@ -85,18 +90,20 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "onEnter" : function () {
-            brightness += 100;
-            top.brightness += 25;
-            right.brightness += 25;
-            bottom.brightness += 25;
-            left.brightness += 25;
+            brightness += 1;
+            top.brightness += 0.25;
+            right.brightness += 0.25;
+            bottom.brightness += 0.25;
+            left.brightness += 0.25;
          },
          "update" : function () {
-            brightness -= 1;
-            brightness = Math.min(100, Math.max(0, brightness));
+            //brightness -= 1;
+            gridObject.brightness = Math.min(1, Math.max(0, brightness));
          },
          "render" : function () {
-            div.css('opacity', brightness);
+            var red = gridObject.brightness * 255;
+            var blue = (1 - gridObject.brightness) * 255;
+            gridObject.div.css('background-color', "rgb(" + Math.floor(red) + ", 0, " + Math.floor(blue) + ")");
          },
       };
       if (mGrid[i] == undefined) {
@@ -118,11 +125,11 @@ var Grid = {
 var Square = {
    "OnEnter" : function (div) {
       var gridObject = $(this).data();
-      gridObject.onEnter();
+      //gridObject.onEnter();
    },
 
    "OnLeave" : function (div) {
       var gridObject = $(this).data();
-      gridObject.onLeave();
+      //gridObject.onLeave();
    },
 };
