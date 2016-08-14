@@ -52,8 +52,26 @@ var Grid = {
          var j = index / NUM_COLUMNS;
          var gridObject = Grid.getSquare(i,j);
          gridObject.div = $(this);
-         $(this).data(gridObject);
+         $(this).data(gridObject); // TODO this does not work so well...
       });
+   },
+   
+   "renderGrid" : function () {
+      for (i = 0; i < NUM_COLUMNS; i++) {
+         for (j = 0; j < NUM_ROWS; j++) {
+            var gridObject = Grid.getSquare(i,j);
+            gridObject.render();
+         }
+      };
+   },
+   
+   "updateGrid" : function () {
+      for (i = 0; i < NUM_COLUMNS; i++) {
+         for (j = 0; j < NUM_ROWS; j++) {
+            var gridObject = Grid.getSquare(i,j);
+            gridObject.update();
+         }
+      };
    },
    
    "createGridObject" : function (i, j) {
@@ -66,6 +84,20 @@ var Grid = {
          "right" : null,
          "bottom" : null,
          "left" : null,
+         "onEnter" : function () {
+            brightness += 100;
+            top.brightness += 25;
+            right.brightness += 25;
+            bottom.brightness += 25;
+            left.brightness += 25;
+         },
+         "update" : function () {
+            brightness -= 1;
+            brightness = Math.min(100, Math.max(0, brightness));
+         },
+         "render" : function () {
+            div.css('opacity', brightness);
+         },
       };
       if (mGrid[i] == undefined) {
          mGrid[i] = [];
@@ -86,26 +118,11 @@ var Grid = {
 var Square = {
    "OnEnter" : function (div) {
       var gridObject = $(this).data();
-      gridObject.brightness = 1;
-      if (gridObject.brightness > 0.5)
-      {
-         div.css('background-color', 'blue');
-      }
-      else
-      {
-         div.css('background-color', 'red');
-      }
+      gridObject.onEnter();
    },
 
    "OnLeave" : function (div) {
       var gridObject = $(this).data();
-      if (gridObject.brightness > 0.5)
-      {
-         div.css('background-color', 'blue');
-      }
-      else
-      {
-         div.css('background-color', 'red');
-      }
+      gridObject.onLeave();
    },
 };
