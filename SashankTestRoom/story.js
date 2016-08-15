@@ -1,5 +1,6 @@
 "use strict";
 
+var gStory;
 var Story = {
    "createDefaultStory" : function () {
       var story = Story.createStory();
@@ -15,12 +16,6 @@ var Story = {
       return {
          "pages" : [],
          "currentPageIndex" : -1,
-         "render" : function () {
-            if (0 <= this.currentPageIndex && this.currentPageIndex < this.pages.length) {
-               var page = this.pages[this.currentPageIndex];
-               page.render();
-            }
-         }
       }
    },
    "createPage" : function (text) {
@@ -29,16 +24,7 @@ var Story = {
       
       return {
          "text" : text,
-         "choices" : [],
-         "render" : function () {
-            $("#pageTextArea").val(text);
-            $("#choicesWrapper").empty();
-            for (var i = 0; i < this.choices.length; i++) {
-               var choice = this.choices[i];
-               var htmlText = choice.createHtml();
-               $("#choicesWrapper").append(htmlText);
-            }
-         }
+         "choices" : []
       }
    },
    "createChoice" : function (text) {
@@ -47,31 +33,48 @@ var Story = {
       
       return {
          "text" : text,
-         "page" : null,
-         "createHtml" : function () {
-            return '<div id="choice1"> \
-               <Button type="button" onclick="">' + text + '</Button> \
-               <Button type="button" onclick="">(X)</Button> \
-            </div>';
-         }
+         "page" : null
       }
    }
 }
 
-var gStory;
-var Load_Click = function ()
-{
-   var storyJson = localStorage.getItem('story');
-   if (storyJson) {
-      //gStory = JSON.parse(storyJson);
+var Renderer = {
+   "renderStory" : function (story) {
+      if (story) {
+         if (0 <= story.currentPageIndex && story.currentPageIndex < story.pages.length) {
+            var page = story.pages[story.currentPageIndex];
+            Renderer.renderPage(page);
+         }
+      }
+   },
+   "renderPage" : function (page) {
+      $("#pageTextArea").val(page.text);
+      $("#choicesWrapper").empty();
+      for (var i = 0; i < page.choices.length; i++) {
+         var choice = page.choices[i];
+         var htmlText = Renderer.createChoiceHtml(choice);
+         $("#choicesWrapper").append(htmlText);
+      }
+   },
+   "createChoiceHtml" : function (choice) {
+      return '<div id="choice1"> \
+         <Button type="button" onclick="">' + choice.text + '</Button> \
+         <Button type="button" onclick="">(X)</Button> \
+      </div>';
+   }
+}
+
+var Load_Click = function () {
+   var story = JSON.parse(localStorage.getItem('story'));
+   if (story) {
+      gStory = story;
    }
    if (gStory == null) {
       gStory = Story.createDefaultStory();
    }
-   gStory.render();
+   Renderer.renderStory(gStory);
 };
 
-var Save_Click = function ()
-{
+var Save_Click = function () {
    localStorage.setItem('story', JSON.stringify(gStory));
 };
