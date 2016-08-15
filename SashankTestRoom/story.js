@@ -1,5 +1,16 @@
 "use strict";
 
+$(document).ready(function() {
+   $("#pageTextArea").on('change keyup paste', function () {
+      if (gStory) {
+         if (0 <= gStory.currentPageIndex && gStory.currentPageIndex < gStory.pages.length) {
+            var page = gStory.pages[gStory.currentPageIndex];
+            page.text = $("#pageTextArea").val();
+         }
+      }
+   });
+});
+
 var gStory;
 var Story = {
    "createDefaultStory" : function () {
