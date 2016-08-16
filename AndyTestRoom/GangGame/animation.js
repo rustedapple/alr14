@@ -79,7 +79,7 @@ var Grid = {
       setInterval(Grid.updateGrid, 1);
       setInterval(Grid.renderGrid, 1);
 
-      setTimeout(Grid.createFire, 2000);
+      setTimeout(Grid.createFireFromRightSide, 2000);
    },
    
    "renderGrid" : function () {
@@ -102,7 +102,7 @@ var Grid = {
       };
    },
 
-   "createFire" : function () {
+   "createFireFromRightSide" : function () {
       var i,j;
 
       i = Math.floor(Math.random() * NUM_ROWS);
@@ -110,10 +110,10 @@ var Grid = {
 
       for (j = 0; j < NUM_COLUMNS; j++)
       {
-         
+         var tile = Grid.getSquare(NUM_ROWS - 1,j);
+         tile.createFire();
       }
-      var tile = Grid.getSquare(i,j);
-      tile.createFire();
+      
    },
    
    "createTile" : function (i, j) {
@@ -131,27 +131,35 @@ var Grid = {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
          "onClick" : function () {
-            //tile.brightness += 1;
             tile.type = TileType.Wall;
             
             Grid.renderGrid();
          },
          "createFire" : function () {
-            //tile.brightness += 1;
+            var neighbor;
+
             if (tile.type !== TileType.Wall && tile.type !== TileType.Fire)
             {
                tile.type = TileType.Fire;
-               
+
                for (neighbor in tile.getNeighbors()) {
                   if (neighbor !== null && neighbor.type !== TileType.Fire) {
                      setTimeout(neighbor.createFire, 200);
                   }
-               });
+               };
+
+               setTimeout(tile.killFire, 800);
 
                console.log("create fire called");
             }
 
             Grid.renderGrid();
+         },
+         "killFire" : function () {
+            if (tile.type == TileType.Fire)
+            {
+               tile.type = TileType.Empty;
+            }
          },
          "onLeave" : function () {
             Grid.renderGrid();
