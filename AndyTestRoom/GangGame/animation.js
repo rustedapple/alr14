@@ -123,7 +123,9 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "type" : TileType.Empty,
-
+         "getNeighbors" : function () {
+            return [tile.top, tile.right, tile.bottom, tile.left];
+         },
          "onClick" : function () {
             //tile.brightness += 1;
             tile.type = TileType.Wall;
@@ -135,15 +137,13 @@ var Grid = {
             if (tile.type !== TileType.Wall && tile.type !== TileType.Fire)
             {
                tile.type = TileType.Fire;
-            
-               if (tile.top !== null && tile.top.type !== TileType.Fire)
-                  setTimeout(tile.top.createFire, 200);
-               if (tile.right !== null && tile.right.type !== TileType.Fire)
-                  setTimeout(tile.right.createFire, 200);
-               if (tile.bottom !== null && tile.bottom.type !== TileType.Fire)
-                  setTimeout(tile.bottom.createFire, 200);
-               if (tile.left !== null && tile.left.type !== TileType.Fire)
-                  setTimeout(tile.left.createFire, 200);
+               
+               var neighborArray = tile.getNeighbors();
+               neighborArray.forEach(function (neighbor, index, neighborArray) {
+                  if (neighbor !== null && neighbor.type !== TileType.Fire) {
+                     setTimeout(neighbor.createFire, 200);
+                  }
+               });
 
                console.log("create fire called");
             }
