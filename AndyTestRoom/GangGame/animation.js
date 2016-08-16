@@ -33,7 +33,7 @@ var Grid = {
    },
    
    "initializeGrid" : function () {
-      var i, j, gridObject;
+      var i, j, tile;
       for (i = 0; i < NUM_COLUMNS; i++) {
          mGrid[i] = [];
          for (j = 0; j < NUM_ROWS; j++) {
@@ -42,27 +42,27 @@ var Grid = {
       };
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            gridObject = Grid.getSquare(i,j);
-            gridObject.top    = Grid.getSquare(i,j-1);
-            gridObject.right  = Grid.getSquare(i+1,j);
-            gridObject.bottom = Grid.getSquare(i,j+1);
-            gridObject.left   = Grid.getSquare(i-1,j);
+            tile = Grid.getSquare(i,j);
+            tile.top    = Grid.getSquare(i,j-1);
+            tile.right  = Grid.getSquare(i+1,j);
+            tile.bottom = Grid.getSquare(i,j+1);
+            tile.left   = Grid.getSquare(i-1,j);
          }
       };
       $(".square").each(function (index, div) {
          i = Math.floor(index % NUM_COLUMNS);
          j = Math.floor(index / NUM_COLUMNS);
          //console.log(i + ", " + j);
-         gridObject = Grid.getSquare(i,j);
-         gridObject.div = $(this);
-         //$(this).data("gridObject", gridObject); // TODO why does this not work?
+         tile = Grid.getSquare(i,j);
+         tile.div = $(this);
+         //$(this).data("tile", tile); // TODO why does this not work?
          // Theory: $() returns a jquery object, whereas you need to operate on the DOM element
          // But then why does the passed in div not work? Goddammit...
-         gridObject.div.data("gridObject", gridObject);
+         tile.div.data("tile", tile);
          
          /*$(this).css('background-color', 'green');
-         gridObject.brightness = (i+j) % 2
-         gridObject.render();*/
+         tile.brightness = (i+j) % 2
+         tile.render();*/
       });
 
       setInterval(Grid.updateGrid, 1);
@@ -73,8 +73,8 @@ var Grid = {
       var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            var gridObject = Grid.getSquare(i,j);
-            gridObject.render();
+            var tile = Grid.getSquare(i,j);
+            tile.render();
          }
       };
    },
@@ -83,14 +83,14 @@ var Grid = {
       var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            var gridObject = Grid.getSquare(i,j);
-            gridObject.update();
+            var tile = Grid.getSquare(i,j);
+            tile.update();
          }
       };
    },
    
    "createGridObject" : function (i, j) {
-      var gridObject = {
+      var tile = {
          "div" : null,
          "i" : i,
          "j" : j,
@@ -99,11 +99,11 @@ var Grid = {
          "right" : null,
          "bottom" : null,
          "left" : null,
-         "color" : [0, 0, 0, 1],
+         "color" : [180, 180, 122, 1],
 
          "onClick" : function () {
-            //gridObject.brightness += 1;
-            gridObject.color = [0, 0, 0, 1];
+            //tile.brightness += 1;
+            tile.color = [60, 60, 60, 1];
             
             Grid.renderGrid();
          },
@@ -111,23 +111,23 @@ var Grid = {
             Grid.renderGrid();
          },
          "update" : function () {
-            if (gridObject.brightness > 0) {
-               if (gridObject.top !== null)
-                  gridObject.top.brightness += BLEED_FACTOR * gridObject.brightness;
-               if (gridObject.right !== null)
-                  gridObject.right.brightness += BLEED_FACTOR * gridObject.brightness;
-               if (gridObject.bottom !== null)
-                  gridObject.bottom.brightness += BLEED_FACTOR * gridObject.brightness;
-               if (gridObject.left !== null)
-                  gridObject.left.brightness += BLEED_FACTOR * gridObject.brightness;
+            if (tile.brightness > 0) {
+               if (tile.top !== null)
+                  tile.top.brightness += BLEED_FACTOR * tile.brightness;
+               if (tile.right !== null)
+                  tile.right.brightness += BLEED_FACTOR * tile.brightness;
+               if (tile.bottom !== null)
+                  tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
+               if (tile.left !== null)
+                  tile.left.brightness += BLEED_FACTOR * tile.brightness;
                
-               gridObject.brightness *= DECAY_RATE;
-               gridObject.brightness = Math.min(1, Math.max(0, gridObject.brightness));
+               tile.brightness *= DECAY_RATE;
+               tile.brightness = Math.min(1, Math.max(0, tile.brightness));
             }
          },
          "render" : function () {
-            //var red = gridObject.brightness * 255;
-            //var blue = (1 - gridObject.brightness) * 255;
+            //var red = tile.brightness * 255;
+            //var blue = (1 - tile.brightness) * 255;
 
             var red = [255, 0, 0, 1];
             var blue = [0, 255, 0, 1];
@@ -139,18 +139,18 @@ var Grid = {
                combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
             }
 
-            
 
-            var color = rgbaToString(gridObject.color);
+
+            var color = rgbaToString(tile.color);
             
-            //gridObject.div.css('background', color);
+            tile.div.css('background', color);
          },
       };
       if (mGrid[i] == undefined) {
          mGrid[i] = [];
       }
-      mGrid[i][j] = gridObject;
-      return gridObject;
+      mGrid[i][j] = tile;
+      return tile;
    },
    
    "getSquare" : function (i, j) {
@@ -170,17 +170,17 @@ var rgbaToString = function (color) {
 
 var Square = {
    "OnClick" : function (div) {
-      var gridObject = div.data("gridObject");
-      for (var property in gridObject) {
-         if (gridObject.hasOwnProperty(property)) {
-            // console.log(property + ": " + gridObject[property]);
+      var tile = div.data("tile");
+      for (var property in tile) {
+         if (tile.hasOwnProperty(property)) {
+            // console.log(property + ": " + tile[property]);
          }
       }
-      gridObject.onClick();
+      tile.onClick();
    },
 
    "OnLeave" : function (div) {
-      var gridObject = div.data("gridObject");
-      gridObject.onLeave();
+      var tile = div.data("tile");
+      tile.onLeave();
    },
 };
