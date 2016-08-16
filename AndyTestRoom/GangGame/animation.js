@@ -30,6 +30,7 @@ var TileType = {
    "Fire" : {
       "index" : 2,
       "color" : [255, 0, 0, 1],
+      
    },
 };
 
@@ -79,7 +80,7 @@ var Grid = {
       setInterval(Grid.updateGrid, 16);
       setInterval(Grid.renderGrid, 16);
 
-      setInterval(Grid.createFireFromRight, 2000);
+      setInterval(Grid.createFireRandomly, 2000);
    },
    
    "renderGrid" : function () {
@@ -110,8 +111,16 @@ var Grid = {
          var tile = Grid.getSquare(NUM_ROWS - 1,j);
          tile.createFire();
       }
+   },
 
-      
+   "createFireRandomly" : function () {
+      var i,j;
+
+      i = Math.floor(Math.random * NUM_ROWS);
+      j = Math.floor(Math.random * NUM_COLUMNS);
+
+      var tile = Grid.getSquare(i,j);
+      tile.createFire();
    },
    
    "createTile" : function (i, j) {
