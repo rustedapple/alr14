@@ -5,9 +5,6 @@ var animation = {
       document.getElementById("grid").innerHTML = Grid.createGridHtml();
       Grid.initializeGrid();
    },
-   "run" : function ()
-   {
-   }
 };
 
 var NUM_ROWS = 20;
@@ -60,18 +57,18 @@ var Grid = {
       };
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            tile = Grid.getSquare(i,j);
-            tile.top    = Grid.getSquare(i,j-1);
-            tile.right  = Grid.getSquare(i+1,j);
-            tile.bottom = Grid.getSquare(i,j+1);
-            tile.left   = Grid.getSquare(i-1,j);
+            tile = Grid.getTile(i,j);
+            tile.top    = Grid.getTile(i,j-1);
+            tile.right  = Grid.getTile(i+1,j);
+            tile.bottom = Grid.getTile(i,j+1);
+            tile.left   = Grid.getTile(i-1,j);
          }
       };
       $(".square").each(function (index, div) {
          i = Math.floor(index % NUM_COLUMNS);
          j = Math.floor(index / NUM_COLUMNS);
 
-         tile = Grid.getSquare(i,j);
+         tile = Grid.getTile(i,j);
          tile.div = $(this);
          tile.div.data("tile", tile);
          
@@ -87,7 +84,7 @@ var Grid = {
       var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            var tile = Grid.getSquare(i,j);
+            var tile = Grid.getTile(i,j);
             tile.render();
          }
       };
@@ -97,30 +94,32 @@ var Grid = {
       var i,j;
       for (i = 0; i < NUM_COLUMNS; i++) {
          for (j = 0; j < NUM_ROWS; j++) {
-            var tile = Grid.getSquare(i,j);
+            var tile = Grid.getTile(i,j);
             tile.update();
          }
       };
    },
 
    "createFireFromRight" : function () {
-      var i,j;
-
-      for (j = 0; j < NUM_COLUMNS; j++)
-      {
-         var tile = Grid.getSquare(NUM_ROWS - 1,j);
-         tile.createFire();
+      var j;
+      for (j = 0; j < NUM_COLUMNS; j++) {
+         var tile = Grid.getTile(NUM_ROWS - 1,j);
+         if (tile !== null) {
+            tile.createFire();
+         }
       }
    },
 
    "createFireRandomly" : function () {
       var i,j;
+      i = Math.floor(Math.random() * NUM_ROWS);
+      j = Math.floor(Math.random() * NUM_COLUMNS);
 
-      i = Math.floor(Math.random * NUM_ROWS);
-      j = Math.floor(Math.random * NUM_COLUMNS);
-
-      var tile = Grid.getSquare(i,j);
-      tile.createFire();
+      var tile = Grid.getTile(i,j);
+      if (tile !== null)
+      {
+         tile.createFire();
+      }
    },
    
    "createTile" : function (i, j) {
@@ -143,35 +142,26 @@ var Grid = {
             
             Grid.renderGrid();
          },
+         "canCreateFire" : function () {
+            return (tile.type !== TileType.Wall && tile.type !== TileType.Fire);
+         },
          "createFire" : function () {
-            var neighbor;
-            if (tile.type !== TileType.Wall && tile.type !== TileType.Fire)
+            if (tile.canCreateFire())
             {
                tile.type = TileType.Fire;
-               
-               // Using iterator
-               //tile.getNeighbors().forEach(function(neighbor, index, neighborArray) {
-                  
-               // Do NOT "for in" an array
-               //for (neighbor in tile.getNeighbors()) {
-               
-               // Best way
-               var neighbors = tile.getNeighbors();
-               for (var i = 0; i < neighbors.length; i++) {
-                  if (neighbors[i] !== null) {
-                     setTimeout(neighbors[i].createFire, 200);
-                  }
-               };
-
-               // if (tile.left !== null)
-               //    setTimeout(tile.left.createFire, 200);
-
+               setTimeout(tile.spreadFire, 200);
                setTimeout(tile.killFire, 500);
-
                console.log("create fire called");
             }
-
-            //Grid.renderGrid();
+         },
+         "spreadFire" : function () {
+            var neighbors = tile.getNeighbors();
+            for (var i = 0; i < neighbors.length; i++) {
+               var neighbor = neighbors[i];
+               if (neighbor !== null && neighbor.canCreateFire()) {
+                  setTimeout(neighbor.createFire, 200);
+               }
+            };
          },
          "killFire" : function () {
             if (tile.type == TileType.Fire) {
@@ -220,10 +210,8 @@ var Grid = {
       mGrid[i][j] = tile;
       return tile;
    },
-   
-   "getSquare" : function (i, j) {
-      if (0 <= i && i < NUM_COLUMNS && 0 <= j && j < NUM_ROWS)
-      {
+   "getTile" : function (i, j) {
+      if (0 <= i && i < NUM_COLUMNS && 0 <= j && j < NUM_ROWS) {
          return mGrid[i][j];
       }
       return null;
@@ -231,8 +219,6 @@ var Grid = {
 };
 
 var rgbaToString = function (color) {
-
-
    return "rgba(" + color[0] + "," + color[1] + "," + color[2] + "," + color[3] + ")";
 };
 
@@ -246,7 +232,6 @@ var Square = {
       }
       tile.onClick();
    },
-
    "OnLeave" : function (div) {
       var tile = div.data("tile");
       tile.onLeave();
