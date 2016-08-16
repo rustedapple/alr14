@@ -44,7 +44,7 @@ var Home = {
 			$SM.set('game.temperature', 0);
 			$SM.set('stores.babyBirdHealth', 0);
 			$SM.set('stores.food', 1);
-			$SM.set('stores.distance', 0);
+			$SM.set('stores.distance', "abc");
 
 
 

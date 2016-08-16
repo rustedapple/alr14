@@ -73,7 +73,7 @@
 		options: {
 			state: null,
 			debug: false,
-			log: false,
+			log: true,
 			dropbox: false,
 			doubleTime: false
 		},
@@ -204,24 +204,6 @@
 			Notifications.init();
 			Events.init();
 			Home.init();
-
-			// if(typeof $SM.get('stores.wood') != 'undefined') {
-			// 	Outside.init();
-			// }
-			// if($SM.get('stores.compass', true) > 0) {
-			// 	Path.init();
-			// }
-			// if($SM.get('features.location.spaceShip')) {
-			// 	Ship.init();
-			// }
-
-			// if($SM.get('config.lightsOff', true)){
-			// 		Engine.turnLightsOff();
-			// }
-
-			// if($SM.get('config.hyperMode', true)){
-			// 		Engine.triggerHyperMode();
-			// }
 
 			Engine.saveLanguage();
 			Engine.travelTo(Home);
