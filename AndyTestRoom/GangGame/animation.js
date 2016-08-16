@@ -23,7 +23,7 @@ var Grid = {
          result += "<div>";
          for (j = 0; j < NUM_ROWS; j++) {
             result += '<div id="gridsquare" class="square" \
-               onmouseenter="Square.OnEnter($(this));" \
+               onclick="Square.OnClick($(this));" \
                onmouseleave="Square.OnLeave($(this));" \
             ></div>\n';
          }
@@ -99,22 +99,15 @@ var Grid = {
          "right" : null,
          "bottom" : null,
          "left" : null,
-         "onEnter" : function () {
-            gridObject.brightness += 1;
-            /*if (gridObject.top !== null)
-               gridObject.top.brightness += 0.25;
-            if (gridObject.right !== null)
-               gridObject.right.brightness += 0.25;
-            if (gridObject.bottom !== null)
-               gridObject.bottom.brightness += 0.25;
-            if (gridObject.left !== null)
-               gridObject.left.brightness += 0.25;*/
+         "color" : [0, 0, 0, 1],
+
+         "onClick" : function () {
+            //gridObject.brightness += 1;
+            gridObject.color = [0, 0, 0, 1];
             
-            //Grid.updateGrid();
             Grid.renderGrid();
          },
          "onLeave" : function () {
-            //Grid.updateGrid();
             Grid.renderGrid();
          },
          "update" : function () {
@@ -138,6 +131,7 @@ var Grid = {
 
             var red = [255, 0, 0, 1];
             var blue = [0, 255, 0, 1];
+            var black = [0, 0, 0, 1];
 
             var combinedColor = [0, 0, 0, 0];
             for (i = 0; i < 4; i++)
@@ -145,7 +139,9 @@ var Grid = {
                combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
             }
 
-            var color = rgbaToString(combinedColor);
+            
+
+            var color = rgbaToString(gridObject.color);
             
             //gridObject.div.css('background', color);
          },
@@ -173,14 +169,14 @@ var rgbaToString = function (color) {
 };
 
 var Square = {
-   "OnEnter" : function (div) {
+   "OnClick" : function (div) {
       var gridObject = div.data("gridObject");
       for (var property in gridObject) {
          if (gridObject.hasOwnProperty(property)) {
             // console.log(property + ": " + gridObject[property]);
          }
       }
-      gridObject.onEnter();
+      gridObject.onClick();
    },
 
    "OnLeave" : function (div) {
