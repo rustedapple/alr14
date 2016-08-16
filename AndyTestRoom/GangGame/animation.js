@@ -23,12 +23,12 @@ var TileType = {
    },
 
    "Wall" : {
-      "index" : 0,
+      "index" : 1,
       "color" : [60, 60, 60, 1],
    },
 
    "Fire" : {
-      "index" : 0,
+      "index" : 2,
       "color" : [255, 0, 0, 1],
    },
 };
@@ -78,6 +78,8 @@ var Grid = {
 
       setInterval(Grid.updateGrid, 1);
       setInterval(Grid.renderGrid, 1);
+
+      setTimeout(Grid.createFire, 2000);
    },
    
    "renderGrid" : function () {
@@ -99,6 +101,16 @@ var Grid = {
          }
       };
    },
+
+   "createFire" : function () {
+      var i,j;
+
+      i = Math.floor(Math.random() * NUM_COLUMNS);
+      j = Math.floor(Math.random() * NUM_ROWS);
+
+      var tile = Grid.getSquare(i,j);
+      tile.createFire();
+   },
    
    "createTile" : function (i, j) {
       var tile = {
@@ -116,6 +128,26 @@ var Grid = {
             //tile.brightness += 1;
             tile.type = TileType.Wall;
             
+            Grid.renderGrid();
+         },
+         "createFire" : function () {
+            //tile.brightness += 1;
+            if (tile.type !== TileType.Wall && tile.type !== TileType.Fire)
+            {
+               tile.type = TileType.Fire;
+            
+               if (tile.top !== null && tile.top.type !== TileType.Fire)
+                  setTimeout(tile.top.createFire, 200);
+               if (tile.right !== null && tile.right.type !== TileType.Fire)
+                  setTimeout(tile.right.createFire, 200);
+               if (tile.bottom !== null && tile.bottom.type !== TileType.Fire)
+                  setTimeout(tile.bottom.createFire, 200);
+               if (tile.left !== null && tile.left.type !== TileType.Fire)
+                  setTimeout(tile.left.createFire, 200);
+
+               console.log("create fire called");
+            }
+
             Grid.renderGrid();
          },
          "onLeave" : function () {
@@ -145,16 +177,13 @@ var Grid = {
             var black = [0, 0, 0, 1];
 
             var combinedColor = [0, 0, 0, 0];
-            for (i = 0; i < 4; i++)
-            {
-               combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
-            }
+            // for (i = 0; i < 4; i++)
+            // {
+            //    combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
+            // }
 
-
-
-            var color = rgbaToString(tile.type.color);
             
-            tile.div.css('background', color);
+            tile.div.css('background', rgbaToString(tile.type.color));
          },
       };
       if (mGrid[i] == undefined) {
