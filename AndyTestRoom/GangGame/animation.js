@@ -76,10 +76,10 @@ var Grid = {
          
       });
 
-      setInterval(Grid.updateGrid, 1);
-      setInterval(Grid.renderGrid, 1);
+      setInterval(Grid.updateGrid, 16);
+      setInterval(Grid.renderGrid, 16);
 
-      setTimeout(Grid.createFire, 2000);
+      setInterval(Grid.createFireFromRight, 2000);
    },
    
    "renderGrid" : function () {
@@ -102,14 +102,16 @@ var Grid = {
       };
    },
 
-   "createFire" : function () {
+   "createFireFromRight" : function () {
       var i,j;
 
-      i = Math.floor(Math.random() * NUM_COLUMNS);
-      j = Math.floor(Math.random() * NUM_ROWS);
+      for (j = 0; j < NUM_COLUMNS; j++)
+      {
+         var tile = Grid.getSquare(NUM_ROWS - 1,j);
+         tile.createFire();
+      }
 
-      var tile = Grid.getSquare(i,j);
-      tile.createFire();
+      
    },
    
    "createTile" : function (i, j) {
@@ -152,28 +154,38 @@ var Grid = {
                   }
                };
 
+               // if (tile.left !== null)
+               //    setTimeout(tile.left.createFire, 200);
+
+               setTimeout(tile.killFire, 500);
+
                console.log("create fire called");
             }
 
-            Grid.renderGrid();
+            //Grid.renderGrid();
+         },
+         "killFire" : function () {
+            if (tile.type == TileType.Fire) {
+               tile.type = TileType.Empty;
+            }
          },
          "onLeave" : function () {
             Grid.renderGrid();
          },
          "update" : function () {
-            if (tile.brightness > 0) {
-               if (tile.top !== null)
-                  tile.top.brightness += BLEED_FACTOR * tile.brightness;
-               if (tile.right !== null)
-                  tile.right.brightness += BLEED_FACTOR * tile.brightness;
-               if (tile.bottom !== null)
-                  tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
-               if (tile.left !== null)
-                  tile.left.brightness += BLEED_FACTOR * tile.brightness;
+            // if (tile.brightness > 0) {
+            //    if (tile.top !== null)
+            //       tile.top.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.right !== null)
+            //       tile.right.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.bottom !== null)
+            //       tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.left !== null)
+            //       tile.left.brightness += BLEED_FACTOR * tile.brightness;
                
-               tile.brightness *= DECAY_RATE;
-               tile.brightness = Math.min(1, Math.max(0, tile.brightness));
-            }
+            //    tile.brightness *= DECAY_RATE;
+            //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
+            // }
          },
          "render" : function () {
             //var red = tile.brightness * 255;
