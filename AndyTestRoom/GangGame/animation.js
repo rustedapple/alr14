@@ -105,9 +105,13 @@ var Grid = {
    "createFire" : function () {
       var i,j;
 
-      i = Math.floor(Math.random() * NUM_COLUMNS);
-      j = Math.floor(Math.random() * NUM_ROWS);
+      i = Math.floor(Math.random() * NUM_ROWS);
+      j = Math.floor(Math.random() * NUM_COLUMNS);
 
+      for (j = 0; j < NUM_COLUMNS; j++)
+      {
+         
+      }
       var tile = Grid.getSquare(i,j);
       tile.createFire();
    },
