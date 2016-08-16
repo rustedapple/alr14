@@ -133,16 +133,24 @@ var Grid = {
             Grid.renderGrid();
          },
          "createFire" : function () {
-            //tile.brightness += 1;
+            var neighbor;
             if (tile.type !== TileType.Wall && tile.type !== TileType.Fire)
             {
                tile.type = TileType.Fire;
                
-               for (neighbor in tile.getNeighbors()) {
-                  if (neighbor !== null && neighbor.type !== TileType.Fire) {
-                     setTimeout(neighbor.createFire, 200);
+               // Using iterator
+               //tile.getNeighbors().forEach(function(neighbor, index, neighborArray) {
+                  
+               // Do NOT "for in" an array
+               //for (neighbor in tile.getNeighbors()) {
+               
+               // Best way
+               var neighbors = tile.getNeighbors();
+               for (var i = 0; i < neighbors.length; i++) {
+                  if (neighbors[i] !== null) {
+                     setTimeout(neighbors[i].createFire, 200);
                   }
-               });
+               };
 
                console.log("create fire called");
             }
