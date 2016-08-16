@@ -138,8 +138,7 @@ var Grid = {
             {
                tile.type = TileType.Fire;
                
-               var neighborArray = tile.getNeighbors();
-               neighborArray.forEach(function (neighbor, index, neighborArray) {
+               for (neighbor in tile.getNeighbors()) {
                   if (neighbor !== null && neighbor.type !== TileType.Fire) {
                      setTimeout(neighbor.createFire, 200);
                   }
