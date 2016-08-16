@@ -16,6 +16,23 @@ var mGrid = [];
 var DECAY_RATE = 0.9;
 var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
+var TileType = {
+   "Empty" : {
+      "index" : 0,
+      "color" : [180, 180, 122, 1],
+   },
+
+   "Wall" : {
+      "index" : 0,
+      "color" : [60, 60, 60, 1],
+   },
+
+   "Fire" : {
+      "index" : 0,
+      "color" : [255, 0, 0, 1],
+   },
+};
+
 var Grid = {
    "createGridHtml" : function () {
       var i, j, result = "";
@@ -37,7 +54,7 @@ var Grid = {
       for (i = 0; i < NUM_COLUMNS; i++) {
          mGrid[i] = [];
          for (j = 0; j < NUM_ROWS; j++) {
-            mGrid[i][j] = Grid.createGridObject(i,j);
+            mGrid[i][j] = Grid.createTile(i,j);
          }
       };
       for (i = 0; i < NUM_COLUMNS; i++) {
@@ -52,17 +69,11 @@ var Grid = {
       $(".square").each(function (index, div) {
          i = Math.floor(index % NUM_COLUMNS);
          j = Math.floor(index / NUM_COLUMNS);
-         //console.log(i + ", " + j);
+
          tile = Grid.getSquare(i,j);
          tile.div = $(this);
-         //$(this).data("tile", tile); // TODO why does this not work?
-         // Theory: $() returns a jquery object, whereas you need to operate on the DOM element
-         // But then why does the passed in div not work? Goddammit...
          tile.div.data("tile", tile);
          
-         /*$(this).css('background-color', 'green');
-         tile.brightness = (i+j) % 2
-         tile.render();*/
       });
 
       setInterval(Grid.updateGrid, 1);
@@ -89,7 +100,7 @@ var Grid = {
       };
    },
    
-   "createGridObject" : function (i, j) {
+   "createTile" : function (i, j) {
       var tile = {
          "div" : null,
          "i" : i,
@@ -99,11 +110,11 @@ var Grid = {
          "right" : null,
          "bottom" : null,
          "left" : null,
-         "color" : [180, 180, 122, 1],
+         "type" : TileType.Empty,
 
          "onClick" : function () {
             //tile.brightness += 1;
-            tile.color = [60, 60, 60, 1];
+            tile.type = TileType.Wall;
             
             Grid.renderGrid();
          },
@@ -141,7 +152,7 @@ var Grid = {
 
 
 
-            var color = rgbaToString(tile.color);
+            var color = rgbaToString(tile.type.color);
             
             tile.div.css('background', color);
          },
