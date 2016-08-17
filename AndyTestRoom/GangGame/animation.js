@@ -33,6 +33,8 @@ var Grid = {
    "NUM_ROWS" : 60,
    "NUM_COLUMNS" : 60,
    "mGrid" : [],
+   "mRegions" : [],
+   
    "createGridHtml" : function () {
       var i, j, result = "";
       for (i = 0; i < Grid.NUM_COLUMNS; i++) {
@@ -79,7 +81,7 @@ var Grid = {
       setInterval(Grid.updateGrid, 16);
       setInterval(Grid.renderGrid, 16);
 
-      setTimeout(function() {setInterval(Grid.createFireRandomly, 500);}, 3000);
+      //setTimeout(function() {setInterval(Grid.createFireRandomly, 500);}, 3000);
    },
    
    "renderGrid" : function () {
@@ -98,6 +100,34 @@ var Grid = {
          for (j = 0; j < Grid.NUM_ROWS; j++) {
             var tile = Grid.getTile(i,j);
             tile.update();
+         }
+      };
+   },
+   
+   "calculateRegions" : function () {
+      var i, j, startTile, regionN, unSortedTiles = [];
+      this.mRegions = [];
+      
+      for (i = 0; i < Grid.NUM_COLUMNS; i++) {
+         for (j = 0; j < Grid.NUM_ROWS; j++) {
+            unSortedTiles.push(Grid.getTile(i,j));
+         }
+      };
+      while (unSortedTiles.length > 0) {
+         startTile = unSortedTiles[0];
+         regionN = startTile.getNeighborhood();
+         //unSortedTiles = unSortedTiles.diff(regionN); // TODO Remove RegionN tiles from unsortedTiles
+         this.mRegions.push(regionN);
+      }
+      
+      // Optional part:
+      for (i = 0; i < this.mRegions.Length; i++) {
+         regionN = mRegion[i];
+         var randomColor = createRandomColor();
+         for (j = 0; j < regionN.Length; j++) {
+            var tile = mRegion[i];
+            tile.overrideColor = randomColor;
+            tile.colorChanged = true;
          }
       };
    },
@@ -140,22 +170,28 @@ var Grid = {
          "strength" : 0,
          "originalStrength" : 0,
          "alpha" : 1,
+         "overrideColor" : null,
          "colorChanged" : false,
          "floodFillCheck" : false,
 
          "getNeighbors" : function () {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
+         "getNeighborhood" : function () {
+            return [tile.top, tile.right, tile.bottom, tile.left];
+         },
          "buildWall" : function () {
-            if (tile.type != TileType.Wall)
-            {
+            if (tile.type != TileType.Wall) {
                tile.type = TileType.Wall;
             } else if (tile.type == TileType.Wall) {
                tile.type = TileType.Empty;
             }
             tile.colorChanged = true;
             tile.render();
-
+            
+            // Not yet ready...
+            //Grid.calculateRegions();
+            //Grid.render();
          },
          "onEnter" : function () {
             tile.alpha = 0.5;
@@ -179,7 +215,7 @@ var Grid = {
             //var blue = (1 - tile.brightness) * 255;
             if (tile.colorChanged == true)
             {
-               var color = tile.type.color;  
+               var color = tile.type.color;
                tile.colorChanged = false;
                if (tile.originalStrength !== 0) {
                   var combinedColor = [0, 0, 0, 1];
@@ -195,6 +231,11 @@ var Grid = {
                   //console.log(tile.alpha);
                }
                color[3] = tile.alpha;
+               
+               if (tile.overrideColor !== null) {
+                  color = tile.overrideColor;
+               }
+               
                tile.div.css('background', rgbaToString(color));
             }
          },
