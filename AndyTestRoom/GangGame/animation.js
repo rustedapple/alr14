@@ -7,14 +7,14 @@ var animation = {
    },
 };
 
-var NUM_ROWS = 60;
-var NUM_COLUMNS = 60;
+const NUM_ROWS = 60;
+const NUM_COLUMNS = 60;
+const DECAY_RATE = 0.9;
+const BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 var mGrid = [];
-var DECAY_RATE = 0.9;
-var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
 var TileType = 
-{   "Empty" : {
+{   "None" : {
       "index" : 0,
       "color" : [180, 180, 122, 1],
    },
@@ -125,7 +125,7 @@ var Grid = {
       if (tile !== null)
       {
          tile.originalStrength = 8;
-         tile.createFire(12, 12);
+         tile.createFire(25, 25);
       }
    },
    
@@ -139,9 +139,10 @@ var Grid = {
          "right" : null,
          "bottom" : null,
          "left" : null,
-         "type" : TileType.Empty,
+         "type" : TileType.None,
          "strength" : 0,
          "originalStrength" : 0,
+         "additionalColor" : [255,0,0,1],
          "alpha" : 1,
          "colorChanged" : false,
          "floodFillCheck" : false,
@@ -149,16 +150,16 @@ var Grid = {
          "getNeighbors" : function () {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
-         "buildWall" : function () {
-            if (tile.type != TileType.Wall)
-            {
+         "toggleWall" : function () {
+            if (tile.type != TileType.Wall) {
                tile.type = TileType.Wall;
-            } else if (tile.type == TileType.Wall) {
-               tile.type = TileType.Empty;
+            } 
+            else if (tile.type == TileType.Wall) {
+               tile.type = TileType.None;
             }
+
             tile.colorChanged = true;
             tile.render();
-
          },
          "onEnter" : function () {
             tile.alpha = 0.5;
@@ -184,11 +185,11 @@ var Grid = {
             //    tile.brightness *= DECAY_RATE;
             //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
             // }
-            if (tile.type == TileType.Empty) {
-               tile.strength = 0;
-               tile.originalStrength = 0;
-               tile.alpha = 1;
-            }
+            // if (tile.type == TileType.None) {
+            //    tile.strength = 0;
+            //    tile.originalStrength = 0;
+            //    tile.alpha = 1;
+            // } 
          },
          "render" : function () {
             //var red = tile.brightness * 255;
@@ -198,26 +199,28 @@ var Grid = {
             {
                var color = tile.type.color;  
                tile.colorChanged = false;
-               if (tile.originalStrength !== 0) {
-                  var combinedColor = [0, 0, 0, 1];
+               // if (tile.originalStrength !== 0) {
+                   var combinedColor = [0, 0, 0, 1];
                   for (i = 0; i < 3; i++)
                   {
                      //if (color[i] !== 0) {
 
-                        combinedColor[i] = Math.round(((TileType.Empty.color[i] * (1 - tile.strength / tile.originalStrength)) + (color[i] * (tile.strength / tile.originalStrength))) / 2);
+                        //combinedColor[i] = Math.round((tile.additionalColor[i] + color[i]) / 2);
                         
                      //} 
                   }
-                  console.log(combinedColor);
-                  color = combinedColor;
-                  //tile.alpha = tile.strength / tile.originalStrength;
-                  //console.log(tile.alpha);
-               }
+                  //console.log(tile.additionalColor);
+               //    console.log(combinedColor);
+                   //color = combinedColor;
+               //    //tile.alpha = tile.strength / tile.originalStrength;
+               //    //console.log(tile.alpha);
+               // }
+
                color[3] = tile.alpha;
                tile.div.css('background', rgbaToString(color));
             }
          },
-         "floodFill" : function(tile, floodFillArray) {
+         "floodFill" : function(floodFillArray) {
 
          },
          "canCreateFire" : function () {
@@ -226,13 +229,26 @@ var Grid = {
          "createFire" : function (strength, originalStrength) {
             if (tile.canCreateFire())
             {
+               
                tile.type = TileType.Fire;
                tile.strength = strength;
                tile.originalStrength = originalStrength;
                tile.colorChanged = true;
                setTimeout(tile.spreadFire, 50);
                //setTimeout(tile.killFire, Math.round(600 * ((tile.strength / tile.originalStrength))));
-               setTimeout(tile.killFire, Math.round(600));
+               setTimeout(tile.killFire, Math.round(200));
+
+               // if (tile.type == TileType.Fire) {
+               //    var neighbors = tile.getNeighbors();
+               //    for (var i = 0; i < neighbors.length; i++) {
+               //       var neighbor = neighbors[i];
+               //       if (neighbor !== null && neighbor.type == TileType.None) {
+               //          for (i = 0; i < 3; i++) {
+               //             neighbor.additionalColor[i] = Math.round(((TileType.None.color[i] * (1 - tile.strength / tile.originalStrength)) + (TileType.Fire.color[i] * (tile.strength / tile.originalStrength))) / 2);
+               //          }                     
+               //       }
+               //    };
+               // }
             }
          },
          "spreadFire" : function () {
@@ -240,18 +256,27 @@ var Grid = {
             for (var i = 0; i < neighbors.length; i++) {
                var neighbor = neighbors[i];
                if (neighbor !== null && neighbor.canCreateFire() && tile.strength !== 0) {
-                  setTimeout(neighbor.createFire(tile.strength - 1, tile.originalStrength), 16);
+                  setTimeout(neighbor.createFire(tile.strength - 1, tile.originalStrength), 50);
                }
             };
          },
          "killFire" : function () {
             if (tile.type == TileType.Fire) {
-               tile.type = TileType.Empty;
+               tile.type = TileType.None;
                tile.colorChanged = true;
 
                tile.strength = 0;
                tile.originalStrength = 0;
                tile.alpha = 1;
+
+               tile.additionalColor = [0,0,0,1];
+               var neighbors = tile.getNeighbors();
+               for (var i = 0; i < neighbors.length; i++) {
+                  var neighbor = neighbors[i];
+                  if (neighbor !== null && neighbor.type == TileType.None) {
+                     neighbor.additionalColor = [0,0,0,1];
+                  }
+               };
             }
          },
       };
@@ -281,7 +306,7 @@ var Square = {
             // console.log(property + ": " + tile[property]);
          }
       }
-      tile.buildWall();
+      tile.toggleWall();
    },
    "OnEnter" : function (div) {
       var tile = div.data("tile");
