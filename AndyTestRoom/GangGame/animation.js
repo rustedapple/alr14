@@ -78,7 +78,7 @@ var Grid = {
       setInterval(Grid.updateGrid, 16);
       setInterval(Grid.renderGrid, 16);
 
-      setInterval(Grid.createFireRandomly, 100);
+      setTimeout(function() {setInterval(Grid.createFireRandomly, 500);}, 3000);
    },
    
    "renderGrid" : function () {
