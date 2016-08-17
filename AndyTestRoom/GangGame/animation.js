@@ -13,8 +13,8 @@ var mGrid = [];
 var DECAY_RATE = 0.9;
 var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
-var TileType = {
-   "Empty" : {
+var TileType = 
+{   "Empty" : {
       "index" : 0,
       "color" : [180, 180, 122, 1],
    },
@@ -26,8 +26,12 @@ var TileType = {
 
    "Fire" : {
       "index" : 2,
-      "color" : [255, 0, 0, 1],
+      "color" : [210, 4, 4, 1],
       
+   },
+   "Farmland": {
+      "index" : 3,
+      "color" : [41, 176, 10, 1],
    },
 };
 
@@ -106,7 +110,8 @@ var Grid = {
       for (j = 0; j < NUM_COLUMNS; j++) {
          var tile = Grid.getTile(NUM_ROWS - 1,j);
          if (tile !== null) {
-            tile.createFire();
+            tile.originalStrength = 99;
+            tile.createFire(99, 99);
          }
       }
    },
@@ -119,7 +124,8 @@ var Grid = {
       var tile = Grid.getTile(i,j);
       if (tile !== null)
       {
-         tile.createFire();
+         tile.originalStrength = 8;
+         tile.createFire(12, 12);
       }
    },
    
@@ -134,23 +140,25 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "type" : TileType.Empty,
+         "strength" : 0,
+         "originalStrength" : 0,
          "alpha" : 1,
-       "colorChanged" : false,
+         "colorChanged" : false,
+         "floodFillCheck" : false,
+
          "getNeighbors" : function () {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
-         "onClick" : function () {
+         "buildWall" : function () {
             if (tile.type != TileType.Wall)
             {
                tile.type = TileType.Wall;
             } else if (tile.type == TileType.Wall) {
                tile.type = TileType.Empty;
             }
-            
-            /* this is where SASHANK VELIGATI puts the go-style territory control when enclosing a section in walls */
-
             tile.colorChanged = true;
             tile.render();
+
          },
          "onEnter" : function () {
             tile.alpha = 0.5;
@@ -176,55 +184,74 @@ var Grid = {
             //    tile.brightness *= DECAY_RATE;
             //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
             // }
+            if (tile.type == TileType.Empty) {
+               tile.strength = 0;
+               tile.originalStrength = 0;
+               tile.alpha = 1;
+            }
          },
          "render" : function () {
             //var red = tile.brightness * 255;
             //var blue = (1 - tile.brightness) * 255;
 
-            var red = [255, 0, 0, 1];
-            var blue = [0, 255, 0, 1];
-            var black = [0, 0, 0, 1];
-
-            var combinedColor = [0, 0, 0, 0];
-            // for (i = 0; i < 4; i++)
-            // {
-            //    combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
-            // }
-
             if (tile.colorChanged == true)
             {
+               var color = tile.type.color;  
                tile.colorChanged = false;
-               var color = tile.type.color;
+               if (tile.originalStrength !== 0) {
+                  var combinedColor = [0, 0, 0, 1];
+                  for (i = 0; i < 3; i++)
+                  {
+                     //if (color[i] !== 0) {
+
+                        combinedColor[i] = Math.round(((TileType.Empty.color[i] * (1 - tile.strength / tile.originalStrength)) + (color[i] * (tile.strength / tile.originalStrength))) / 2);
+                        
+                     //} 
+                  }
+                  console.log(combinedColor);
+                  color = combinedColor;
+                  //tile.alpha = tile.strength / tile.originalStrength;
+                  //console.log(tile.alpha);
+               }
                color[3] = tile.alpha;
                tile.div.css('background', rgbaToString(color));
             }
          },
+         "floodFill" : function(tile, floodFillArray) {
+
+         },
          "canCreateFire" : function () {
             return (tile.type !== TileType.Wall && tile.type !== TileType.Fire);
          },
-         "createFire" : function () {
+         "createFire" : function (strength, originalStrength) {
             if (tile.canCreateFire())
             {
                tile.type = TileType.Fire;
-            tile.colorChanged = true;
-               setTimeout(tile.spreadFire, 16);
-               setTimeout(tile.killFire, 500);
-               console.log("create fire called");
+               tile.strength = strength;
+               tile.originalStrength = originalStrength;
+               tile.colorChanged = true;
+               setTimeout(tile.spreadFire, 50);
+               //setTimeout(tile.killFire, Math.round(600 * ((tile.strength / tile.originalStrength))));
+               setTimeout(tile.killFire, Math.round(600));
             }
          },
          "spreadFire" : function () {
             var neighbors = tile.getNeighbors();
             for (var i = 0; i < neighbors.length; i++) {
                var neighbor = neighbors[i];
-               if (neighbor !== null && neighbor.canCreateFire()) {
-                  setTimeout(neighbor.createFire, 16);
+               if (neighbor !== null && neighbor.canCreateFire() && tile.strength !== 0) {
+                  setTimeout(neighbor.createFire(tile.strength - 1, tile.originalStrength), 16);
                }
             };
          },
          "killFire" : function () {
             if (tile.type == TileType.Fire) {
                tile.type = TileType.Empty;
-            tile.colorChanged = true;
+               tile.colorChanged = true;
+
+               tile.strength = 0;
+               tile.originalStrength = 0;
+               tile.alpha = 1;
             }
          },
       };
@@ -254,7 +281,7 @@ var Square = {
             // console.log(property + ": " + tile[property]);
          }
       }
-      tile.onClick();
+      tile.buildWall();
    },
    "OnEnter" : function (div) {
       var tile = div.data("tile");
