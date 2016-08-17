@@ -13,8 +13,8 @@ var mGrid = [];
 var DECAY_RATE = 0.9;
 var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
-var TileType = 
-{   "Empty" : {
+var TileType = {
+   "Empty" : {
       "index" : 0,
       "color" : [180, 180, 122, 1],
    },
