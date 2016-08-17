@@ -39,6 +39,7 @@ var Grid = {
          for (j = 0; j < NUM_ROWS; j++) {
             result += '<div id="gridsquare" class="square" \
                onclick="Square.OnClick($(this));" \
+               onmouseenter="Square.OnEnter($(this));" \
                onmouseleave="Square.OnLeave($(this));" \
             ></div>\n';
          }
@@ -133,6 +134,7 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "type" : TileType.Empty,
+         "alpha" : 1,
        "colorChanged" : false,
          "getNeighbors" : function () {
             return [tile.top, tile.right, tile.bottom, tile.left];
@@ -140,8 +142,55 @@ var Grid = {
          "onClick" : function () {
             //tile.brightness += 1;
             tile.type = TileType.Wall;
-            
-            Grid.renderGrid();
+            tile.colorChanged = true;
+            tile.render();
+         },
+         "onEnter" : function () {
+            tile.alpha = 0.5;
+            tile.colorChanged = true;
+            tile.render();
+         },
+         "onLeave" : function () {
+            tile.alpha = 1;
+            tile.colorChanged = true;
+            tile.render();
+         },
+         "update" : function () {
+            // if (tile.brightness > 0) {
+            //    if (tile.top !== null)
+            //       tile.top.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.right !== null)
+            //       tile.right.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.bottom !== null)
+            //       tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
+            //    if (tile.left !== null)
+            //       tile.left.brightness += BLEED_FACTOR * tile.brightness;
+               
+            //    tile.brightness *= DECAY_RATE;
+            //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
+            // }
+         },
+         "render" : function () {
+            //var red = tile.brightness * 255;
+            //var blue = (1 - tile.brightness) * 255;
+
+            var red = [255, 0, 0, 1];
+            var blue = [0, 255, 0, 1];
+            var black = [0, 0, 0, 1];
+
+            var combinedColor = [0, 0, 0, 0];
+            // for (i = 0; i < 4; i++)
+            // {
+            //    combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
+            // }
+
+            if (tile.colorChanged == true)
+            {
+               tile.colorChanged = false;
+               var color = tile.type.color;
+               color[3] = tile.alpha;
+               tile.div.css('background', rgbaToString(color));
+            }
          },
          "canCreateFire" : function () {
             return (tile.type !== TileType.Wall && tile.type !== TileType.Fire);
@@ -171,44 +220,6 @@ var Grid = {
             tile.colorChanged = true;
             }
          },
-         "onLeave" : function () {
-            Grid.renderGrid();
-         },
-         "update" : function () {
-            // if (tile.brightness > 0) {
--            //    if (tile.top !== null)
--            //       tile.top.brightness += BLEED_FACTOR * tile.brightness;
--            //    if (tile.right !== null)
--            //       tile.right.brightness += BLEED_FACTOR * tile.brightness;
--            //    if (tile.bottom !== null)
--            //       tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
--            //    if (tile.left !== null)
--            //       tile.left.brightness += BLEED_FACTOR * tile.brightness;
--               
--            //    tile.brightness *= DECAY_RATE;
--            //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
--            // }
-         },
-         "render" : function () {
-            //var red = tile.brightness * 255;
-            //var blue = (1 - tile.brightness) * 255;
-
-            var red = [255, 0, 0, 1];
-            var blue = [0, 255, 0, 1];
-            var black = [0, 0, 0, 1];
-
-            var combinedColor = [0, 0, 0, 0];
-            // for (i = 0; i < 4; i++)
-            // {
-            //    combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
-            // }
-
-            if (tile.colorChanged == true)
-         {
-            tile.colorChanged = false;
-            tile.div.css('background', rgbaToString(tile.type.color));
-         }
-         },
       };
       if (mGrid[i] == undefined) {
          mGrid[i] = [];
@@ -237,6 +248,10 @@ var Square = {
          }
       }
       tile.onClick();
+   },
+   "OnEnter" : function (div) {
+      var tile = div.data("tile");
+      tile.onEnter();
    },
    "OnLeave" : function (div) {
       var tile = div.data("tile");
