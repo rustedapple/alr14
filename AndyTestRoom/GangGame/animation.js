@@ -258,7 +258,7 @@ var Grid = {
                tile.strength = strength;
                tile.originalStrength = originalStrength;
                tile.colorChanged = true;
-               setTimeout(tile.spreadFire, 50);
+               tile.spreadFire();
                //setTimeout(tile.killFire, Math.round(600 * ((tile.strength / tile.originalStrength))));
                setTimeout(tile.killFire, Math.round(200));
 
