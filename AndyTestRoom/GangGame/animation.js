@@ -7,8 +7,8 @@ var animation = {
    },
 };
 
-var NUM_ROWS = 20;
-var NUM_COLUMNS = 20;
+var NUM_ROWS = 60;
+var NUM_COLUMNS = 60;
 var mGrid = [];
 var DECAY_RATE = 0.9;
 var BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
@@ -77,7 +77,7 @@ var Grid = {
       setInterval(Grid.updateGrid, 16);
       setInterval(Grid.renderGrid, 16);
 
-      setInterval(Grid.createFireRandomly, 2000);
+      setInterval(Grid.createFireRandomly, 100);
    },
    
    "renderGrid" : function () {
@@ -133,6 +133,7 @@ var Grid = {
          "bottom" : null,
          "left" : null,
          "type" : TileType.Empty,
+       "colorChanged" : false,
          "getNeighbors" : function () {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
@@ -149,7 +150,8 @@ var Grid = {
             if (tile.canCreateFire())
             {
                tile.type = TileType.Fire;
-               setTimeout(tile.spreadFire, 200);
+            tile.colorChanged = true;
+               setTimeout(tile.spreadFire, 16);
                setTimeout(tile.killFire, 500);
                console.log("create fire called");
             }
@@ -159,13 +161,14 @@ var Grid = {
             for (var i = 0; i < neighbors.length; i++) {
                var neighbor = neighbors[i];
                if (neighbor !== null && neighbor.canCreateFire()) {
-                  setTimeout(neighbor.createFire, 200);
+                  setTimeout(neighbor.createFire, 16);
                }
             };
          },
          "killFire" : function () {
             if (tile.type == TileType.Fire) {
                tile.type = TileType.Empty;
+            tile.colorChanged = true;
             }
          },
          "onLeave" : function () {
@@ -173,18 +176,18 @@ var Grid = {
          },
          "update" : function () {
             // if (tile.brightness > 0) {
-            //    if (tile.top !== null)
-            //       tile.top.brightness += BLEED_FACTOR * tile.brightness;
-            //    if (tile.right !== null)
-            //       tile.right.brightness += BLEED_FACTOR * tile.brightness;
-            //    if (tile.bottom !== null)
-            //       tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
-            //    if (tile.left !== null)
-            //       tile.left.brightness += BLEED_FACTOR * tile.brightness;
-               
-            //    tile.brightness *= DECAY_RATE;
-            //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
-            // }
+-            //    if (tile.top !== null)
+-            //       tile.top.brightness += BLEED_FACTOR * tile.brightness;
+-            //    if (tile.right !== null)
+-            //       tile.right.brightness += BLEED_FACTOR * tile.brightness;
+-            //    if (tile.bottom !== null)
+-            //       tile.bottom.brightness += BLEED_FACTOR * tile.brightness;
+-            //    if (tile.left !== null)
+-            //       tile.left.brightness += BLEED_FACTOR * tile.brightness;
+-               
+-            //    tile.brightness *= DECAY_RATE;
+-            //    tile.brightness = Math.min(1, Math.max(0, tile.brightness));
+-            // }
          },
          "render" : function () {
             //var red = tile.brightness * 255;
@@ -200,8 +203,11 @@ var Grid = {
             //    combinedColor[i] = Math.round((red[i] + blue[i]) / 2);
             // }
 
-            
+            if (tile.colorChanged == true)
+         {
+            tile.colorChanged = false;
             tile.div.css('background', rgbaToString(tile.type.color));
+         }
          },
       };
       if (mGrid[i] == undefined) {
