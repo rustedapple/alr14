@@ -3,8 +3,8 @@ div.square {
    display:inline-block;
    margin:-2px;
    padding:0px;
-   width:20px;
-   height:20px;
+   width:25px;
+   height:25px;
    background:rgba(180, 180, 122, 1);
    border: 1px solid black;
    font-size: 0;

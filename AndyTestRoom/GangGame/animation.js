@@ -140,8 +140,15 @@ var Grid = {
             return [tile.top, tile.right, tile.bottom, tile.left];
          },
          "onClick" : function () {
-            //tile.brightness += 1;
-            tile.type = TileType.Wall;
+            if (tile.type != TileType.Wall)
+            {
+               tile.type = TileType.Wall;
+            } else if (tile.type == TileType.Wall) {
+               tile.type = TileType.Empty;
+            }
+            
+            /* this is where SASHANK VELIGATI puts the go-style territory control when enclosing a section in walls */
+
             tile.colorChanged = true;
             tile.render();
          },
