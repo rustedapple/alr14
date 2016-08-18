@@ -1,3 +1,15 @@
+body,html{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    line-height: 1;
+    color : #393939;
+    font-family: 'Open Sans';
+    background-color : #e2e2e2;
+}
 
 div.square {
    display:inline-block;

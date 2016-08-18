@@ -4,6 +4,9 @@ https://docs.c9.io/v1.0/docs/connected-services
 cloud 9's version of a gui version for git
 https://root-project.org/2014/07/09/work/ungit-on-cloud9/
 
+WebGL doesn't run locally (which includes pixi.js and phaser) which is where Cloud9 can help.  However, there's alternatives here -
+https://github.com/pixijs/pixi.js/wiki/FAQs
+
 -----
 
 git commands I use for cloud9
