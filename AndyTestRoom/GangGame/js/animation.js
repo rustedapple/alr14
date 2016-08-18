@@ -7,6 +7,8 @@ var animation = {
    },
 };
 
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+
 const DECAY_RATE = 0.9;
 const BLEED_FACTOR = 0.0252; // Use ~"(1-DECAY_RATE)/4" for good balance.
 
