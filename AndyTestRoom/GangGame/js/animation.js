@@ -7,88 +7,43 @@ var animation = {
    },
 };
 
-//var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
-var game = new Phaser.Game(800, 800, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
+document.body.appendChild(renderer.view);
 
-function preload() {
+// create the root of the scene graph
+var stage = new PIXI.Container();
 
-    game.load.tilemap('map', "assets/tilemaps/maps/tile_properties.json", null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles', "assets/tilemaps/tiles/gridtiles.png");
+var container = new PIXI.Container();
 
-}
+stage.addChild(container);
 
-var map;
-var layer;
-var marker;
+for (var j = 0; j < 5; j++) {
 
-// var sprite;
-var cursors;
+    for (var i = 0; i < 5; i++) {
+        var bunny = PIXI.Sprite.fromImage('_assets/basics/bunny.png');
+        bunny.x = 40 * i;
+        bunny.y = 40 * j;
+        container.addChild(bunny);
+    };
+};
+/*
+ * All the bunnies are added to the container with the addChild method
+ * when you do this, all the bunnies become children of the container, and when a container moves,
+ * so do all its children.
+ * This gives you a lot of flexibility and makes it easier to position elements on the screen
+ */
+container.x = 100;
+container.y = 60;
 
-function create() {
+// start animating
+animate();
 
-     game.physics.startSystem(Phaser.Physics.ARCADE);
+function animate() {
 
-     map = game.add.tilemap('map');
+    requestAnimationFrame(animate);
 
-     map.addTilesetImage('tiles');
-
-     // map.setCollisionBetween(1, 12);
-
-     layer = map.createLayer('Tile Layer 1');
-
-     layer.resizeWorld();
-
-     //  Our painting marker
-     marker = game.add.graphics();
-     marker.lineStyle(2, 0xffffff, 1);
-     marker.drawRect(0, 0, 32, 32);
-
-     game.input.addMoveCallback(updateMarker, this);
-
-     game.input.onDown.add(getTileProperties, this);
-
-     cursors = game.input.keyboard.createCursorKeys();
-
-}
-
-function getTileProperties() {
-
-     var x = layer.getTileX(game.input.activePointer.worldX);
-     var y = layer.getTileY(game.input.activePointer.worldY);
-
-     var tile = map.getTile(x, y, layer);
-
-     tile.properties.wibble = true;
-
-}
-
-function update() {
-
-   //  if (cursors.left.isDown)
-   //  {
-   //       game.camera.x -= 4;
-   //  }
-   //  else if (cursors.right.isDown)
-   //  {
-   //       game.camera.x += 4;
-   //  }
-
-   //  if (cursors.up.isDown)
-   //  {
-   //       game.camera.y -= 4;
-   //  }
-   //  else if (cursors.down.isDown)
-   //  {
-   //       game.camera.y += 4;
-   //  }
-
-}
-
-function render() {
-
-    // game.debug.text('Current Layer: ' + currentLayer.name, 16, 550);
-    // game.debug.text('1-3 Switch Layers. SPACE = Show All. Cursors = Move Camera', 16, 570);
-
+    // render the root container
+    renderer.render(stage);
 }
 
 const DECAY_RATE = 0.9;
