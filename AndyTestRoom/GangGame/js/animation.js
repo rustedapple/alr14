@@ -26,61 +26,61 @@ var cursors;
 
 function create() {
 
-    // game.physics.startSystem(Phaser.Physics.ARCADE);
+     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    // map = game.add.tilemap('map');
+     map = game.add.tilemap('map');
 
-    // map.addTilesetImage('tiles');
+     map.addTilesetImage('tiles');
 
-    // // map.setCollisionBetween(1, 12);
+     // map.setCollisionBetween(1, 12);
 
-    // layer = map.createLayer('Tile Layer 1');
+     layer = map.createLayer('Tile Layer 1');
 
-    // layer.resizeWorld();
+     layer.resizeWorld();
 
-    // //  Our painting marker
-    // marker = game.add.graphics();
-    // marker.lineStyle(2, 0xffffff, 1);
-    // marker.drawRect(0, 0, 32, 32);
+     //  Our painting marker
+     marker = game.add.graphics();
+     marker.lineStyle(2, 0xffffff, 1);
+     marker.drawRect(0, 0, 32, 32);
 
-    // game.input.addMoveCallback(updateMarker, this);
+     game.input.addMoveCallback(updateMarker, this);
 
-    // game.input.onDown.add(getTileProperties, this);
+     game.input.onDown.add(getTileProperties, this);
 
-    // cursors = game.input.keyboard.createCursorKeys();
+     cursors = game.input.keyboard.createCursorKeys();
 
 }
 
 function getTileProperties() {
 
-    // var x = layer.getTileX(game.input.activePointer.worldX);
-    // var y = layer.getTileY(game.input.activePointer.worldY);
+     var x = layer.getTileX(game.input.activePointer.worldX);
+     var y = layer.getTileY(game.input.activePointer.worldY);
 
-    // var tile = map.getTile(x, y, layer);
+     var tile = map.getTile(x, y, layer);
 
-    // tile.properties.wibble = true;
+     tile.properties.wibble = true;
 
 }
 
 function update() {
 
-    // if (cursors.left.isDown)
-    // {
-    //     game.camera.x -= 4;
-    // }
-    // else if (cursors.right.isDown)
-    // {
-    //     game.camera.x += 4;
-    // }
+   //  if (cursors.left.isDown)
+   //  {
+   //       game.camera.x -= 4;
+   //  }
+   //  else if (cursors.right.isDown)
+   //  {
+   //       game.camera.x += 4;
+   //  }
 
-    // if (cursors.up.isDown)
-    // {
-    //     game.camera.y -= 4;
-    // }
-    // else if (cursors.down.isDown)
-    // {
-    //     game.camera.y += 4;
-    // }
+   //  if (cursors.up.isDown)
+   //  {
+   //       game.camera.y -= 4;
+   //  }
+   //  else if (cursors.down.isDown)
+   //  {
+   //       game.camera.y += 4;
+   //  }
 
 }
 
