@@ -1,0 +1,23 @@
+connect github to cloud9 -
+https://docs.c9.io/v1.0/docs/connected-services
+
+cloud 9's version of a gui version for git
+https://root-project.org/2014/07/09/work/ungit-on-cloud9/
+
+-----
+
+git commands I use for cloud9
+
+git fetch
+git merge
+git commit -m "things you changed here"
+git push
+(tutorial said to use git push -u origin master, but git push seemed to work for me - maybe you can clarify that)
+
+https://www.quora.com/How-do-I-commit-changes-to-GitHub-within-Cloud9-IDE
+-----
+
+I'm not sure if this is necessary, but I cloned repo in git gui to our new github home
+https://github.com/rustedapple/alr14.git
+
+So I'm slowly trying to grasp, but I guess github is the intermediary between our notepad++/sublime stuff we wanna do on our local machines and the online cloud changes we do on cloud9.  Kinda like best of both worlds hopefully.
