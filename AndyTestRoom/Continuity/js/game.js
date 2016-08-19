@@ -45,7 +45,7 @@ playGame.prototype = {
           hexagonGroup.y = 20;
 
           marker = game.add.sprite(0,0,"marker");
-			marker.anchor.setTo(0.5);
+		marker.anchor.setTo(0.5);
 		marker.visible=false;
 		hexagonGroup.add(marker);
           moveIndex = game.input.addMoveCallback(checkHex, this);   
@@ -109,7 +109,7 @@ function placeMarker(posX,posY){
 		for(var j = 0; j < GRID_SIZE_X; j ++){
 			if(GRID_SIZE_Y%2==0 || i+1<GRID_SIZE_Y || j%2==0){
 				if (hexagonArray[i][j] != null) {
-					hexagonArray[i][j].tint = 0xffffff;
+					//hexagonArray[i][j].tint = 0xffffff;
 				}
 			}
 		}
@@ -119,7 +119,7 @@ function placeMarker(posX,posY){
 		marker.visible=false;
 	}
 	else{
-		marker.visible=true;
+		//marker.visible=true;
 		marker.x = HEXAGON_WIDTH*posX;
 		marker.y = HEXAGON_HEIGHT/4*3*posY+HEXAGON_HEIGHT/2;
 
@@ -132,18 +132,8 @@ function placeMarker(posX,posY){
 		}
 
 		if (hexagonArray[posY][posX] != null) {
-			hexagonArray[posY][posX].tint = 0x999900;
+			//hexagonArray[posY][posX].tint = 0x999900;
 		}
-		// if(markerY+markerX%2<GRID_SIZE_Y/2 && (GRID_SIZE_Y%2==0 || markerY<Math.floor(GRID_SIZE_Y/2))){
-		// 	// left
-		// 	// if(markerX-1>=0){
-		// 	// 	hexagonArray[markerY+markerX%2][markerX-1].tint = 0xff0000;
-		// 	// }
-		// 	// // right
-		// 	// if(markerX+1<GRID_SIZE_X){
-		// 	// 	hexagonArray[markerY+markerX%2][markerX+1].tint = 0xff0000;
-		// 	// }
-		// } 
 	}
 }	
 
@@ -173,19 +163,44 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
      tile = game.add.sprite(hexagonX, hexagonY, tileType);
      hexagonGroup.add(tile);
      hexagonArray[i][j] = tile; 
+     tile.inputEnabled = true;
+     tile.events.onInputOver.add(over, this);
+     tile.events.onInputOut.add(up, this);
+     tile.input.pixelPerfectOver = true;
+     tile.events.onInputDown.add(onClick, this, hexagonX, hexagonY);
+     tile.input.priorityID = i;
      if (tileType == "wallTile") {
           tweenTile = game.add.tween(tile);
           tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 1200,  Phaser.Easing.Bounce.Out, true);
      }
      if (tileType == "resourceTile") {
-			tweenTile = game.add.tween(tile);
+		tweenTile = game.add.tween(tile);
           tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
           tweenTile.onComplete.add(function() {
                tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
                tweenTile.start;
           });
-
      }
+}
+
+function onClick(tile, hexagonX, hexagonY) {
+     //tile.pause();
+     var tweenTile;
+     tweenTile = game.add.tween(tile);
+     tweenTile.to({ alpha:1, y: /*hexagonY*/ - HEXAGON_HEIGHT * 5}, 400,  Phaser.Easing.Quadratic.Out, true);
+     //tweenTile.onComplete.add(function() {
+     //     tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
+     //     tweenTile.start;
+     //});
+}
+function over(tile) {
+     tile.tint = 0x999900;
+}
+function up(tile) {
+     tile.tint = 0xffffff;
+}
+function over1() {
+     //tile.tint = 0x999900;
 }
 
 /*var hexagonText = game.add.text(0 + HEXAGON_WIDTH / 3 + 5, 0 + 15, i + "," + j);
