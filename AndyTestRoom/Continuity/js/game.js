@@ -114,7 +114,8 @@ function placeMarker(posX,posY){
 			}
 		}
 	}
-	if(posX<0 || posY<0 || posY>=GRID_SIZE_Y || posX>columns-1){
+	console.log(posX + " ___ " + GRID_SIZE_X);
+	if(posX<0 || posY<0 || posY>=GRID_SIZE_Y || posX>=GRID_SIZE_X - posY%2){
 		marker.visible=false;
 	}
 	else{
@@ -133,16 +134,16 @@ function placeMarker(posX,posY){
 		if (hexagonArray[posY][posX] != null) {
 			hexagonArray[posY][posX].tint = 0x999900;
 		}
-		if(markerY+markerX%2<GRID_SIZE_Y/2 && (GRID_SIZE_Y%2==0 || markerY<Math.floor(GRID_SIZE_Y/2))){
-			// left
-			// if(markerX-1>=0){
-			// 	hexagonArray[markerY+markerX%2][markerX-1].tint = 0xff0000;
-			// }
-			// // right
-			// if(markerX+1<GRID_SIZE_X){
-			// 	hexagonArray[markerY+markerX%2][markerX+1].tint = 0xff0000;
-			// }
-		} 
+		// if(markerY+markerX%2<GRID_SIZE_Y/2 && (GRID_SIZE_Y%2==0 || markerY<Math.floor(GRID_SIZE_Y/2))){
+		// 	// left
+		// 	// if(markerX-1>=0){
+		// 	// 	hexagonArray[markerY+markerX%2][markerX-1].tint = 0xff0000;
+		// 	// }
+		// 	// // right
+		// 	// if(markerX+1<GRID_SIZE_X){
+		// 	// 	hexagonArray[markerY+markerX%2][markerX+1].tint = 0xff0000;
+		// 	// }
+		// } 
 	}
 }	
 
