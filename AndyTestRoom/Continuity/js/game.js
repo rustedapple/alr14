@@ -177,11 +177,11 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
      if (tileType == "resourceTile") {
 		tweenTile = game.add.tween(tile);
 		tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 3000,  Phaser.Easing.Bounce.Out, true);
-          //tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
-          // tweenTile.onComplete.add(function() {
-          //      tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
-          //      tweenTile.start;
-          // });
+          tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
+          tweenTile.onComplete.add(function() {
+               tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
+               //tweenTile.start;
+          });
      }
 }
 
