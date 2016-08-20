@@ -1,6 +1,6 @@
 const HEXAGON_WIDTH = 70;
 const HEXAGON_HEIGHT = 26; //26//80
-const GRID_SIZE_X = 1400;
+const GRID_SIZE_X = 28;
 const GRID_SIZE_Y = 36; //36
 
 var game;
@@ -18,24 +18,25 @@ var sectorWidth = HEXAGON_WIDTH;
 var sectorHeight = HEXAGON_HEIGHT / 4 * 3;
 var gradient = (HEXAGON_HEIGHT / 4) / (HEXAGON_WIDTH / 2);
 
-window.onload = function () {
+window.onload = function() {
    game = new Phaser.Game(1200, 1200);
    game.state.add("PlayGame", playGame);
    game.state.start("PlayGame");
 };
 
-var playGame = function (game) {};
+var playGame = function(game) {};
 
 playGame.prototype = {
-   preload : function () {
+   preload: function() {
       game.load.image("grassTile", "assets/grass.png");
       game.load.image("fireTile", "assets/fire.png");
       game.load.image("wallTile", "assets/wall.png");
       game.load.image("resourceTile", "assets/resource.png");
       game.load.image("emptyTile", "assets/empty.png");
       game.load.image("marker", "assets/marker.png");
+      game.time.advancedTiming = true;
    },
-   create : function () {
+   create: function() {
       hexagonGroup = game.add.group();
       game.stage.backgroundColor = "#ffffff";
       cursors = game.input.keyboard.createCursorKeys();
@@ -51,16 +52,16 @@ playGame.prototype = {
       hexagonGroup.add(marker);
       moveIndex = game.input.addMoveCallback(checkHex, this);
    },
-   update : function () {
+   update: function() {
       var destroyedRow = false;
       for (var i = minRow; i < GRID_SIZE_Y; i++) {
          for (var j = 0; j < GRID_SIZE_X; j++) {
             if ((i % 2 == 0 || j < GRID_SIZE_X - 1) && hexagonArray[i][j].world.y < 0) {
                var destroyTween = game.add.tween(hexagonArray[i][j]).to({
-                     alpha : 0,
-                     y : hexagonArray[i][j].y + HEXAGON_HEIGHT / 2
-                  }, 200, Phaser.Easing.Quadratic.Out, true);
-               destroyTween.onComplete.add(function (e) {
+                  alpha: 0,
+                  y: hexagonArray[i][j].y + HEXAGON_HEIGHT / 2
+               }, 200, Phaser.Easing.Quadratic.Out, true);
+               destroyTween.onComplete.add(function(e) {
                   e.destroy();
                })
                destroyedRow = true;
@@ -70,8 +71,10 @@ playGame.prototype = {
       if (destroyedRow) {
          minRow++;
       }
+      
+      hexagonGroup.sort('z', Phaser.Group.SORT_ASCENDING);
    },
-   render : function () {
+   render: function() {
       game.debug.text(game.time.fps || '--', 2, 14, "#00ff00");
       game.debug.cameraInfo(game.camera, 32, 32);
    }
@@ -90,15 +93,18 @@ function checkHex() {
       if (deltaY < ((-HEXAGON_HEIGHT / 4) + deltaX * gradient)) {
          candidateY--;
       }
-   } else {
+   }
+   else {
       if (deltaX >= HEXAGON_WIDTH / 2) {
          if (deltaY < (HEXAGON_HEIGHT / 2 - deltaX * gradient)) {
             candidateY--;
          }
-      } else {
+      }
+      else {
          if (deltaY < deltaX * gradient) {
             candidateY--;
-         } else {
+         }
+         else {
             candidateX--;
          }
       }
@@ -119,7 +125,8 @@ function placeMarker(posX, posY) {
    //console.log(posX + " ___ " + GRID_SIZE_X);
    if (posX < 0 || posY < 0 || posY >= GRID_SIZE_Y || posX >= GRID_SIZE_X - posY % 2) {
       marker.visible = false;
-   } else {
+   }
+   else {
       //marker.visible=true;
       marker.x = HEXAGON_WIDTH * posX;
       marker.y = HEXAGON_HEIGHT / 4 * 3 * posY + HEXAGON_HEIGHT / 2;
@@ -127,7 +134,8 @@ function placeMarker(posX, posY) {
       //for the halfway point
       if (posY % 2 == 0) {
          marker.x += HEXAGON_WIDTH / 2;
-      } else {
+      }
+      else {
          marker.x += HEXAGON_WIDTH;
       }
 
@@ -146,12 +154,15 @@ function addHexagonRow(i) {
       rand = Math.floor(Math.random() * 50);
       if (rand == 0) {
          constructTile(hexagonX, hexagonY, i, j, "wallTile");
-      } else if (rand >= 1 && rand <= 2) {
+      }
+      else if (rand >= 1 && rand <= 2) {
          constructTile(hexagonX, hexagonY, i, j, "grassTile");
          //constructTile(hexagonX, hexagonY, i, j, "emptyTile");
-      } else if (rand == 3) {
+      }
+      else if (rand == 3) {
          constructTile(hexagonX, hexagonY, i, j, "resourceTile");
-      } else {
+      }
+      else {
          constructTile(hexagonX, hexagonY, i, j, "grassTile");
       }
    }
@@ -169,28 +180,35 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
    tile.events.onInputOver.add(over, this);
    tile.events.onInputOut.add(up, this);
 
-   tile.events.onInputDown.add(function () {
+   tile.events.onInputDown.add(function() {
       onClick(tile, i, j);
    }, this);
 
    tile.input.pixelPerfectOver = true;
    tile.input.pixelPerfectClick = true;
-   tile.input.priorityID = i;
-   tile.autoCull = true;
+   console.log(i);
    tile.z = i;
+   tile.autoCull = true;
+   
+   var hexagonText = game.add.text(0 + HEXAGON_WIDTH / 3 + 5, 0 + 15, i + "," + j);
+   hexagonText.font = "arial";
+   hexagonText.align = "center";
+   hexagonText.fontSize = 10;
+   tile.addChild(hexagonText);
+   
 
    if (tileType == "wallTile") {
       tweenTile = game.add.tween(tile);
       tweenTile.to({
-         alpha : 1,
-         y : hexagonY - HEXAGON_HEIGHT * 0.8
+         alpha: 1,
+         y: hexagonY - HEXAGON_HEIGHT * 0.8
       }, 3000, Phaser.Easing.Bounce.Out, true);
    }
    if (tileType == "resourceTile") {
       tweenTile = game.add.tween(tile);
       tweenTile.to({
-         alpha : 1,
-         y : hexagonY - HEXAGON_HEIGHT * 0.8
+         alpha: 1,
+         y: hexagonY - HEXAGON_HEIGHT * 0.8
       }, 3000, Phaser.Easing.Bounce.Out, true);
       //tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
       // tweenTile.onComplete.add(function() {
@@ -201,23 +219,36 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
 }
 
 function onClick(tile, i, j) {
-   var destroyTween = game.add.tween(tile).to({
-         alpha : 0,
-         y : tile.y - HEXAGON_HEIGHT * 3
-      }, 400, Phaser.Easing.Quadratic.Out, true);
+   // var destroyTween = game.add.tween(tile).to({
+   //    alpha: 0,
+   //    y: tile.y - HEXAGON_HEIGHT * 3
+   // }, 400, Phaser.Easing.Quadratic.Out, true);
 
-   destroyTween.onComplete.add(function (e) {
-      e.destroy();
-   })
+   // destroyTween.onComplete.add(function(e) {
+   //    e.destroy();
+   // })
 
-   constructTile(tile.x, tile.y, i, j, "grassTile");
+   // constructTile(tile.x, tile.y, i, j, "grassTile");
+   
+   tile.loadTexture("wallTile");
+   var tweenTile;
+   tweenTile = game.add.tween(tile);
+      tweenTile.to({
+         alpha: 1,
+         y: tile.y - HEXAGON_HEIGHT * 0.8
+      }, 3000, Phaser.Easing.Bounce.Out, true);
+   
+   //hexagonArray[i][j].
 }
+
 function over(tile) {
    tile.tint = 0x999900;
 }
+
 function up(tile) {
    tile.tint = 0xffffff;
 }
+
 function over1() {
    //tile.tint = 0x999900;
 }
@@ -227,4 +258,3 @@ hexagonText.font = "arial";
 hexagonText.align = "center";
 hexagonText.fontSize = 10;
 grassTile.addChild(hexagonText);  */
-
