@@ -1,7 +1,7 @@
 const HEXAGON_WIDTH = 70;
 const HEXAGON_HEIGHT = 26;//26//80
-const GRID_SIZE_X = 14;
-const GRID_SIZE_Y = 36;
+const GRID_SIZE_X = 140;
+const GRID_SIZE_Y = 360;
 
 var game;
 var minRow = 0;
@@ -22,7 +22,7 @@ window.onload = function() {
 	game = new Phaser.Game(1200, 1200);
      game.state.add("PlayGame", playGame);
      game.state.start("PlayGame");
-}
+};
 
 var playGame = function(game){}
 playGame.prototype = {
@@ -114,7 +114,7 @@ function placeMarker(posX,posY){
 			}
 		}
 	}
-	console.log(posX + " ___ " + GRID_SIZE_X);
+	//console.log(posX + " ___ " + GRID_SIZE_X);
 	if(posX<0 || posY<0 || posY>=GRID_SIZE_Y || posX>=GRID_SIZE_X - posY%2){
 		marker.visible=false;
 	}
@@ -160,16 +160,25 @@ function addHexagonRow(i){
 function constructTile(hexagonX, hexagonY, i, j, tileType) {
      var tweenTile;
      var tile;
+
      tile = game.add.sprite(hexagonX, hexagonY, tileType);
      hexagonGroup.add(tile);
      hexagonArray[i][j] = tile; 
+     
      tile.inputEnabled = true;
      tile.events.onInputOver.add(over, this);
      tile.events.onInputOut.add(up, this);
-     tile.events.onInputDown.add(onClick, this, hexagonX, hexagonY);
+     
+     tile.events.onInputDown.add(function () {
+          onClick(tile, i, j);
+     }, this);
+     
      tile.input.pixelPerfectOver = true;
      tile.input.pixelPerfectClick = true;
      tile.input.priorityID = i;
+     tile.autoCull = true;
+     tile.z = i;
+     
      if (tileType == "wallTile") {
           tweenTile = game.add.tween(tile);
           tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 3000,  Phaser.Easing.Bounce.Out, true);
@@ -185,10 +194,17 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
      }
 }
 
-function onClick(tile, hexagonX, hexagonY) {
-	var tweenTile;
-	tweenTile = game.add.tween(tile);
-	tweenTile.to({ alpha:1, y: /*hexagonY*/ - HEXAGON_HEIGHT * 5}, 400,  Phaser.Easing.Quadratic.Out, true);
+function onClick(tile, i, j) {
+	var destroyTween = game.add.tween(tile).to({
+          alpha:0,
+          y: tile.y - HEXAGON_HEIGHT * 3
+     }, 400,  Phaser.Easing.Quadratic.Out, true);
+     destroyTween.onComplete.add(function(e){
+          e.destroy();
+     })
+     
+     console.log("i = " + i + "; j = " + j);
+     constructTile(tile.x, tile.y, i, j, "grassTile");
 }
 function over(tile) {
      tile.tint = 0x999900;
