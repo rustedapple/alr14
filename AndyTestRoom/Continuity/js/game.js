@@ -166,32 +166,29 @@ function constructTile(hexagonX, hexagonY, i, j, tileType) {
      tile.inputEnabled = true;
      tile.events.onInputOver.add(over, this);
      tile.events.onInputOut.add(up, this);
-     tile.input.pixelPerfectOver = true;
      tile.events.onInputDown.add(onClick, this, hexagonX, hexagonY);
+     tile.input.pixelPerfectOver = true;
+     tile.input.pixelPerfectClick = true;
      tile.input.priorityID = i;
      if (tileType == "wallTile") {
           tweenTile = game.add.tween(tile);
-          tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 1200,  Phaser.Easing.Bounce.Out, true);
+          tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 3000,  Phaser.Easing.Bounce.Out, true);
      }
      if (tileType == "resourceTile") {
 		tweenTile = game.add.tween(tile);
-          tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
-          tweenTile.onComplete.add(function() {
-               tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
-               tweenTile.start;
-          });
+		tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.8}, 3000,  Phaser.Easing.Bounce.Out, true);
+          //tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
+          // tweenTile.onComplete.add(function() {
+          //      tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
+          //      tweenTile.start;
+          // });
      }
 }
 
 function onClick(tile, hexagonX, hexagonY) {
-     //tile.pause();
-     var tweenTile;
-     tweenTile = game.add.tween(tile);
-     tweenTile.to({ alpha:1, y: /*hexagonY*/ - HEXAGON_HEIGHT * 5}, 400,  Phaser.Easing.Quadratic.Out, true);
-     //tweenTile.onComplete.add(function() {
-     //     tweenTile.to({ alpha:1, y: hexagonY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
-     //     tweenTile.start;
-     //});
+	var tweenTile;
+	tweenTile = game.add.tween(tile);
+	tweenTile.to({ alpha:1, y: /*hexagonY*/ - HEXAGON_HEIGHT * 5}, 400,  Phaser.Easing.Quadratic.Out, true);
 }
 function over(tile) {
      tile.tint = 0x999900;
