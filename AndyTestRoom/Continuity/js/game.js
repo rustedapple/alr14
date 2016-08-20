@@ -1,7 +1,7 @@
 const HEXAGON_WIDTH = 70;
 const HEXAGON_HEIGHT = 26;//26//80
-const GRID_SIZE_X = 140;
-const GRID_SIZE_Y = 360;
+const GRID_SIZE_X = 1400;
+const GRID_SIZE_Y = 36;//36
 
 var game;
 var minRow = 0;
@@ -24,7 +24,11 @@ window.onload = function() {
      game.state.start("PlayGame");
 };
 
-var playGame = function(game){}
+var playGame = function(game)
+{
+     
+};
+
 playGame.prototype = {
      preload: function(){
      	game.load.image("grassTile", "assets/grass.png");
@@ -68,7 +72,11 @@ playGame.prototype = {
 		}
         if(destroyedRow){
              minRow ++;           
-        }    
+        }
+     },
+     render: function() {
+          game.debug.text(game.time.fps || '--', 2, 14, "#00ff00");
+          game.debug.cameraInfo(game.camera, 32, 32);
      }
 }
 
@@ -199,11 +207,11 @@ function onClick(tile, i, j) {
           alpha:0,
           y: tile.y - HEXAGON_HEIGHT * 3
      }, 400,  Phaser.Easing.Quadratic.Out, true);
+     
      destroyTween.onComplete.add(function(e){
           e.destroy();
      })
      
-     console.log("i = " + i + "; j = " + j);
      constructTile(tile.x, tile.y, i, j, "grassTile");
 }
 function over(tile) {
