@@ -37,15 +37,18 @@ Continuity.Chunk.prototype = {
     var startingXPos = Continuity.Map.CHUNK_SIZE * chunkX;
     var startingYPos = Continuity.Map.CHUNK_SIZE * chunkY;
 
-    this.tileMap.addTilesetImage(this.tileset);
-    this.tileMapLayer = this.tileMap.create("tilemap", Continuity.Map.CHUNK_TILES, Continuity.Map.CHUNK_TILES, Continuity.Map.TILE_SIZE, Continuity.Map.TILE_SIZE);
+    this.tileMap.addTilesetImage(this.tileset, null, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT_ugh, 2, 3);
+    //this.tileMap.width = 80;
+    
+    this.tileMapLayer = this.tileMap.create("tilemap", Continuity.Map.CHUNK_TILES, Continuity.Map.CHUNK_TILES, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
     this.tileMapLayer.fixedToCamera = false;
     this.tileMapLayer.scrollFactorX = 0;
     this.tileMapLayer.scrollFactorY = 0;
     this.tileMapLayer.position.set(startingXPos, startingYPos);
-
     this.tileMapLayer.inputEnabled = true;
-
+    
+    //this.tileMap.tileWidth = Continuity.Map.HEXAGON_WIDTH;
+    //this.tileMap.tileHeight = Continuity.Map.HEXAGON_HEIGHT;
     var self = this;
     this.tileMapLayer.events.onInputDown.add(function(sprite, pointer){
       var chunkIndex = self.map.getChunkIndexForCoordinate(pointer.worldX, pointer.worldY);
@@ -55,8 +58,9 @@ Continuity.Chunk.prototype = {
     var tile;
     for(var i = 0; i < Continuity.Map.CHUNK_TILES; i++){
       for(var j = 0; j < Continuity.Map.CHUNK_TILES; j++){
-        tile = this.map.chunkFactory.createTile(chunkX, chunkY, i, j, this.tileMapLayer);
+        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, this.tileMapLayer);
         this.tileMap.putTile(tile, tile.x, tile.y);
+        
       }
     }
 

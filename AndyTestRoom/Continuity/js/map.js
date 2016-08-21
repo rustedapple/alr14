@@ -13,7 +13,7 @@ Continuity.Map = function (game, params) {
   this.world = game.world;
   this._tileCache = {};
 
-  this.chunkFactory = new Continuity.ChunkFactory(this, params);
+  this.tileFactory = new Continuity.TileFactory(this, params);
 
   console.group('Continuity::Map()', 'New Map instance created.');
   console.log('World', this.generation);
@@ -22,21 +22,17 @@ Continuity.Map = function (game, params) {
 
 Continuity.Map.WORLD_SIZE        = 8192;//px
 Continuity.Map.CHUNK_SIZE        = 2048;//px -
-Continuity.Map.HEXAGON_WIDTH     = 70;//px;
+Continuity.Map.HEXAGON_WIDTH     = 70//70;//px;
 Continuity.Map.HEXAGON_HEIGHT    = 32;//px;
+Continuity.Map.HEXAGON_HEIGHT_ugh= 80;
 Continuity.Map.WORLD_CHUNKS      = Continuity.Map.WORLD_SIZE / Continuity.Map.CHUNK_SIZE;
 Continuity.Map.CHUNK_TILES       = Continuity.Map.CHUNK_SIZE / Continuity.Map.HEXAGON_WIDTH;
 Continuity.Map.WORLD_TILES       = Continuity.Map.WORLD_CHUNKS * Continuity.Map.CHUNK_TILES;
 
 Continuity.Map.DEFAULT_GEN_MIN   = 0;
 Continuity.Map.DEFAULT_GEN_MAX   = 32;
-Continuity.Map.DEFAULT_GEN_SEED  = "default";
+Continuity.Map.DEFAULT_GEN_SEED  = Math.floor(Math.random() * 5);//"default";
 Continuity.Map.DEFAULT_GEN_QUAL  = 128.0;
-
-// const HEXAGON_WIDTH = 70;
-// const HEXAGON_HEIGHT = 26; //26//80
-// const GRID_SIZE_X = 28;
-// const GRID_SIZE_Y = 36; //36
 
 Continuity.Map.prototype = {
 

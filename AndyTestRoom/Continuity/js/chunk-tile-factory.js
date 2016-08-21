@@ -7,15 +7,24 @@
 var Continuity = window.Continuity || {}; // Namespace
 
 (function() {
-  Continuity.ChunkFactory = {};
-  Continuity.ChunkFactory.createSeed = function(s) {
+
+  /**
+   * A static factory for creating Phase.Tiles for use by Chunks
+   *
+   */
+  Continuity.TileFactory = {};
+
+
+  Continuity.TileFactory.createSeed = function(s) {
+
+
   };
 
   /**
    * Generate Simplex noise for a given coordinate. This noise data is then used
    * to determine what the map should look like at the specific coordinate.
    *
-   * @method Continuity.Map#generate
+   * @method ChunkMap.Map#generate
    * @param {number} cx - Chunk x index
    * @param {number} cy - Chunk y index
    * @param {number} tx - Tile x index
@@ -23,7 +32,7 @@ var Continuity = window.Continuity || {}; // Namespace
    * @param {number} layer - The layer of noise to generate
    * @return {number} A value between 0 and 1 representing the level of noise at this point.
    */
-  Continuity.ChunkFactory.generate = function(cx, cy, tx, ty, layer) {
+  Continuity.TileFactory.generate = function(cx, cy, tx, ty, layer) {
     layer = (typeof layer === 'undefined') ? 0 : layer;
     var d = this.generation._delta;
     var s = this.generation._float;
@@ -34,7 +43,11 @@ var Continuity = window.Continuity || {}; // Namespace
 
     return n;
   };
+
+
 })();
+
+
 
 /**
  * @author       
@@ -45,7 +58,19 @@ var Continuity = window.Continuity || {}; // Namespace
 var WorldSim = window.Continuity || {}; // Namespace
 
 (function() {
-  WorldSim.ChunkFactory = function (map, params) {
+
+  /**
+   * The TileFactory generates a tile for a given coordinate on the map.
+   *
+   * @class WorldSim.TileFactory
+   * @constructor
+   * @param {WorldSim.Map} map - reference to the map we will be drawing tiles for.
+   */
+  WorldSim.TileFactory = function (map, params) {
+
+    /**
+     * @property {ChunkMap.Map} map - A reference to the owning map.
+     */
     this.map = map;
 
     /**
@@ -73,17 +98,17 @@ var WorldSim = window.Continuity || {}; // Namespace
     this.generation._delta = this.generation.quality + this.generation._float;
 
     /**
-     * @property {Continuity.SimplexNoise} noise - A reference to Simplex Noise generator
+     * @property {ChunkMap.SimplexNoise} noise - A reference to Simplex Noise generator
      */
     this.noise = new WorldSim.SimplexNoise(this.generation._num);
 
     this.textureIndexByType = {
-      'none' : 0,
-      'fire': 1,
+      'wall' : 0,
+      'grass': 1,
       'resource' : 2,
-      'grass' : 3,
+      'fire' : 3,
       'hexagon': 4,
-      'wall': 5
+      'none': 5
     };
 
     var ttype   = '';
@@ -95,13 +120,13 @@ var WorldSim = window.Continuity || {}; // Namespace
   };
 
 
-  WorldSim.ChunkFactory.prototype = {
+  WorldSim.TileFactory.prototype = {
 
     /**
      * Generate Simplex noise for a given coordinate. This noise data is then used
      * to determine what the map should look like at the specific coordinate.
      *
-     * @method Continuity.ChunkFactory#_generate
+     * @method ChunkMap.TileFactory#_generate
      * @param {number} cx - Chunk x index
      * @param {number} cy - Chunk y index
      * @param {number} tx - Tile x index
@@ -121,30 +146,47 @@ var WorldSim = window.Continuity || {}; // Namespace
 
       return n;
     },
-    
+
+    /**
+     * Puts a tile of the given index value at the coordinate specified.
+     * If you pass `null` as the tile it will pass your call over to Tilemap.removeTile instead.
+     *
+     * @method ChunkMap.TileFactory#createTile
+     * @param {number} chunkX - X position of the Chunk this tile will live in (given in tile units, not pixels)
+     * @param {number} chunkY - Y position of the Chunk this tile will live in (given in tile units, not pixels)
+     * @param {number} tileX - X position of the tile relative to the parent Chunk (given in tile units, not pixels)
+     * @param {number} tileY - Y position of the tile relative to the parent Chunk (given in tile units, not pixels)
+     * @param {Phaser.TilemapLayer} layer - The layer in the Tilemap data that this tile belongs to.
+     * @return {Phaser.Tile} The Tile object that was created
+     */
     createTile: function(chunkX, chunkY, tileX, tileY, layer) {
       this.v = this._generate(chunkX, chunkY, tileX, tileY);
 
-      this.ttype = 'none';
+      this.ttype = 'grass';
       this.subtype = '';
       if ( this.v > 0 ) {
         if ( this.v <= 0.1 ) {
           this.ttype = 'grass';
-        } else if ( this.v <= 0.4 ) {
+          if ( this.v >= 0.04 && this.v <= 0.05 ) {
+            this.ttype = 'wall';
+          }
+        } else if ( this.v <= 0.5 ) {
           this.ttype = 'grass';
           if ( this.v >= 0.30 && this.v <= 0.35 ) {
-            this.subtype = 'resource';
+            this.ttype = 'wall';
           }
         } else {
           this.ttype = 'wall';
         }
       }
+      
+      
 
-      return new Phaser.Tile(layer, this.textureIndexByType[this.ttype], tileX, tileY, WorldSim.Map.TILE_SIZE, WorldSim.Map.TILE_SIZE)
+      return new Phaser.Tile(layer, this.textureIndexByType[this.ttype], tileX, tileY)
     }
-    
+
   };
 
-  WorldSim.ChunkFactory.prototype.constructor = WorldSim.ChunkFactory;
+  WorldSim.TileFactory.prototype.constructor = WorldSim.TileFactory;
 
 })();

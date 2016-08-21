@@ -8,13 +8,13 @@
 			margin:0px;
 		}
 	</style>
-	 <script src="js/lib/phaser.min.js"></script>
+	 <script src ="lib/phaser.js"></script>
      <script src ="js/noise.js"></script>
      <script src ="js/tile.js"></script>
      <script src ="js/utils.js"></script>
      <script src ="js/map.js"></script>
      <script src ="js/engine.js"></script>
-     <script src ="js/chunkFactory.js"></script>
+     <script src ="js/chunk-tile-factory.js"></script>
      <script src ="js/chunk.js"></script>
 	</head>
 	
@@ -23,7 +23,7 @@
     		window.onload = function() {
                 // <!-- If you increase the size of the game canvas, you need to also increase the ChunkMap.Map.CHUNK_SIZE constant to match. -->
                 // <!-- Keep this value a power of 2. -->
-                var mapSize = 512 * 2 * 2;
+                var mapSize = 2048;
                 var continuityEngine = new Continuity.Engine(mapSize, mapSize*3/4, "");
             };
         </script>
