@@ -21,8 +21,10 @@ var Continuity = window.Continuity || {};
          Continuity.game.time.advancedTiming = true;
          Continuity.game.load.tilemap('terrain', 'assets/main.json', null, Phaser.Tilemap.TILED_JSON);
          Continuity.game.load.image('terrain', 'assets/main.png');
-         Continuity.game.load.image('grassTile', 'assets/grass.png');
-           
+         Continuity.game.load.image('grass', 'assets/grass.png');
+         Continuity.game.load.image('fire', 'assets/fire.png');
+         Continuity.game.load.image('resource', 'assets/resource.png');
+         Continuity.game.load.image('wall', 'assets/wall.png');
        },
        _onCreate: function() {
          Continuity.game.world.setBounds(0, 0, Continuity.Map.WORLD_SIZE, Continuity.Map.WORLD_SIZE);

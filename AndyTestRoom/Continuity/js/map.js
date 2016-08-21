@@ -33,7 +33,7 @@ Continuity.Map.WORLD_TILES       = Continuity.Map.WORLD_CHUNKS * Continuity.Map.
 
 Continuity.Map.DEFAULT_GEN_MIN   = 0;
 Continuity.Map.DEFAULT_GEN_MAX   = 32;
-Continuity.Map.DEFAULT_GEN_SEED  = Math.floor(Math.random() * 5);//"default";
+Continuity.Map.DEFAULT_GEN_SEED  = Math.random() * 99999;//"default";
 Continuity.Map.DEFAULT_GEN_QUAL  = 128.0;
 
 Continuity.Map.prototype = {
@@ -99,7 +99,7 @@ Continuity.Map.prototype = {
 
     console.log("Continuity.Map#renderChunk", "creating chunk:", id, "with index:", chunkX, chunkY);
 
-    this._tileCache[id] = new Continuity.Chunk(this.game, this, 'grassTile', chunkX, chunkY);
+    this._tileCache[id] = new Continuity.Chunk(this.game, this, 'terrain', chunkX, chunkY);
   },
 
 

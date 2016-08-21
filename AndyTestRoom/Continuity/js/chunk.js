@@ -26,6 +26,7 @@ Continuity.Chunk = function (game, map, tileset, chunkX, chunkY) {
   this.tileMap = game.add.tilemap();
   this.tileset = tileset;
   this.tileMapLayer = null;
+  this.hexagonGroup = Continuity.game.add.group();
   this._create();
 };
 
@@ -43,83 +44,30 @@ Continuity.Chunk.prototype = {
     this.tileMapLayer.scrollFactorX = 0;
     this.tileMapLayer.scrollFactorY = 0;
     this.tileMapLayer.position.set(startingXPos, startingYPos);
-    this.tileMapLayer.inputEnabled = true;
+    //this.tileMapLayer.inputEnabled = true;
     
     //this.tileMap.tileWidth = Continuity.Map.HEXAGON_WIDTH;
     //this.tileMap.tileHeight = Continuity.Map.HEXAGON_HEIGHT;
     var self = this;
-    this.tileMapLayer.events.onInputDown.add(function(sprite, pointer){
-      var chunkIndex = self.map.getChunkIndexForCoordinate(pointer.worldX, pointer.worldY);
-      console.log("digging at chunk:", chunkIndex, "with rect", self.rect);
-    }, this.tileMapLayer);
+    // this.tileMapLayer.events.onInputDown.add(function(sprite, pointer){
+    //   var chunkIndex = self.map.getChunkIndexForCoordinate(pointer.worldX, pointer.worldY);
+    //   //console.log("digging at chunk:", chunkIndex, "with rect", self.rect);
+    // }, this.tileMapLayer);
 
     var tile;
     for(var i = 0; i < Continuity.Map.CHUNK_TILES; i++){
       for(var j = 0; j < Continuity.Map.CHUNK_TILES; j++){
-        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, this.tileMapLayer);
-        
-
-        //var tilePosX = Math.random() * 60 + startingXPos + Continuity.Map.HEXAGON_WIDTH * i + (Continuity.Map.HEXAGON_WIDTH / 2) * (j % 2);
-        //var tilePosY = startingYPos + Continuity.Map.HEXAGON_HEIGHT * j / 4 * 3;
-        
-        //var posX = HEXAGON_WIDTH * x + (HEXAGON_WIDTH / 2) * (y % 2);
-//       var posY = HEXAGON_HEIGHT * y / 4 * 3;
         var posX = startingXPos + Continuity.Map.HEXAGON_WIDTH * j + (Continuity.Map.HEXAGON_WIDTH / 2) * (i % 2);
-        var posY = startingYPos+ Continuity.Map.HEXAGON_HEIGHT * i / 4 * 3;
-        console.log(posX + "," + posY);        
-        
+        var posY = startingYPos + Continuity.Map.HEXAGON_HEIGHT * i / 4 * 3;
+        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer);
+        this.hexagonGroup.add(tile);
+        // TODO: have to figure out how to get tiles working again
         //this.tileMap.putTileWorldXY(tile, tilePosX, tilePosY, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
         //this.tileMap.putTile(tile, tile.x, tile.y);
-        //constructTile(tile.x, tile.y, i, j, "grassTile");
-        //    var tile;
-
-    tile = Continuity.game.add.sprite(posX, posY,  'grassTile');
-    tile.autoCull = true;
-
-//    tile.inputEnabled = true;
-//    tile.events.onInputOver.add(over, this);
-//    tile.events.onInputOut.add(up, this);
-
-//    tile.events.onInputDown.add(function() {
-//       onClick(tile, x, y);
-//    }, this);
-
-//    tile.input.pixelPerfectOver = true;
-//    tile.input.pixelPerfectClick = true;
-//    console.log(x);
-//    tile.z = x;
-//    tile.autoCull = true;
-   
-//    var hexagonText = game.add.text(0 + HEXAGON_WIDTH / 3 + 5, 0 + 15, x + "," + y);
-//    hexagonText.font = "arial";
-//    hexagonText.align = "center";
-//    hexagonText.fontSize = 10;
-//    tile.addChild(hexagonText);
-   
-
-//    if (tileType == "wallTile") {
-//       var tweenTile;
-//       tweenTile = game.add.tween(tile);
-//       tweenTile.to({
-//          alpha: 1,
-//          y: posY - HEXAGON_HEIGHT * 0.8
-//       }, 3000, Phaser.Easing.Bounce.Out, true);
-//    }
-//    if (tileType == "resourceTile") {
-//       var tweenTile;
-//       tweenTile = game.add.tween(tile);
-//       tweenTile.to({
-//          alpha: 1,
-//          y: posY - HEXAGON_HEIGHT * 0.8
-//       }, 3000, Phaser.Easing.Bounce.Out, true);
-//       //tweenTile.to({ alpha:1, y: posY - HEXAGON_HEIGHT * 2}, 400,  Phaser.Easing.Quadratic.Out, true);
-//       // tweenTile.onComplete.add(function() {
-//       //      tweenTile.to({ alpha:1, y: posY - HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
-//       //      tweenTile.start;
-//       // });
-//    }
       }
     }
+    
+    this.hexagonGroup.sort('z', Phaser.Group.SORT_ASCENDING);
 
     //this.tileMapLayer.resize(Continuity.Map.CHUNK_SIZE, Continuity.Map.CHUNK_SIZE);
   },
@@ -131,6 +79,7 @@ Continuity.Chunk.prototype = {
     this.tileMapLayer = null;
     this.map = null;
     this.game = null;
+    this.hexagonGroup.removeChildren();
   },
 
   getTile: function(x, y) {

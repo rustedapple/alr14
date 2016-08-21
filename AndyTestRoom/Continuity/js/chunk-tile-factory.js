@@ -111,7 +111,7 @@ var WorldSim = window.Continuity || {}; // Namespace
       'none': 5
     };
 
-    var ttype   = '';
+    //var ttype   = '';
     var subtype = '';
 
     this.v=0;
@@ -159,34 +159,108 @@ var WorldSim = window.Continuity || {}; // Namespace
      * @param {Phaser.TilemapLayer} layer - The layer in the Tilemap data that this tile belongs to.
      * @return {Phaser.Tile} The Tile object that was created
      */
-    createTile: function(chunkX, chunkY, tileX, tileY, layer) {
-      this.v = this._generate(chunkX, chunkY, tileX, tileY);
+    createTile: function(chunkX, chunkY, i, j, posX, posY, layer) {
+      var tile;
+      var ttype = 'grass';
+      
+      this.v = this._generate(chunkX, chunkY, i, j);
 
-      this.ttype = 'grass';
+      
       this.subtype = '';
       if ( this.v > 0 ) {
         if ( this.v <= 0.1 ) {
-          this.ttype = 'grass';
+          ttype = 'grass';
           if ( this.v >= 0.04 && this.v <= 0.05 ) {
-            this.ttype = 'wall';
+            ttype = 'wall';
           }
-        } else if ( this.v <= 0.5 ) {
-          this.ttype = 'grass';
-          if ( this.v >= 0.30 && this.v <= 0.35 ) {
-            this.ttype = 'wall';
+          if ( this.v >= 0.08 && this.v <= 0.09 ) {
+            if (Math.floor(Math.random() * 4) == 0)
+            ttype = 'resource';
+          }
+        } else if ( this.v <= 0.4 ) {
+          ttype = 'grass';
+          if ( this.v >= 0.20 && this.v <= 0.21 ) {
+            ttype = 'wall';
+          }
+          if ( this.v >= 0.30 && this.v <= 0.4 ) {
+            ttype = 'wall';
           }
         } else {
-          this.ttype = 'wall';
+          ttype = 'resource';
         }
       }
       
+      tile = Continuity.game.add.sprite(posX, posY,  ttype);
+      tile.v = this.v;
+      tile.autoCull = true;
+      tile.inputEnabled = true;
+      tile.events.onInputOver.add(over, this);
+      tile.events.onInputOut.add(up, this);
+      tile.events.onInputDown.add(function() {
+        onClick(tile, i, j, ttype);
+      }, this);
+  
+      tile.input.pixelPerfectOver = true;
+      tile.input.pixelPerfectClick = true;
       
+      if (ttype == 'wall') {
+        var tweenTile;
+        tweenTile = Continuity.game.add.tween(tile);
+        tweenTile.to({
+            alpha: 1,
+            y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+        }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
+      }
+      
+      if (ttype == "resource") {
+      var tweenTile;
+        tweenTile = Continuity.game.add.tween(tile);
+        tweenTile.to({
+            alpha: 1,
+            y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+        }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
+        //tweenTile.onComplete.add(function() {
+       //       tweenTile.to({ alpha:1, y: posY - Continuity.HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
+       //       tweenTile.start;
+      //});
+    }
+      
+      return tile;
 
-      return new Phaser.Tile(layer, this.textureIndexByType[this.ttype], tileX, tileY)
+      //return new Phaser.Tile(layer, this.textureIndexByType[this.ttype], tileX, tileY)
     }
 
   };
+  
+  function over(tile) {
+    tile.tint = 0x999900;
+  }
+  
+  function up(tile) {
+    tile.tint = 0xffffff;
+  }
 
+  function onClick(tile, i, j, tileType) {
+    console.log(tileType);
+    if (tileType == 'grass') {
+      tile.loadTexture("wall");
+      var tweenTile;
+      tweenTile = Continuity.game.add.tween(tile);
+        tweenTile.to({
+            alpha: 1,
+            y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+        }, 1000, Phaser.Easing.Bounce.Out, true);
+    }  else if (tileType == 'wall') {
+      tile.loadTexture("grass");
+      var tweenTile;
+      tweenTile = Continuity.game.add.tween(tile);
+        tweenTile.to({
+            alpha: 1,
+            y: tile.y + Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+        }, 1000, Phaser.Easing.Bounce.Out, true);
+    }
+  }
+  
   WorldSim.TileFactory.prototype.constructor = WorldSim.TileFactory;
 
 })();
