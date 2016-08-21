@@ -21,7 +21,9 @@ Continuity.Map = function (game, params) {
 };
 
 Continuity.Map.WORLD_SIZE        = 8192;//px
-Continuity.Map.CHUNK_SIZE        = 2048;//px -
+Continuity.Map.CHUNK_SIZE        = 2048;//px
+Continuity.Map.CHUNK_SIZE_X      = 2048;//px
+Continuity.Map.CHUNK_SIZE_Y      = 750;//px -
 Continuity.Map.HEXAGON_WIDTH     = 70//70;//px;
 Continuity.Map.HEXAGON_HEIGHT    = 32;//px;
 Continuity.Map.HEXAGON_HEIGHT_ugh= 80;
@@ -97,7 +99,7 @@ Continuity.Map.prototype = {
 
     console.log("Continuity.Map#renderChunk", "creating chunk:", id, "with index:", chunkX, chunkY);
 
-    this._tileCache[id] = new Continuity.Chunk(this.game, this, 'terrain', chunkX, chunkY);
+    this._tileCache[id] = new Continuity.Chunk(this.game, this, 'grassTile', chunkX, chunkY);
   },
 
 

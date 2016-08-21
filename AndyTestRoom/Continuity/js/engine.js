@@ -19,12 +19,10 @@ var Continuity = window.Continuity || {};
        },
        _onPreload: function() {
          Continuity.game.time.advancedTiming = true;
-         //Continuity.game.load.image('terrain', 'assets/terrain.png');
          Continuity.game.load.tilemap('terrain', 'assets/main.json', null, Phaser.Tilemap.TILED_JSON);
          Continuity.game.load.image('terrain', 'assets/main.png');
-        // Continuity.game.load.image('terrain', 'assets/tileTypes.png');
-        //Continuity.load.spritesheet('terrain', 'assets/main.png', 80, 70);
-        //Continuity.game.load.atlas('terrain', 'assets/main.png', 'assets/main.json', Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY);
+         Continuity.game.load.image('grassTile', 'assets/grass.png');
+           
        },
        _onCreate: function() {
          Continuity.game.world.setBounds(0, 0, Continuity.Map.WORLD_SIZE, Continuity.Map.WORLD_SIZE);
