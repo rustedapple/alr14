@@ -1,4 +1,0 @@
-http://phaser.io/news/2016/01/chunkmap
-https://gamedevacademy.org/how-to-procedurally-generate-a-dungeon-in-phaser-part-1/?a=13
-http://www.emanueleferonato.com/2016/07/14/html5-down-the-mountain-game-prototype-made-with-phaser-making-hops-more-realistic/
-http://www.emanueleferonato.com/tag/down-the-mountain/

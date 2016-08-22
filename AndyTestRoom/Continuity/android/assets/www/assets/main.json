@@ -1,0 +1,46 @@
+{
+"frames": [
+	{
+		"filename": "empty.png",
+		"frame": {"x":0, "y":243, "w":1, "h":1},
+		"spriteSourceSize": {"x":-2,"y":-2,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	},
+	{
+		"filename": "fire.png",
+		"frame": {"x":71, "y":81, "w":70, "h":80},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	},
+	{
+		"filename": "grass.png",
+		"frame": {"x":71, "y":0, "w":70, "h":80},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	},
+	{
+		"filename": "hexagon.png",
+		"frame": {"x":0, "y":162, "w":70, "h":80},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	},
+	{
+		"filename": "resource.png",
+		"frame": {"x":0, "y":81, "w":70, "h":80},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	},
+	{
+		"filename": "wall.png",
+		"frame": {"x":0, "y":0, "w":70, "h":80},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":80},
+		"sourceSize": {"w":70,"h":80}
+	}
+
+],
+"meta": {
+	"image": "main.png",
+	"size": {"w": 256, "h": 256},
+	"scale": "1"
+}
+}
