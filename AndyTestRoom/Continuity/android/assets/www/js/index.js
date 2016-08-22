@@ -35,13 +35,12 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
 
-            		window.onload = function() {
+            		//window.onload = function() {
                         // <!-- If you increase the size of the game canvas, you need to also increase the ChunkMap.Map.CHUNK_SIZE constant to match. -->
                         // <!-- Keep this value a power of 2. -->
                         var mapSize = 2048;
                         var continuityEngine = new Continuity.Engine(mapSize, mapSize*3/4, "");
-                    };
-                </script>
+                    //};
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
