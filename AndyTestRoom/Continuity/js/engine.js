@@ -5,11 +5,11 @@ var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
 var isoGroup, sorted;
-
+//http://rotates.org/phaser/iso/examples/depth_sorting.htm
 BasicGame.Boot.prototype =
 {
     preload: function () {
-        game.load.image('cube', '../assets/tiles/grass.png');
+        game.load.image('cube', '../assets/tiles/cube.png');
 
         game.time.advancedTiming = true;
 
@@ -28,8 +28,8 @@ BasicGame.Boot.prototype =
 
         // Let's make a load of cubes on a grid, but do it back-to-front so they get added out of order.
         var cube;
-        for (var xx = 9999; xx > 0; xx -= 48) {
-            for (var yy = 9999; yy > 0; yy -= 48) {
+        for (var xx = 4096; xx > 0; xx -= 48) {
+            for (var yy = 4096; yy > 0; yy -= 48) {
                 // Create a cube using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
                 cube = game.add.isoSprite(xx, yy, 0, 'cube', 0, isoGroup);
