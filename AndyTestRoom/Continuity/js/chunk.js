@@ -59,15 +59,21 @@ Continuity.Chunk.prototype = {
       for(var j = 0; j < Continuity.Map.CHUNK_TILES; j++){
         var posX = startingXPos + Continuity.Map.HEXAGON_WIDTH * j + (Continuity.Map.HEXAGON_WIDTH / 2) * (i % 2);
         var posY = startingYPos + Continuity.Map.HEXAGON_HEIGHT * i / 4 * 3;
-        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer);
-        this.hexagonGroup.add(tile);
+        //tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer, this.hexagonGroup);
+
+        Continuity.game.add.isoSprite(posX, posY, 0, 'grass', 0, this.hexagonGroup);
+
+        //this.hexagonGroup.add(tile);
         // TODO: have to figure out how to get tiles working again
         //this.tileMap.putTileWorldXY(tile, tilePosX, tilePosY, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
         //this.tileMap.putTile(tile, tile.x, tile.y);
       }
     }
-    
-    this.hexagonGroup.sort('z', Phaser.Group.SORT_ASCENDING);
+
+    //console.log("depth sorting");
+
+    //Continuity.game.iso.simpleSort(this.hexagonGroup);
+    //this.hexagonGroup.sort('z', Phaser.Group.SORT_ASCENDING);
 
     //this.tileMapLayer.resize(Continuity.Map.CHUNK_SIZE, Continuity.Map.CHUNK_SIZE);
   },
@@ -80,6 +86,8 @@ Continuity.Chunk.prototype = {
     this.map = null;
     this.game = null;
     this.hexagonGroup.removeChildren();
+
+    //this.hexagonGroup.renderable = false;
   },
 
   getTile: function(x, y) {

@@ -14,6 +14,7 @@ Continuity.Map = function (game, params) {
   this._tileCache = {};
 
   this.tileFactory = new Continuity.TileFactory(this, params);
+  this.hexagonGroupGroup = Continuity.game.add.group();
 
   console.group('Continuity::Map()', 'New Map instance created.');
   console.log('World', this.generation);
@@ -75,7 +76,7 @@ Continuity.Map.prototype = {
     var chunk = this._tileCache[id];
 
     if(chunk) {
-      console.log("Continuity.Map#destroyChunk", "destroying chunk:", id, "with index:", chunkX, chunkY);
+      //console.log("Continuity.Map#destroyChunk", "destroying chunk:", id, "with index:", chunkX, chunkY);
       chunk.destroy();
       delete this._tileCache[id];
     }
@@ -97,9 +98,10 @@ Continuity.Map.prototype = {
     if(this._tileCache[id])
       return;
 
-    console.log("Continuity.Map#renderChunk", "creating chunk:", id, "with index:", chunkX, chunkY);
+    //console.log("Continuity.Map#renderChunk", "creating chunk:", id, "with index:", chunkX, chunkY);
 
     this._tileCache[id] = new Continuity.Chunk(this.game, this, 'terrain', chunkX, chunkY);
+    this.hexagonGroupGroup.add
   },
 
 

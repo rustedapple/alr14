@@ -159,10 +159,10 @@ var WorldSim = window.Continuity || {}; // Namespace
      * @param {Phaser.TilemapLayer} layer - The layer in the Tilemap data that this tile belongs to.
      * @return {Phaser.Tile} The Tile object that was created
      */
-    createTile: function(chunkX, chunkY, i, j, posX, posY, layer) {
+    createTile: function(chunkX, chunkY, i, j, posX, posY, layer, hexagonGroupZZ) {
       var tile;
       var ttype = 'grass';
-      
+      var hexagonGroup = Continuity.game.add.group();
       this.v = this._generate(chunkX, chunkY, i, j);
 
       
@@ -190,9 +190,13 @@ var WorldSim = window.Continuity || {}; // Namespace
         }
       }
       
-      tile = Continuity.game.add.sprite(posX, posY,  ttype);
-      tile.v = this.v;
-      tile.autoCull = true;
+      //tile = Continuity.game.add.sprite(posX, posY + Math.random(),  ttype);
+      //tile = 
+      Continuity.game.add.isoSprite(posX, posY, 0, ttype, 0);
+      //tile.anchor.set(0.5);
+
+
+      /*tile.autoCull = true;
       tile.inputEnabled = true;
       tile.events.onInputOver.add(over, this);
       tile.events.onInputOut.add(up, this);
@@ -219,11 +223,13 @@ var WorldSim = window.Continuity || {}; // Namespace
             alpha: 1,
             y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
         }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
+      } */
+
         //tweenTile.onComplete.add(function() {
        //       tweenTile.to({ alpha:1, y: posY - Continuity.HEXAGON_HEIGHT * 0.5}, 2000,  Phaser.Easing.Quadratic.In, true);
        //       tweenTile.start;
       //});
-    }
+    
       
       return tile;
 
@@ -241,7 +247,6 @@ var WorldSim = window.Continuity || {}; // Namespace
   }
 
   function onClick(tile, i, j, tileType) {
-    console.log(tileType);
     if (tileType == 'grass') {
       tile.loadTexture("wall");
       var tweenTile;
