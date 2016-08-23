@@ -24,8 +24,8 @@ Continuity.Map = function (game, params) {
 
 Continuity.Map.WORLD_SIZE        = 8192;//px
 Continuity.Map.CHUNK_SIZE        = 512;//px
-Continuity.Map.CHUNK_SIZE_X      = Continuity.Map.HEXAGON_WIDTH * Continuity.Map.CHUNK_TILES;//*Continuity.Map.CHUNK_SIZE;//px560
-Continuity.Map.CHUNK_SIZE_Y      = (Continuity.Map.HEXAGON_HEIGHT * Continuity.Map.CHUNK_TILES) * (3/4);//*Continuity.Map.CHUNK_SIZE;//px192
+Continuity.Map.CHUNK_SIZE_X      = 560;//Continuity.Map.HEXAGON_WIDTH * Continuity.Map.CHUNK_TILES;//*Continuity.Map.CHUNK_SIZE;//px560
+Continuity.Map.CHUNK_SIZE_Y      = 192;//(Continuity.Map.HEXAGON_HEIGHT * Continuity.Map.CHUNK_TILES) * (3/4);//*Continuity.Map.CHUNK_SIZE;//px192
 Continuity.Map.HEXAGON_WIDTH     = 70//70;//px;
 Continuity.Map.HEXAGON_HEIGHT    = 32;//px;
 Continuity.Map.HEXAGON_HEIGHT_ugh= 80;
