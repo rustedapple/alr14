@@ -12,9 +12,8 @@ Continuity.Map = function (game, params) {
   this.game = game;
   this.world = game.world;
   this._tileCache = {};
-
   this.tileFactory = new Continuity.TileFactory(this, params);
-  this.hexagonGroupGroup = Continuity.game.add.group();
+  this.isoGroup = Continuity.game.add.group();
 
   console.group('Continuity::Map()', 'New Map instance created.');
   console.log('World', this.generation);
@@ -22,9 +21,9 @@ Continuity.Map = function (game, params) {
 };
 
 Continuity.Map.WORLD_SIZE        = 8192;//px
-Continuity.Map.CHUNK_SIZE        = 2048;//px
-Continuity.Map.CHUNK_SIZE_X      = 2048;//px
-Continuity.Map.CHUNK_SIZE_Y      = 750;//px -
+Continuity.Map.CHUNK_SIZE        = 512;//px
+Continuity.Map.CHUNK_SIZE_X      = 560;//px
+Continuity.Map.CHUNK_SIZE_Y      = 192;//px -
 Continuity.Map.HEXAGON_WIDTH     = 70//70;//px;
 Continuity.Map.HEXAGON_HEIGHT    = 32;//px;
 Continuity.Map.HEXAGON_HEIGHT_ugh= 80;
@@ -53,8 +52,8 @@ Continuity.Map.prototype = {
     for(var i = 0; i <= Continuity.Map.WORLD_CHUNKS; i++){
       for(var j = 0; j <= Continuity.Map.WORLD_CHUNKS; j++){
 
-        if( (i == x-1 || i==x || i==x+1) &&
-          (j == y-1 || j==y || j==y+1)) {
+        if( (i >= x-1 && i <= x+3) &&
+          (j >= y-1 && j<=y+5)) {
           this.renderChunk(i, j);
         } else {
           this.destroyChunk(i, j);
@@ -77,8 +76,8 @@ Continuity.Map.prototype = {
 
     if(chunk) {
       //console.log("Continuity.Map#destroyChunk", "destroying chunk:", id, "with index:", chunkX, chunkY);
-      chunk.destroy();
-      delete this._tileCache[id];
+      //chunk.destroy();
+      //delete this._tileCache[id];
     }
   },
 
@@ -95,13 +94,14 @@ Continuity.Map.prototype = {
 
     var id = this._hashPair(chunkX, chunkY);
 
-    if(this._tileCache[id])
+    if(this._tileCache[id]) {
+      //this._tileCache[id].chunkGroup.visible = true;
       return;
+    }
 
     //console.log("Continuity.Map#renderChunk", "creating chunk:", id, "with index:", chunkX, chunkY);
 
     this._tileCache[id] = new Continuity.Chunk(this.game, this, 'terrain', chunkX, chunkY);
-    this.hexagonGroupGroup.add
   },
 
 
