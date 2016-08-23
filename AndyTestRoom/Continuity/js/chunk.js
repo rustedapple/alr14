@@ -17,7 +17,7 @@ var Continuity = window.Continuity || {}; // Namespace
  * @param {number} chunkX - Not being used at the moment, will be when Phaser supports multiple camera
  * @param {number} chunkY - Position of the camera on the X axis
  */
-Continuity.Chunk = function (game, map, spritesheet, chunkX, chunkY) {
+Continuity.Chunk = function (game, map, spritesheet, chunkX, chunkY, isHorizontal) {
   this.game = game;
   this.world = game.world;
   this.map = map;
@@ -28,16 +28,16 @@ Continuity.Chunk = function (game, map, spritesheet, chunkX, chunkY) {
   this.tileMapLayer = null;
   this.chunkGroup = Continuity.game.add.group();
   this.spriteArray = [];
-  this._create();
+  this._create(isHorizontal);
 };
 
 Continuity.Chunk.prototype = {
-  _create: function() {
+  _create: function(isHorizontal) {
     var chunkX      = this.x;
     var chunkY      = this.y;
 
-    var startingXPos = Continuity.Map.CHUNK_SIZE_X * chunkX;
-    var startingYPos = Continuity.Map.CHUNK_SIZE_Y * chunkY;
+    var startingXPos = 100+Continuity.Map.CHUNK_SIZE_X * chunkX;
+    var startingYPos = 100+Continuity.Map.CHUNK_SIZE_Y * chunkY;
 
     //this.tileMap.addTilesetImage(this.spritesheet, null, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT, 2, 3);
     this.tileMapLayer = this.tileMap.create("tilemap", Continuity.Map.CHUNK_TILES, Continuity.Map.CHUNK_TILES, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
@@ -52,7 +52,7 @@ Continuity.Chunk.prototype = {
       for(var j = 0; j < Continuity.Map.CHUNK_TILES; j++){
         var posX = startingXPos + Continuity.Map.HEXAGON_WIDTH * j + (Continuity.Map.HEXAGON_WIDTH / 2) * (i % 2);
         var posY = startingYPos + Continuity.Map.HEXAGON_HEIGHT * i / 4 * 3;
-        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer);
+        tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer, isHorizontal);
         //this.chunkGroup.add(tile);
         this.map.isoGroup.add(tile);
         this.spriteArray.push(tile);
@@ -77,7 +77,6 @@ Continuity.Chunk.prototype = {
     this.tileMapLayer = null;
     this.map = null;
     this.game = null;
-    this.chunkGroup.removeChildren();
 
     for (var i = 0; i < this.spriteArray.length; i++) {
       this.spriteArray[i].destroy();

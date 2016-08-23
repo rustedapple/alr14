@@ -15,6 +15,8 @@ Continuity.Map = function (game, params) {
   this.tileFactory = new Continuity.TileFactory(this, params);
   this.isoGroup = Continuity.game.add.group();
 
+  this.prev
+
   console.group('Continuity::Map()', 'New Map instance created.');
   console.log('World', this.generation);
   console.groupEnd();
@@ -22,8 +24,8 @@ Continuity.Map = function (game, params) {
 
 Continuity.Map.WORLD_SIZE        = 8192;//px
 Continuity.Map.CHUNK_SIZE        = 512;//px
-Continuity.Map.CHUNK_SIZE_X      = 560;//px
-Continuity.Map.CHUNK_SIZE_Y      = 192;//px -
+Continuity.Map.CHUNK_SIZE_X      = 560//*Continuity.Map.CHUNK_SIZE;//px560
+Continuity.Map.CHUNK_SIZE_Y      = 192//*Continuity.Map.CHUNK_SIZE;//px192
 Continuity.Map.HEXAGON_WIDTH     = 70//70;//px;
 Continuity.Map.HEXAGON_HEIGHT    = 32;//px;
 Continuity.Map.HEXAGON_HEIGHT_ugh= 80;
@@ -52,8 +54,8 @@ Continuity.Map.prototype = {
     for(var i = 0; i <= Continuity.Map.WORLD_CHUNKS; i++){
       for(var j = 0; j <= Continuity.Map.WORLD_CHUNKS; j++){
 
-        if( (i >= x-1 && i <= x+3) &&
-          (j >= y-1 && j<=y+5)) {
+        if( (i >= x && i <= x+1) &&
+          (j >= y && j<=y+3)) {
           this.renderChunk(i, j);
         } else {
           this.destroyChunk(i, j);
