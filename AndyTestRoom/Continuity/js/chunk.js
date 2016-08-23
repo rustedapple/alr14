@@ -27,8 +27,8 @@ Continuity.Chunk = function (game, map, spritesheet, chunkX, chunkY) {
   this.spritesheet = spritesheet;
   this.tileMapLayer = null;
   this.chunkGroup = Continuity.game.add.group();
+  this.spriteArray = [];
   this._create();
-  console.log("create chunk");
 };
 
 Continuity.Chunk.prototype = {
@@ -39,7 +39,7 @@ Continuity.Chunk.prototype = {
     var startingXPos = Continuity.Map.CHUNK_SIZE_X * chunkX;
     var startingYPos = Continuity.Map.CHUNK_SIZE_Y * chunkY;
 
-    //this.tileMap.addTilesetImage(this.spritesheet, null, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT_ugh, 2, 3);
+    //this.tileMap.addTilesetImage(this.spritesheet, null, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT, 2, 3);
     this.tileMapLayer = this.tileMap.create("tilemap", Continuity.Map.CHUNK_TILES, Continuity.Map.CHUNK_TILES, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
     this.tileMapLayer.fixedToCamera = false;
     this.tileMapLayer.scrollFactorX = 0;
@@ -55,6 +55,7 @@ Continuity.Chunk.prototype = {
         tile = this.map.tileFactory.createTile(chunkX, chunkY, i, j, posX, posY, this.tileMapLayer);
         //this.chunkGroup.add(tile);
         this.map.isoGroup.add(tile);
+        this.spriteArray.push(tile);
         
         // TODO: have to figure out how to get tiles working again
         //this.tileMap.putTileWorldXY(tile, tilePosX, tilePosY, Continuity.Map.HEXAGON_WIDTH, Continuity.Map.HEXAGON_HEIGHT);
@@ -77,6 +78,11 @@ Continuity.Chunk.prototype = {
     this.map = null;
     this.game = null;
     this.chunkGroup.removeChildren();
+
+    for (var i = 0; i < this.spriteArray.length; i++) {
+      this.spriteArray[i].destroy();
+    }
+    this.spriteArray = [];
     //this.chunkGroup.visible = false;
   },
 

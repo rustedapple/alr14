@@ -76,8 +76,8 @@ Continuity.Map.prototype = {
 
     if(chunk) {
       //console.log("Continuity.Map#destroyChunk", "destroying chunk:", id, "with index:", chunkX, chunkY);
-      //chunk.destroy();
-      //delete this._tileCache[id];
+      chunk.destroy();
+      delete this._tileCache[id];
     }
   },
 

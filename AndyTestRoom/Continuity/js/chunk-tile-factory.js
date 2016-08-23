@@ -103,12 +103,19 @@ var WorldSim = window.Continuity || {}; // Namespace
     this.noise = new WorldSim.SimplexNoise(this.generation._num);
 
     this.textureIndexByType = {
-      'wall' : 0,
+      'none' : 0,
+      'fire': 1,
+      'grass' : 2,
+      'hexagon' : 3,
+      'resource': 4,
+      'wall': 5
+
+/*      'wall' : 0,
       'grass': 1,
       'resource' : 2,
       'fire' : 3,
       'hexagon': 4,
-      'none': 5
+      'none': 5*/
     };
 
     //var ttype   = '';
@@ -190,7 +197,7 @@ var WorldSim = window.Continuity || {}; // Namespace
         }
       }
       
-      tile = Continuity.game.add.sprite(posX, posY,  ttype);
+      tile = Continuity.game.add.sprite(posX, posY,  'main', this.textureIndexByType[ttype]);
       //tile.anchor.set(0.5);
 
       //tile.visible = false;
@@ -199,28 +206,30 @@ var WorldSim = window.Continuity || {}; // Namespace
       tile.events.onInputOver.add(over, this);
       tile.events.onInputOut.add(up, this);
       tile.events.onInputDown.add(function() {
-        onClick(tile, i, j, ttype);
+        onClick(tile, i, j, ttype, this.textureIndexByType);
       }, this);
   
       tile.input.pixelPerfectOver = true;
       tile.input.pixelPerfectClick = true;
       
       if (ttype == 'wall') {
-        var tweenTile;
-        tweenTile = Continuity.game.add.tween(tile);
-        tweenTile.to({
-            alpha: 1,
-            y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
-        }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
+        tile.y -= Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2;
+        // var tweenTile;
+        // tweenTile = Continuity.game.add.tween(tile);
+        // tweenTile.to({
+        //     alpha: 1,
+        //     y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+        // }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
       }
       
       if (ttype == "resource") {
-      var tweenTile;
-        tweenTile = Continuity.game.add.tween(tile);
-        tweenTile.to({
-            alpha: 1,
-            y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
-        }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
+        tile.y -= Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2;
+      // var tweenTile;
+      //   tweenTile = Continuity.game.add.tween(tile);
+      //   tweenTile.to({
+      //       alpha: 1,
+      //       y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
+      //   }, 1000 + Math.random() * 500, Phaser.Easing.Bounce.Out, true);
       } 
 
         //tweenTile.onComplete.add(function() {
@@ -244,9 +253,9 @@ var WorldSim = window.Continuity || {}; // Namespace
     tile.tint = 0xffffff;
   }
 
-  function onClick(tile, i, j, tileType) {
+  function onClick(tile, i, j, tileType, textureIndex) {
     if (tileType == 'grass') {
-      tile.loadTexture("wall");
+      tile.frame = textureIndex['wall'];
       var tweenTile;
       tweenTile = Continuity.game.add.tween(tile);
         tweenTile.to({
@@ -254,7 +263,7 @@ var WorldSim = window.Continuity || {}; // Namespace
             y: tile.y - Continuity.Map.HEXAGON_HEIGHT_ugh * 0.2
         }, 1000, Phaser.Easing.Bounce.Out, true);
     }  else if (tileType == 'wall') {
-      tile.loadTexture("grass");
+      tile.frame = textureIndex['grass'];
       var tweenTile;
       tweenTile = Continuity.game.add.tween(tile);
         tweenTile.to({

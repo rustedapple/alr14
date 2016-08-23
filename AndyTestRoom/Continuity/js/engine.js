@@ -20,16 +20,13 @@ var Continuity = window.Continuity || {};
        },
        _onPreload: function() {
          Continuity.game.time.advancedTiming = true;
-         //Continuity.game.load.tilemap('terrain', 'assets/main.json', null, Phaser.Tilemap.TILED_JSON);
+         Continuity.game.load.atlas('main', 'assets/main.png', 'assets/main.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
          //Continuity.game.load.image('terrain', 'assets/main.png');
-         Continuity.game.load.image('grass', 'assets/tiles/grass.png');
-         Continuity.game.load.image('fire', 'assets/tiles/fire.png');
-         Continuity.game.load.image('resource', 'assets/tiles/resource.png');
-         Continuity.game.load.image('wall', 'assets/tiles/wall.png');
-         Continuity.game.load.image('cube', 'assets/tiles/cube.png');
-         Continuity.game.plugins.add(new Phaser.Plugin.Isometric(Continuity.game));
-
-        Continuity.game.load.image('cube', '../assets/tiles/cube.png');
+         // Continuity.game.load.image('grass', 'assets/tiles/grass.png');
+         // Continuity.game.load.image('fire', 'assets/tiles/fire.png');
+         // Continuity.game.load.image('resource', 'assets/tiles/resource.png');
+         // Continuity.game.load.image('wall', 'assets/tiles/wall.png');
+         // Continuity.game.load.image('cube', 'assets/tiles/cube.png');
         Continuity.game.time.advancedTiming = true;
        },
        _onCreate: function() {
